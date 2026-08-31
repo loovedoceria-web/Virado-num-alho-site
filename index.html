@@ -17,13 +17,13 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Barra de Administração (Visível apenas para o cliente logado) -->
-  <div id="admin-bar" style="display:none; background:#111; color:#fff; padding:10px 20px; position:fixed; top:0; width:100%; z-index:9999; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ff9800;">
-    <div>
-      <span style="color:#ff9800; font-weight:bold;">Modo Edição Ativo:</span> Clique nos textos pontilhados para editar. As alterações salvam sozinhas.
-    </div>
-    <button id="btn-logout" style="background:#ff9800; color:#fff; border:none; padding:5px 15px; cursor:pointer; font-weight:bold; border-radius:4px;">Sair do Painel</button>
+  <!-- Barra de Administração (Inicia oculta via CSS) -->
+<div id="admin-bar" style="display:none; background:#111; color:#fff; padding:10px 20px; position:fixed; top:0; left:0; width:100%; z-index:9999; justify-content:space-between; align-items:center; border-bottom:2px solid #ff9800; box-sizing:border-box;">
+  <div>
+    <span style="color:#ff9800; font-weight:bold;">Modo Edição Ativo:</span> Clique nos textos pontilhados para editar. As alterações salvam sozinhas ao clicar fora.
   </div>
+  <button id="btn-logout" style="background:#ff9800; color:#fff; border:none; padding:6px 16px; cursor:pointer; font-weight:bold; border-radius:4px;">Sair do Painel</button>
+</div>
 
   <header class="header">
     <div class="container nav">
