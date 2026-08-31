@@ -1,30 +1,41 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-// Substitua com suas credenciais do Supabase
+// ==========================================
+// 1. CONFIGURAÇÃO DO SUPABASE
+// Substitua com as credenciais do seu projeto
+// ==========================================
 const SUPABASE_URL = 'SUA_SUPABASE_URL'
 const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 let activeImageKeyTarget = null
 
-// 1. Carrega dados do Supabase
+// Atalho: se acessar index.html#admin, redireciona para login.html
+if (window.location.hash === '#admin') {
+  window.location.href = 'login.html'
+}
+
+// ==========================================
+// 2. CARREGAR CONTEÚDO DO SUPABASE (Textos e Fotos)
+// ==========================================
 async function loadSiteContent() {
   try {
     const { data, error } = await supabase.from('site_content').select('key, content')
+    
     if (error) {
-      console.error('Erro ao carregar dados:', error)
+      console.error('Erro ao buscar dados do Supabase:', error)
       return
     }
 
     if (data && data.length > 0) {
       data.forEach(item => {
-        // Textos
+        // Atualiza textos
         const textElements = document.querySelectorAll(`[data-key="${item.key}"]`)
         textElements.forEach(el => {
           el.innerText = item.content
         })
 
-        // Imagens
+        // Atualiza imagens
         const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
         imgElements.forEach(img => {
           img.src = item.content
@@ -36,14 +47,18 @@ async function loadSiteContent() {
   }
 }
 
-// 2. Verifica se o usuário autenticado veio da página login.html
+// ==========================================
+// 3. VERIFICAÇÃO DE SESSÃO DO ADMINISTRADOR
+// ==========================================
 async function checkAuthSession() {
   const { data: { session } } = await supabase.auth.getSession()
   const adminBar = document.getElementById('admin-bar')
 
   if (session) {
+    // Adiciona classe no body que ativa os estilos visuais de edição
     document.body.classList.add('admin-logged')
     if (adminBar) adminBar.style.display = 'flex'
+    
     enableTextInlineEditing()
     enableImageUploadEditing()
   } else {
@@ -52,7 +67,9 @@ async function checkAuthSession() {
   }
 }
 
-// 3. Ativa edição em tempo real de textos
+// ==========================================
+// 4. EDIÇÃO INLINE DE TEXTOS (Salva no Blur)
+// ==========================================
 function enableTextInlineEditing() {
   const editables = document.querySelectorAll('[data-editable]')
 
@@ -76,6 +93,7 @@ function enableTextInlineEditing() {
         console.error(`Erro ao salvar [${key}]:`, error)
         el.style.outline = '2px solid #ff4d4d'
       } else {
+        // Feedback visual verde de confirmação
         el.style.outline = '2px solid #00e676'
         setTimeout(() => {
           el.style.outline = '1.5px dashed #ff9800'
@@ -85,10 +103,14 @@ function enableTextInlineEditing() {
   })
 }
 
-// 4. Ativa troca de fotos via Supabase Storage
+// ==========================================
+// 5. TROCA DE FOTOS COM UPLOAD NO STORAGE
+// ==========================================
 function enableImageUploadEditing() {
   const imgButtons = document.querySelectorAll('[data-trigger-img]')
   const fileInput = document.getElementById('image-file-input')
+
+  if (!fileInput) return
 
   imgButtons.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -109,6 +131,7 @@ function enableImageUploadEditing() {
     const originalBtn = document.querySelector(`[data-trigger-img="${activeImageKeyTarget}"]`)
     if (originalBtn) originalBtn.innerText = 'Enviando...'
 
+    // Upload no bucket "site-images"
     const { error: uploadError } = await supabase.storage
       .from('site-images')
       .upload(filePath, file, { cacheControl: '3600', upsert: true })
@@ -119,12 +142,14 @@ function enableImageUploadEditing() {
       return
     }
 
+    // Obter URL pública
     const { data: publicUrlData } = supabase.storage
       .from('site-images')
       .getPublicUrl(filePath)
 
     const publicUrl = publicUrlData.publicUrl
 
+    // Grava a URL no banco de dados
     const { error: dbError } = await supabase
       .from('site_content')
       .upsert(
@@ -133,7 +158,7 @@ function enableImageUploadEditing() {
       )
 
     if (dbError) {
-      alert('Erro ao salvar endereço da imagem: ' + dbError.message)
+      alert('Erro ao salvar URL no banco: ' + dbError.message)
     } else {
       const imgTarget = document.querySelector(`[data-img-key="${activeImageKeyTarget}"]`)
       if (imgTarget) imgTarget.src = publicUrl
@@ -145,7 +170,11 @@ function enableImageUploadEditing() {
   }
 }
 
-// 5. Botão de Logout
+// ==========================================
+// 6. EVENTOS DE INTERFACE E ADMINISTRAÇÃO
+// ==========================================
+
+// Botão de Logout -> Encerra a sessão e volta para o login
 const logoutBtn = document.getElementById('btn-logout')
 if (logoutBtn) {
   logoutBtn.addEventListener('click', async () => {
@@ -154,7 +183,7 @@ if (logoutBtn) {
   })
 }
 
-// 6. Botão para ocultar contornos de edição
+// Botão para pré-visualizar (ocultar/exibir bordas de edição)
 const previewBtn = document.getElementById('btn-preview')
 if (previewBtn) {
   previewBtn.addEventListener('click', () => {
@@ -165,7 +194,7 @@ if (previewBtn) {
   })
 }
 
-// 7. Menu Mobile
+// Menu Mobile
 const menuToggle = document.getElementById('menu-toggle')
 const navLinks = document.getElementById('nav-links')
 if (menuToggle && navLinks) {
@@ -174,7 +203,9 @@ if (menuToggle && navLinks) {
   })
 }
 
-// Inicialização
+// ==========================================
+// 7. INICIALIZAÇÃO
+// ==========================================
 document.addEventListener('DOMContentLoaded', async () => {
   await loadSiteContent()
   await checkAuthSession()
