@@ -15,8 +15,75 @@
     rel="stylesheet"
   />
   <link rel="stylesheet" href="style.css" />
+
   <style>
-    /* Estilos do Modo Administrador no Site */
+    /* TELA DE LOGIN ANTES DO SITE (Cobre 100% da tela) */
+    #admin-gate-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0b0b0b;
+      z-index: 9999999;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+    .gate-card {
+      background: #161616;
+      border: 1px solid #282828;
+      border-radius: 12px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+      text-align: center;
+      color: #fff;
+    }
+    .gate-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      background: #ff9800;
+      color: #111;
+      font-weight: 900;
+      border-radius: 10px;
+      font-size: 22px;
+      margin-bottom: 18px;
+      font-family: 'Bebas Neue', sans-serif;
+    }
+    .gate-card h2 { color: #ff9800; font-size: 22px; margin-bottom: 8px; }
+    .gate-card p { color: #888; font-size: 13px; margin-bottom: 24px; line-height: 1.4; }
+    .gate-card form { display: flex; flex-direction: column; gap: 14px; }
+    .gate-card input {
+      width: 100%;
+      padding: 13px 15px;
+      background: #202020;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .gate-card input:focus { border-color: #ff9800; }
+    .gate-card button {
+      width: 100%;
+      padding: 13px;
+      background: #ff9800;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .gate-feedback { font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+    /* BARRA SUPERIOR DO ADMIN */
     #admin-bar {
       display: none;
       background: #111;
@@ -31,64 +98,67 @@
       align-items: center;
       border-bottom: 2px solid #ff9800;
       box-sizing: border-box;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
       font-family: 'Inter', sans-serif;
     }
-    .editable-img-wrapper {
-      position: relative;
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    .admin-logged {
-      padding-top: 48px; /* Espaço para a barra fixa */
-    }
+    .admin-logged { padding-top: 50px !important; }
     .admin-logged [data-editable] {
       outline: 1.5px dashed #ff9800;
       cursor: text;
-      transition: all 0.2s;
     }
     .admin-logged [data-editable]:focus {
       outline: 2px solid #00e676;
       background: rgba(255, 152, 0, 0.08);
     }
+    .editable-img-wrapper { position: relative; display: block; width: 100%; height: 100%; }
     .change-img-btn {
       display: none;
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 10px;
+      right: 10px;
       background: #ff9800;
       color: #111;
       font-weight: 800;
-      font-size: 12px;
-      padding: 8px 14px;
-      border-radius: 6px;
+      font-size: 11px;
+      padding: 7px 12px;
+      border-radius: 4px;
       border: none;
       cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.6);
       z-index: 20;
       text-transform: uppercase;
     }
-    .admin-logged .editable-img-wrapper:hover .change-img-btn {
-      display: block;
-    }
+    .admin-logged .editable-img-wrapper:hover .change-img-btn { display: block; }
   </style>
 </head>
 <body>
 
-  <!-- Barra de Controle do Dono -->
+  <!-- TELA DE LOGIN BLOQUEANTE -->
+  <div id="admin-gate-screen">
+    <div class="gate-card">
+      <div class="gate-logo">VA</div>
+      <h2>Área Restrita</h2>
+      <p>Faça login com seu e-mail e senha para acessar o modo de edição do site.</p>
+      
+      <form id="gate-login-form">
+        <input type="email" id="gate-email" placeholder="E-mail do administrador" required />
+        <input type="password" id="gate-password" placeholder="Senha" required />
+        <button type="submit" id="gate-btn">Entrar no Painel</button>
+        <div id="gate-feedback" class="gate-feedback"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- BARRA DE CONTROLE DO ADMIN -->
   <aside id="admin-bar">
     <div style="display:flex; align-items:center; gap:12px;">
-      <span style="background:#ff9800; color:#111; font-weight:800; font-size:11px; padding:4px 8px; border-radius:4px;">MODO ADMIN ATIVO</span>
-      <span style="font-size:13px; color:#e0e0e0;">Clique nos textos ou no botão das imagens para alterar o conteúdo.</span>
+      <span style="background:#ff9800; color:#111; font-weight:800; font-size:11px; padding:3px 8px; border-radius:4px;">MODO ADMIN ATIVO</span>
+      <span style="font-size:13px; color:#ccc;">Clique nos textos pontilhados para editar. Ao clicar fora, salva sozinho.</span>
     </div>
     <div style="display:flex; gap:10px;">
-      <button id="btn-preview" style="background:#222; color:#fff; border:1px solid #444; padding:6px 14px; border-radius:4px; font-weight:600; cursor:pointer;">Ocultar Marcações</button>
       <button id="btn-logout" style="background:#ff9800; color:#111; border:none; padding:6px 16px; font-weight:700; border-radius:4px; cursor:pointer;">Sair do Painel</button>
     </div>
   </aside>
 
-  <!-- Input oculto para upload de imagens -->
+  <!-- Input oculto de upload de fotos -->
   <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
 
   <header class="header">
@@ -301,7 +371,6 @@
       </div>
     </section>
 
-    <!-- Galeria com Imagens Editáveis -->
     <section class="section gallery-section" id="galeria">
       <div class="container">
         <div class="section-heading center">
