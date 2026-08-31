@@ -25,20 +25,6 @@
     <button id="btn-logout" style="background:#ff9800; color:#fff; border:none; padding:5px 15px; cursor:pointer; font-weight:bold; border-radius:4px;">Sair do Painel</button>
   </div>
 
-  <!-- Botão flutuante discreto para o cliente acessar o login -->
-  <button id="btn-open-login" style="position:fixed; bottom:15px; right:15px; background:#111; color:#ff9800; border:1px solid #ff9800; padding:10px 15px; border-radius:50%; cursor:pointer; z-index:9998; font-weight:bold;" title="Área do Cliente">⚙️</button>
-
-  <!-- Modal de Login -->
-  <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center;">
-    <div style="background:#fff; padding:30px; border-radius:8px; width:300px; text-align:center;">
-      <h3 style="margin-bottom:15px; color:#111;">Painel do Cliente</h3>
-      <input type="email" id="admin-email" placeholder="E-mail" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px;" />
-      <input type="password" id="admin-password" placeholder="Senha" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:4px;" />
-      <button id="btn-submit-login" style="width:100%; background:#ff9800; color:#fff; border:none; padding:10px; font-weight:bold; border-radius:4px; cursor:pointer; margin-bottom:10px;">Entrar</button>
-      <button id="btn-close-login" style="background:none; border:none; color:#666; cursor:pointer;">Fechar</button>
-    </div>
-  </div>
-
   <header class="header">
     <div class="container nav">
       <a href="#inicio" class="logo">
@@ -354,6 +340,21 @@
       </div>
     </section>
 
+    <!-- Tela / Seção de Início para Login do Administrador -->
+    <section class="admin-login-container" id="admin-login-section" style="background: #111; color: #fff; padding: 60px 20px; text-align: center; border-top: 2px solid #ff9800;">
+      <div class="container" style="max-width: 400px; margin: 0 auto;">
+        <h3 style="color: #ff9800; margin-bottom: 10px; font-size: 24px;">Área Restrita (Administrador)</h3>
+        <p style="margin-bottom: 25px; color: #ccc; font-size: 14px;">Entre com seu e-mail e senha para gerenciar e editar o conteúdo do site diretamente na tela.</p>
+        
+        <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 15px;">
+          <input type="email" id="login-email" placeholder="E-mail do administrador" required style="padding: 12px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff;" />
+          <input type="password" id="login-password" placeholder="Senha" required style="padding: 12px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff;" />
+          <button type="submit" style="padding: 12px; background: #ff9800; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Entrar no Painel</button>
+          <p id="login-feedback" style="font-size: 14px; margin: 0;"></p>
+        </form>
+      </div>
+    </section>
+
     <section class="section contact-section" id="contato">
       <div class="container contact-grid">
         <div class="contact-copy">
@@ -420,7 +421,6 @@
     </div>
   </footer>
 
-  <!-- Script principal em Inglês conectado ao Supabase -->
   <script type="module" src="script.js"></script>
 </body>
 </html>
