@@ -1,15 +1,15 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-const SUPABASE_URL = 'YOUR_SUPABASE_URL'
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'
+const SUPABASE_URL = 'SUA_SUPABASE_URL'
+const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-// 1. Fetch content from Supabase and populate the website on load
+// 1. Carrega o conteúdo do Supabase para o site
 async function loadSiteContent() {
     try {
         const { data, error } = await supabase.from('site_content').select('*')
         if (error) {
-            console.error('Error loading content:', error)
+            console.error('Erro ao carregar conteúdo:', error)
             return
         }
 
@@ -22,11 +22,11 @@ async function loadSiteContent() {
             })
         }
     } catch (err) {
-        console.error('Unexpected error loading content:', err)
+        console.error('Erro inesperado:', err)
     }
 }
 
-// 2. Check if the user is authenticated as Admin
+// 2. Verifica a sessão e gerencia a interface do Admin
 async function checkAuthSession() {
     const { data: { session } } = await supabase.auth.getSession()
     
@@ -35,23 +35,24 @@ async function checkAuthSession() {
 
     if (session) {
         if (adminBar) adminBar.style.display = 'flex'
-        if (loginSection) loginSection.style.display = 'none' // Esconde o formulário se já estiver logado
-        enableInlineEditing()
+        if (loginSection) loginSection.style.display = 'none'
+        
+        // Ativa a edição imediatamente e garante que os elementos respondam
+        setTimeout(enableInlineEditing, 200)
     } else {
         if (adminBar) adminBar.style.display = 'none'
         if (loginSection) loginSection.style.display = 'block'
     }
 }
 
-// 3. Enable inline editing features when logged in
+// 3. Ativa a edição direto na tela e salva ao perder o foco (blur)
 function enableInlineEditing() {
     const editables = document.querySelectorAll('[data-editable]')
 
     editables.forEach(el => {
-        el.contentEditable = true
+        el.setAttribute('contenteditable', 'true')
         el.style.borderBottom = '2px dashed #ff9800'
         el.style.cursor = 'text'
-        el.title = 'Click to edit this content'
 
         el.addEventListener('blur', async () => {
             const key = el.getAttribute('data-key')
@@ -62,16 +63,16 @@ function enableInlineEditing() {
                 .upsert({ key: key, content: newContent }, { onConflict: 'key' })
 
             if (error) {
-                console.error('Error saving update:', error)
-                alert('Failed to save changes.')
+                console.error('Erro ao salvar:', error)
+                alert('Erro ao salvar alteração.')
             } else {
-                console.log(`Successfully saved: ${key}`)
+                console.log(`Salvo com sucesso: ${key}`)
             }
         })
     })
 }
 
-// 4. Admin Login Form Submission
+// 4. Formulário de Login
 const loginForm = document.getElementById('admin-login-form')
 
 if (loginForm) {
@@ -82,7 +83,7 @@ if (loginForm) {
         const passwordInput = document.getElementById('login-password').value
         const feedback = document.getElementById('login-feedback')
 
-        feedback.textContent = 'Logging in...'
+        feedback.textContent = 'Entrando...'
         feedback.style.color = '#ff9800'
 
         const { error } = await supabase.auth.signInWithPassword({
@@ -91,19 +92,19 @@ if (loginForm) {
         })
 
         if (error) {
-            feedback.textContent = 'Login failed: ' + error.message
+            feedback.textContent = 'Erro ao entrar: ' + error.message
             feedback.style.color = '#ff6b6b'
         } else {
-            feedback.textContent = 'Login successful! Updating page...'
+            feedback.textContent = 'Login com sucesso! Carregando painel...'
             feedback.style.color = '#4cd137'
             setTimeout(() => {
                 window.location.reload()
-            }, 1000)
+            }, 800)
         }
     })
 }
 
-// 5. Logout Control
+// 5. Botão de Logout
 const logoutBtn = document.getElementById('btn-logout')
 
 if (logoutBtn) {
@@ -113,6 +114,6 @@ if (logoutBtn) {
     })
 }
 
-// Initialize on page load
+// Inicialização
 loadSiteContent()
 checkAuthSession()
