@@ -15,15 +15,81 @@
     rel="stylesheet"
   />
   <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Estilos do Modo Administrador no Site */
+    #admin-bar {
+      display: none;
+      background: #111;
+      color: #fff;
+      padding: 10px 24px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999999;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ff9800;
+      box-sizing: border-box;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      font-family: 'Inter', sans-serif;
+    }
+    .editable-img-wrapper {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    .admin-logged {
+      padding-top: 48px; /* Espaço para a barra fixa */
+    }
+    .admin-logged [data-editable] {
+      outline: 1.5px dashed #ff9800;
+      cursor: text;
+      transition: all 0.2s;
+    }
+    .admin-logged [data-editable]:focus {
+      outline: 2px solid #00e676;
+      background: rgba(255, 152, 0, 0.08);
+    }
+    .change-img-btn {
+      display: none;
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #ff9800;
+      color: #111;
+      font-weight: 800;
+      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+      z-index: 20;
+      text-transform: uppercase;
+    }
+    .admin-logged .editable-img-wrapper:hover .change-img-btn {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-  <!-- Barra de Administração (Inicia oculta via CSS) -->
-<div id="admin-bar" style="display:none; background:#111; color:#fff; padding:10px 20px; position:fixed; top:0; left:0; width:100%; z-index:9999; justify-content:space-between; align-items:center; border-bottom:2px solid #ff9800; box-sizing:border-box;">
-  <div>
-    <span style="color:#ff9800; font-weight:bold;">Modo Edição Ativo:</span> Clique nos textos pontilhados para editar. As alterações salvam sozinhas ao clicar fora.
-  </div>
-  <button id="btn-logout" style="background:#ff9800; color:#fff; border:none; padding:6px 16px; cursor:pointer; font-weight:bold; border-radius:4px;">Sair do Painel</button>
-</div>
+
+  <!-- Barra de Controle do Dono -->
+  <aside id="admin-bar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span style="background:#ff9800; color:#111; font-weight:800; font-size:11px; padding:4px 8px; border-radius:4px;">MODO ADMIN ATIVO</span>
+      <span style="font-size:13px; color:#e0e0e0;">Clique nos textos ou no botão das imagens para alterar o conteúdo.</span>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button id="btn-preview" style="background:#222; color:#fff; border:1px solid #444; padding:6px 14px; border-radius:4px; font-weight:600; cursor:pointer;">Ocultar Marcações</button>
+      <button id="btn-logout" style="background:#ff9800; color:#111; border:none; padding:6px 16px; font-weight:700; border-radius:4px; cursor:pointer;">Sair do Painel</button>
+    </div>
+  </aside>
+
+  <!-- Input oculto para upload de imagens -->
+  <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
 
   <header class="header">
     <div class="container nav">
@@ -161,8 +227,14 @@
         </div>
 
         <div class="about-visual">
-          <div class="image-stack large">BURGER PREMIUM</div>
-          <div class="image-stack small">PÃO DE ALHO RECHEADO</div>
+          <div class="editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80" alt="Burger Premium" data-img-key="about_img_1" class="image-stack large" />
+            <button class="change-img-btn" data-trigger-img="about_img_1">Trocar Foto</button>
+          </div>
+          <div class="editable-img-wrapper" style="margin-top: 15px;">
+            <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" alt="Pão de Alho" data-img-key="about_img_2" class="image-stack small" />
+            <button class="change-img-btn" data-trigger-img="about_img_2">Trocar Foto</button>
+          </div>
         </div>
       </div>
     </section>
@@ -173,8 +245,7 @@
           <span class="section-tag section-tag-dark" data-editable data-key="dest_tag">Destaques</span>
           <h2 data-editable data-key="dest_title">O que torna o Virado Num Alho especial</h2>
           <p data-editable data-key="dest_subtitle">
-            Estrutura ideal para apresentar os principais diferenciais da marca
-            em um site profissional.
+            Estrutura ideal para apresentar os principais diferenciais da marca.
           </p>
         </div>
 
@@ -183,8 +254,7 @@
             <div class="icon">🍔</div>
             <h3 data-editable data-key="srv_1_title">Hambúrgueres artesanais</h3>
             <p data-editable data-key="srv_1_desc">
-              Montagens robustas, carnes suculentas, queijos marcantes e
-              apresentação que chama atenção em qualquer tela.
+              Montagens robustas, carnes suculentas, queijos marcantes e apresentação única.
             </p>
           </article>
 
@@ -192,8 +262,7 @@
             <div class="icon">🧄</div>
             <h3 data-editable data-key="srv_2_title">Pães de alho recheados</h3>
             <p data-editable data-key="srv_2_desc">
-              O produto que reforça a identidade da marca e entrega um diferencial
-              memorável no mercado local.
+              O produto que reforça a identidade da marca e entrega um diferencial memorável.
             </p>
           </article>
 
@@ -201,8 +270,7 @@
             <div class="icon">🔥</div>
             <h3 data-editable data-key="srv_3_title">Experiência intensa</h3>
             <p data-editable data-key="srv_3_desc">
-              Uma proposta gastronômica com personalidade, feita para quem busca
-              muito sabor e impacto visual.
+              Uma proposta gastronômica com personalidade e muito sabor.
             </p>
           </article>
 
@@ -210,8 +278,7 @@
             <div class="icon">📍</div>
             <h3 data-editable data-key="srv_4_title">Duas unidades</h3>
             <p data-editable data-key="srv_4_desc">
-              Atendimento em pontos estratégicos, facilitando o acesso do público
-              e ampliando a presença da marca.
+              Atendimento em pontos estratégicos em Capoeiras e Serraria.
             </p>
           </article>
 
@@ -219,8 +286,7 @@
             <div class="icon">⭐</div>
             <h3 data-editable data-key="srv_5_title">Forte prova social</h3>
             <p data-editable data-key="srv_5_desc">
-              Milhares de avaliações no Google e audiência relevante no Instagram
-              aumentam a confiança do visitante.
+              Milhares de avaliações no Google e audiência engajada.
             </p>
           </article>
 
@@ -228,52 +294,43 @@
             <div class="icon">🎶</div>
             <h3 data-editable data-key="srv_6_title">Clima descontraído</h3>
             <p data-editable data-key="srv_6_desc">
-              Ambiente e proposta ideais para quem quer comer bem, encontrar os
-              amigos e aproveitar a noite.
+              Ambiente e proposta ideais para reunir amigos e família.
             </p>
           </article>
         </div>
       </div>
     </section>
 
+    <!-- Galeria com Imagens Editáveis -->
     <section class="section gallery-section" id="galeria">
       <div class="container">
         <div class="section-heading center">
           <span class="section-tag" data-editable data-key="gal_tag">Galeria</span>
           <h2 data-editable data-key="gal_title">Uma identidade visual que abre o apetite</h2>
           <p data-editable data-key="gal_subtitle">
-            Espaço perfeito para destacar burgers, ambientação e produtos
-            campeões da casa.
+            Destaque para nossos burgers, ambiente e momentos.
           </p>
         </div>
 
         <div class="gallery-grid">
-          <div class="gallery-card tall">
-            <div class="gallery-overlay">
-              <span>Ambiente</span>
-              <strong>Noite, branding e experiência</strong>
-            </div>
+          <div class="gallery-card tall editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Galeria 1" data-img-key="gal_img_1" />
+            <button class="change-img-btn" data-trigger-img="gal_img_1">Trocar Foto</button>
           </div>
 
-          <div class="gallery-card">
-            <div class="gallery-overlay">
-              <span>Burger artesanal</span>
-              <strong>Montagem alta e visual marcante</strong>
-            </div>
+          <div class="gallery-card editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80" alt="Galeria 2" data-img-key="gal_img_2" />
+            <button class="change-img-btn" data-trigger-img="gal_img_2">Trocar Foto</button>
           </div>
 
-          <div class="gallery-card">
-            <div class="gallery-overlay">
-              <span>Especial da casa</span>
-              <strong>Pão de alho recheado</strong>
-            </div>
+          <div class="gallery-card editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80" alt="Galeria 3" data-img-key="gal_img_3" />
+            <button class="change-img-btn" data-trigger-img="gal_img_3">Trocar Foto</button>
           </div>
 
-          <div class="gallery-card wide">
-            <div class="gallery-overlay">
-              <span>Assinatura da marca</span>
-              <strong>Sabor forte, textura e presença visual</strong>
-            </div>
+          <div class="gallery-card wide editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80" alt="Galeria 4" data-img-key="gal_img_4" />
+            <button class="change-img-btn" data-trigger-img="gal_img_4">Trocar Foto</button>
           </div>
         </div>
       </div>
@@ -285,8 +342,7 @@
           <span class="section-tag" data-editable data-key="units_tag">Unidades e horários</span>
           <h2 data-editable data-key="units_title">Informações organizadas para facilitar a visita</h2>
           <p data-editable data-key="units_desc">
-            Um site profissional também precisa transformar interesse em ação.
-            Aqui entram localização, horários e contato de forma clara.
+            Localização e horários para você planejar seu pedido ou visita.
           </p>
         </div>
 
@@ -315,7 +371,7 @@
         <div class="section-heading center">
           <span class="section-tag">Depoimentos</span>
           <h2>O que o público comenta</h2>
-          <p>Comentários reais ajudam a construir confiança e reforçar percepção de qualidade.</p>
+          <p>Comentários reais dos nossos clientes.</p>
         </div>
 
         <div class="testimonials-grid">
@@ -327,31 +383,16 @@
 
           <article class="testimonial-card">
             <div class="quote-mark">"</div>
-            <p data-editable data-key="test_2_p">Basicamente um pão de carne com queijo porque a pasta de alho nem senti.</p>
+            <p data-editable data-key="test_2_p">Um dos melhores pães de alho recheados que já experimentei na região.</p>
             <strong data-editable data-key="test_2_author">Fefa Avalia</strong>
           </article>
 
           <article class="testimonial-card">
             <div class="quote-mark">"</div>
-            <p data-editable data-key="test_3_p">Estacionamento na rua, tem bastante vagas principalmente se tratando a noite.</p>
+            <p data-editable data-key="test_3_p">Estacionamento na rua bem tranquilo e lanche impecável.</p>
             <strong data-editable data-key="test_3_author">luiz lopes</strong>
           </article>
         </div>
-      </div>
-    </section>
-
-    <!-- Tela / Seção de Início para Login do Administrador -->
-    <section class="admin-login-container" id="admin-login-section" style="background: #111; color: #fff; padding: 60px 20px; text-align: center; border-top: 2px solid #ff9800;">
-      <div class="container" style="max-width: 400px; margin: 0 auto;">
-        <h3 style="color: #ff9800; margin-bottom: 10px; font-size: 24px;">Área Restrita (Administrador)</h3>
-        <p style="margin-bottom: 25px; color: #ccc; font-size: 14px;">Entre com seu e-mail e senha para gerenciar e editar o conteúdo do site diretamente na tela.</p>
-        
-        <form id="admin-login-form" style="display: flex; flex-direction: column; gap: 15px;">
-          <input type="email" id="login-email" placeholder="E-mail do administrador" required style="padding: 12px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff;" />
-          <input type="password" id="login-password" placeholder="Senha" required style="padding: 12px; border-radius: 4px; border: 1px solid #444; background: #222; color: #fff;" />
-          <button type="submit" style="padding: 12px; background: #ff9800; color: #fff; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Entrar no Painel</button>
-          <p id="login-feedback" style="font-size: 14px; margin: 0;"></p>
-        </form>
       </div>
     </section>
 
@@ -360,7 +401,7 @@
         <div class="contact-copy">
           <span class="section-tag">Contato</span>
           <h2>Fale com a equipe do Virado Num Alho</h2>
-          <p>Ideal para reservas, dúvidas, parcerias, pedidos de informação ou direcionamento para redes sociais.</p>
+          <p>Ideal para dúvidas, encomendas ou reservas.</p>
 
           <div class="contact-info-card">
             <ul>
@@ -375,29 +416,19 @@
 
         <form class="contact-form" id="contact-form">
           <h3>Envie sua mensagem</h3>
-
           <div class="form-group">
             <label for="nome">Nome</label>
             <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
           </div>
-
           <div class="form-group">
             <label for="telefone">Telefone</label>
             <input type="tel" id="telefone" name="telefone" placeholder="(48) 99999-9999" required />
           </div>
-
-          <div class="form-group">
-            <label for="assunto">Assunto</label>
-            <input type="text" id="assunto" name="assunto" placeholder="Ex: Reserva, parceria, cardápio" required />
-          </div>
-
           <div class="form-group">
             <label for="mensagem">Mensagem</label>
-            <textarea id="mensagem" name="mensagem" rows="5" placeholder="Digite sua mensagem" required></textarea>
+            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Digite sua mensagem" required></textarea>
           </div>
-
           <button type="submit" class="btn btn-full">Enviar</button>
-          <p class="form-message" id="form-message"></p>
         </form>
       </div>
     </section>
@@ -409,7 +440,6 @@
         <strong>Virado Num Alho</strong>
         <p>Hambúrguer artesanal, pão de alho recheado e identidade forte em Florianópolis.</p>
       </div>
-
       <div class="footer-links">
         <a href="#inicio">Início</a>
         <a href="#sobre">Sobre</a>
