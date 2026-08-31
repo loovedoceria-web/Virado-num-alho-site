@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Administrativo | Virado Num Alho</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+    body {
+      background-color: #0b0b0b;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .login-card {
+      background: #161616;
+      border: 1px solid #282828;
+      border-radius: 12px;
+      padding: 40px 30px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      text-align: center;
+    }
+    .logo-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+      background: #ff9800;
+      color: #111;
+      font-weight: 900;
+      border-radius: 10px;
+      font-size: 24px;
+      margin-bottom: 20px;
+      font-family: 'Bebas Neue', sans-serif;
+    }
+    h1 {
+      color: #ff9800;
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #999;
+      font-size: 14px;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      background: #202020;
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      border-color: #ff9800;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #ff9800;
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s;
+      margin-top: 5px;
+    }
+    button:hover {
+      filter: brightness(1.1);
+    }
+    #feedback {
+      font-size: 14px;
+      min-height: 20px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
 
+  <div class="login-card">
+    <div class="logo-mark">VA</div>
+    <h1>Área Restrita (Administrador)</h1>
+    <p>Entre com seu e-mail e senha para gerenciar e editar o conteúdo do site diretamente na tela.</p>
+
+    <form id="admin-login-form">
+      <input type="email" id="login-email" placeholder="E-mail do administrador" required autocomplete="email" />
+      <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password" />
+      <button type="submit" id="btn-submit">Entrar no Painel</button>
+      <div id="feedback"></div>
+    </form>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+
+    // Substitua com suas credenciais do Supabase
+    const SUPABASE_URL = 'SUA_SUPABASE_URL'
+    const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+    // Se já estiver com sessão ativa, redireciona direto para o site
+    const { data: { session } } = await supabase.auth.getSession()
+    if (session) {
+      window.location.href = 'index.html'
+    }
+
+    const form = document.getElementById('admin-login-form')
+    const feedback = document.getElementById('feedback')
+    const btn = document.getElementById('btn-submit')
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const email = document.getElementById('login-email').value.trim()
+      const password = document.getElementById('login-password').value
+
+      btn.disabled = true
+      feedback.textContent = 'Autenticando...'
+      feedback.style.color = '#ff9800'
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+      if (error) {
+        feedback.textContent = 'Credenciais inválidas: ' + error.message
+        feedback.style.color = '#ff5252'
+        btn.disabled = false
+      } else {
+        feedback.textContent = 'Login aprovado! Redirecionando para edição...'
+        feedback.style.color = '#00e676'
+        setTimeout(() => {
+          window.location.href = 'index.html'
+        }, 800)
+      }
+    })
+  </script>
+</body>
+</html>
