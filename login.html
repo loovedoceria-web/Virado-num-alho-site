@@ -116,48 +116,41 @@
     </form>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+ <script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-    // Substitua com suas credenciais do Supabase
-    const SUPABASE_URL = 'SUA_SUPABASE_URL'
-    const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  const SUPABASE_URL = 'SUA_SUPABASE_URL'
+  const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-    // Se já estiver com sessão ativa, redireciona direto para o site
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) {
-      window.location.href = 'index.html'
+  const form = document.getElementById('admin-login-form')
+  const feedback = document.getElementById('feedback')
+  const btn = document.getElementById('btn-submit')
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    const email = document.getElementById('login-email').value.trim()
+    const password = document.getElementById('login-password').value
+
+    btn.disabled = true
+    feedback.textContent = 'Verificando credenciais...'
+    feedback.style.color = '#ff9800'
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (error) {
+      feedback.textContent = 'Erro ao entrar: ' + error.message
+      feedback.style.color = '#ff5252'
+      btn.disabled = false
+    } else {
+      feedback.textContent = 'Sucesso! Entrando no painel...'
+      feedback.style.color = '#00e676'
+      
+      setTimeout(() => {
+        // Redireciona para o site no modo edição
+        window.location.href = 'index.html'
+      }, 700)
     }
-
-    const form = document.getElementById('admin-login-form')
-    const feedback = document.getElementById('feedback')
-    const btn = document.getElementById('btn-submit')
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault()
-
-      const email = document.getElementById('login-email').value.trim()
-      const password = document.getElementById('login-password').value
-
-      btn.disabled = true
-      feedback.textContent = 'Autenticando...'
-      feedback.style.color = '#ff9800'
-
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-
-      if (error) {
-        feedback.textContent = 'Credenciais inválidas: ' + error.message
-        feedback.style.color = '#ff5252'
-        btn.disabled = false
-      } else {
-        feedback.textContent = 'Login aprovado! Redirecionando para edição...'
-        feedback.style.color = '#00e676'
-        setTimeout(() => {
-          window.location.href = 'index.html'
-        }, 800)
-      }
-    })
-  </script>
-</body>
-</html>
+  })
+</script>
