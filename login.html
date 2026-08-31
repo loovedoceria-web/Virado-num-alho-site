@@ -8,12 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
     body {
       background-color: #0b0b0b;
       color: #fff;
@@ -47,23 +42,9 @@
       margin-bottom: 20px;
       font-family: 'Bebas Neue', sans-serif;
     }
-    h1 {
-      color: #ff9800;
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-    p {
-      color: #999;
-      font-size: 14px;
-      margin-bottom: 28px;
-      line-height: 1.5;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+    h1 { color: #ff9800; font-size: 24px; font-weight: 800; margin-bottom: 10px; }
+    p { color: #999; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+    form { display: flex; flex-direction: column; gap: 16px; }
     input {
       width: 100%;
       padding: 14px 16px;
@@ -73,11 +54,8 @@
       color: #fff;
       font-size: 15px;
       outline: none;
-      transition: border-color 0.2s;
     }
-    input:focus {
-      border-color: #ff9800;
-    }
+    input:focus { border-color: #ff9800; }
     button {
       width: 100%;
       padding: 14px;
@@ -88,16 +66,13 @@
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
-      transition: filter 0.2s;
-      margin-top: 5px;
-    }
-    button:hover {
-      filter: brightness(1.1);
     }
     #feedback {
       font-size: 14px;
       min-height: 20px;
-      margin-top: 10px;
+      margin-top: 12px;
+      line-height: 1.4;
+      word-break: break-word;
     }
   </style>
 </head>
@@ -106,51 +81,67 @@
   <div class="login-card">
     <div class="logo-mark">VA</div>
     <h1>Área Restrita (Administrador)</h1>
-    <p>Entre com seu e-mail e senha para gerenciar e editar o conteúdo do site diretamente na tela.</p>
+    <p>Entre com seu e-mail e senha para gerenciar o conteúdo do site.</p>
 
     <form id="admin-login-form">
-      <input type="email" id="login-email" placeholder="E-mail do administrador" required autocomplete="email" />
-      <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password" />
+      <input type="email" id="login-email" placeholder="E-mail do administrador" required />
+      <input type="password" id="login-password" placeholder="Senha" required />
       <button type="submit" id="btn-submit">Entrar no Painel</button>
       <div id="feedback"></div>
     </form>
   </div>
 
- <script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-  const SUPABASE_URL = 'SUA_SUPABASE_URL'
-  const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    // COLOQUE SUAS CHAVES AQUI
+    const SUPABASE_URL = 'SUA_SUPABASE_URL'
+    const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-  const form = document.getElementById('admin-login-form')
-  const feedback = document.getElementById('feedback')
-  const btn = document.getElementById('btn-submit')
+    const form = document.getElementById('admin-login-form')
+    const feedback = document.getElementById('feedback')
+    const btn = document.getElementById('btn-submit')
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault()
-
-    const email = document.getElementById('login-email').value.trim()
-    const password = document.getElementById('login-password').value
-
-    btn.disabled = true
-    feedback.textContent = 'Verificando credenciais...'
-    feedback.style.color = '#ff9800'
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-
-    if (error) {
-      feedback.textContent = 'Erro ao entrar: ' + error.message
-      feedback.style.color = '#ff5252'
-      btn.disabled = false
-    } else {
-      feedback.textContent = 'Sucesso! Entrando no painel...'
-      feedback.style.color = '#00e676'
-      
-      setTimeout(() => {
-        // Redireciona para o site no modo edição
-        window.location.href = 'index.html'
-      }, 700)
+    // Alerta se as chaves ainda forem os textos padrões
+    if (SUPABASE_URL.includes('SUA_SUPABASE_URL') || SUPABASE_ANON_KEY.includes('SUA_SUPABASE_ANON_KEY')) {
+      feedback.textContent = 'Atenção: Você precisa colar a URL e ANON KEY do Supabase no código do login.html!'
+      feedback.style.color = '#ff9800'
     }
-  })
-</script>
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+
+      const email = document.getElementById('login-email').value.trim()
+      const password = document.getElementById('login-password').value
+
+      btn.disabled = true
+      feedback.textContent = 'Conectando ao Supabase...'
+      feedback.style.color = '#ff9800'
+
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+        if (error) {
+          console.error('Erro retornado pelo Supabase:', error)
+          feedback.textContent = 'Erro: ' + error.message
+          feedback.style.color = '#ff5252'
+          btn.disabled = false
+        } else {
+          feedback.textContent = 'Acesso liberado! Redirecionando...'
+          feedback.style.color = '#00e676'
+          
+          setTimeout(() => {
+            window.location.href = './index.html'
+          }, 600)
+        }
+      } catch (err) {
+        console.error('Erro de conexão:', err)
+        feedback.textContent = 'Falha na conexão. Verifique se está usando Live Server (http://) e não abrindo como arquivo local.'
+        feedback.style.color = '#ff5252'
+        btn.disabled = false
+      }
+    })
+  </script>
+</body>
+</html>
