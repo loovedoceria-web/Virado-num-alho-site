@@ -8,22 +8,44 @@
     name="description"
     content="Virado Num Alho: hamburgueria artesanal com pão de alho recheado, burgers marcantes e duas unidades na Grande Florianópolis."
   />
-  <link rel="preconnect" href="[fonts.googleapis.com](https://fonts.googleapis.com)">
-  <link rel="preconnect" href="[fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap)"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap"
     rel="stylesheet"
   />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Barra de Administração (Visível apenas para o cliente logado) -->
+  <div id="admin-bar" style="display:none; background:#111; color:#fff; padding:10px 20px; position:fixed; top:0; width:100%; z-index:9999; display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #ff9800;">
+    <div>
+      <span style="color:#ff9800; font-weight:bold;">Modo Edição Ativo:</span> Clique nos textos pontilhados para editar. As alterações salvam sozinhas.
+    </div>
+    <button id="btn-logout" style="background:#ff9800; color:#fff; border:none; padding:5px 15px; cursor:pointer; font-weight:bold; border-radius:4px;">Sair do Painel</button>
+  </div>
+
+  <!-- Botão flutuante discreto para o cliente acessar o login -->
+  <button id="btn-open-login" style="position:fixed; bottom:15px; right:15px; background:#111; color:#ff9800; border:1px solid #ff9800; padding:10px 15px; border-radius:50%; cursor:pointer; z-index:9998; font-weight:bold;" title="Área do Cliente">⚙️</button>
+
+  <!-- Modal de Login -->
+  <div id="login-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:10000; justify-content:center; align-items:center;">
+    <div style="background:#fff; padding:30px; border-radius:8px; width:300px; text-align:center;">
+      <h3 style="margin-bottom:15px; color:#111;">Painel do Cliente</h3>
+      <input type="email" id="admin-email" placeholder="E-mail" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px;" />
+      <input type="password" id="admin-password" placeholder="Senha" style="width:100%; padding:10px; margin-bottom:15px; border:1px solid #ccc; border-radius:4px;" />
+      <button id="btn-submit-login" style="width:100%; background:#ff9800; color:#fff; border:none; padding:10px; font-weight:bold; border-radius:4px; cursor:pointer; margin-bottom:10px;">Entrar</button>
+      <button id="btn-close-login" style="background:none; border:none; color:#666; cursor:pointer;">Fechar</button>
+    </div>
+  </div>
+
   <header class="header">
     <div class="container nav">
       <a href="#inicio" class="logo">
         <span class="logo-mark">VA</span>
         <div class="logo-text">
-          <strong>Virado Num Alho</strong>
-          <small>Burgers + pão de alho recheado</small>
+          <strong data-editable data-key="brand_name">Virado Num Alho</strong>
+          <small data-editable data-key="brand_subtitle">Burgers + pão de alho recheado</small>
         </div>
       </a>
 
@@ -50,12 +72,12 @@
 
       <div class="container hero-grid">
         <div class="hero-content">
-          <span class="eyebrow">🥇 O primeiro pão de alho da Grande Florianópolis</span>
-          <h1>
+          <span class="eyebrow" data-editable data-key="hero_eyebrow">🥇 O primeiro pão de alho da Grande Florianópolis</span>
+          <h1 data-editable data-key="hero_title">
             Hamburgueria com identidade forte, sabor marcante e pão de alho recheado
           </h1>
-          <p>
-            O <strong>Virado Num Alho</strong> combina burgers artesanais,
+          <p data-editable data-key="hero_description">
+            O Virado Num Alho combina burgers artesanais,
             pão de alho recheado e uma presença visual marcante para entregar
             uma experiência gastronômica memorável em Florianópolis.
           </p>
@@ -67,33 +89,33 @@
 
           <div class="hero-info-cards">
             <div class="mini-card">
-              <strong>4,339</strong>
-              <span>avaliações no Google</span>
+              <strong data-editable data-key="card_1_val">4,339</strong>
+              <span data-editable data-key="card_1_lbl">avaliações no Google</span>
             </div>
             <div class="mini-card">
-              <strong>R$ 20-40</strong>
-              <span>faixa de preço</span>
+              <strong data-editable data-key="card_2_val">R$ 20-40</strong>
+              <span data-editable data-key="card_2_lbl">faixa de preço</span>
             </div>
             <div class="mini-card">
-              <strong>2 unidades</strong>
-              <span>Capoeiras e Serraria</span>
+              <strong data-editable data-key="card_3_val">2 unidades</strong>
+              <span data-editable data-key="card_3_lbl">Capoeiras e Serraria</span>
             </div>
           </div>
         </div>
 
         <div class="hero-highlight">
           <div class="highlight-card">
-            <span class="highlight-badge">Especial da casa</span>
-            <h2>Pão de alho recheado</h2>
-            <p>
+            <span class="highlight-badge" data-editable data-key="highlight_badge">Especial da casa</span>
+            <h2 data-editable data-key="highlight_title">Pão de alho recheado</h2>
+            <p data-editable data-key="highlight_desc">
               Uma assinatura de marca que diferencia a casa e cria uma proposta
               de valor clara para o público.
             </p>
 
             <ul>
-              <li>Burgers artesanais com presença visual forte</li>
-              <li>Combinações intensas e identidade própria</li>
-              <li>Experiência casual com clima premium</li>
+              <li data-editable data-key="hl_item_1">Burgers artesanais com presença visual forte</li>
+              <li data-editable data-key="hl_item_2">Combinações intensas e identidade própria</li>
+              <li data-editable data-key="hl_item_3">Experiência casual com clima premium</li>
             </ul>
           </div>
         </div>
@@ -102,24 +124,24 @@
 
     <section class="proof-bar">
       <div class="container proof-grid">
-        <div class="proof-item">12 mil seguidores</div>
-        <div class="proof-item">169 posts publicados</div>
-        <div class="proof-item">Atendimento em duas unidades</div>
-        <div class="proof-item">Marca forte e reconhecimento local</div>
+        <div class="proof-item" data-editable data-key="proof_1">12 mil seguidores</div>
+        <div class="proof-item" data-editable data-key="proof_2">169 posts publicados</div>
+        <div class="proof-item" data-editable data-key="proof_3">Atendimento em duas unidades</div>
+        <div class="proof-item" data-editable data-key="proof_4">Marca forte e reconhecimento local</div>
       </div>
     </section>
 
     <section class="section about" id="sobre">
       <div class="container about-grid">
         <div class="about-content">
-          <span class="section-tag">Sobre a marca</span>
-          <h2>Uma hamburgueria pensada para ser lembrada</h2>
-          <p>
-            O <strong>Virado Num Alho</strong> se destaca por unir uma proposta
+          <span class="section-tag" data-editable data-key="about_tag">Sobre a marca</span>
+          <h2 data-editable data-key="about_title">Uma hamburgueria pensada para ser lembrada</h2>
+          <p data-editable data-key="about_p1">
+            O Virado Num Alho se destaca por unir uma proposta
             visual forte com um cardápio que explora burgers artesanais e o
             apelo irresistível do pão de alho recheado.
           </p>
-          <p>
+          <p data-editable data-key="about_p2">
             A comunicação da marca, o nome, a assinatura gastronômica e a prova
             social ajudam a construir uma presença sólida, com potencial alto de
             atração tanto para público recorrente quanto para novos clientes.
@@ -127,24 +149,24 @@
 
           <div class="about-features">
             <article class="feature-box">
-              <h3>Assinatura própria</h3>
-              <p>
+              <h3 data-editable data-key="feat_1_title">Assinatura própria</h3>
+              <p data-editable data-key="feat_1_desc">
                 A combinação entre hambúrguer artesanal e alho cria um
                 posicionamento único e fácil de memorizar.
               </p>
             </article>
 
             <article class="feature-box">
-              <h3>Experiência visual</h3>
-              <p>
+              <h3 data-editable data-key="feat_2_title">Experiência visual</h3>
+              <p data-editable data-key="feat_2_desc">
                 Fotos, ambientação e apresentação dos burgers ajudam a vender
                 antes mesmo do primeiro pedido.
               </p>
             </article>
 
             <article class="feature-box">
-              <h3>Força local</h3>
-              <p>
+              <h3 data-editable data-key="feat_3_title">Força local</h3>
+              <p data-editable data-key="feat_3_desc">
                 Presença consolidada em Florianópolis, com unidades em
                 Capoeiras e Serraria.
               </p>
@@ -162,9 +184,9 @@
     <section class="section dark-section" id="servicos">
       <div class="container">
         <div class="section-heading center light">
-          <span class="section-tag section-tag-dark">Destaques</span>
-          <h2>O que torna o Virado Num Alho especial</h2>
-          <p>
+          <span class="section-tag section-tag-dark" data-editable data-key="dest_tag">Destaques</span>
+          <h2 data-editable data-key="dest_title">O que torna o Virado Num Alho especial</h2>
+          <p data-editable data-key="dest_subtitle">
             Estrutura ideal para apresentar os principais diferenciais da marca
             em um site profissional.
           </p>
@@ -173,8 +195,8 @@
         <div class="services-grid">
           <article class="service-card">
             <div class="icon">🍔</div>
-            <h3>Hambúrgueres artesanais</h3>
-            <p>
+            <h3 data-editable data-key="srv_1_title">Hambúrgueres artesanais</h3>
+            <p data-editable data-key="srv_1_desc">
               Montagens robustas, carnes suculentas, queijos marcantes e
               apresentação que chama atenção em qualquer tela.
             </p>
@@ -182,8 +204,8 @@
 
           <article class="service-card">
             <div class="icon">🧄</div>
-            <h3>Pães de alho recheados</h3>
-            <p>
+            <h3 data-editable data-key="srv_2_title">Pães de alho recheados</h3>
+            <p data-editable data-key="srv_2_desc">
               O produto que reforça a identidade da marca e entrega um diferencial
               memorável no mercado local.
             </p>
@@ -191,8 +213,8 @@
 
           <article class="service-card">
             <div class="icon">🔥</div>
-            <h3>Experiência intensa</h3>
-            <p>
+            <h3 data-editable data-key="srv_3_title">Experiência intensa</h3>
+            <p data-editable data-key="srv_3_desc">
               Uma proposta gastronômica com personalidade, feita para quem busca
               muito sabor e impacto visual.
             </p>
@@ -200,8 +222,8 @@
 
           <article class="service-card">
             <div class="icon">📍</div>
-            <h3>Duas unidades</h3>
-            <p>
+            <h3 data-editable data-key="srv_4_title">Duas unidades</h3>
+            <p data-editable data-key="srv_4_desc">
               Atendimento em pontos estratégicos, facilitando o acesso do público
               e ampliando a presença da marca.
             </p>
@@ -209,8 +231,8 @@
 
           <article class="service-card">
             <div class="icon">⭐</div>
-            <h3>Forte prova social</h3>
-            <p>
+            <h3 data-editable data-key="srv_5_title">Forte prova social</h3>
+            <p data-editable data-key="srv_5_desc">
               Milhares de avaliações no Google e audiência relevante no Instagram
               aumentam a confiança do visitante.
             </p>
@@ -218,8 +240,8 @@
 
           <article class="service-card">
             <div class="icon">🎶</div>
-            <h3>Clima descontraído</h3>
-            <p>
+            <h3 data-editable data-key="srv_6_title">Clima descontraído</h3>
+            <p data-editable data-key="srv_6_desc">
               Ambiente e proposta ideais para quem quer comer bem, encontrar os
               amigos e aproveitar a noite.
             </p>
@@ -231,9 +253,9 @@
     <section class="section gallery-section" id="galeria">
       <div class="container">
         <div class="section-heading center">
-          <span class="section-tag">Galeria</span>
-          <h2>Uma identidade visual que abre o apetite</h2>
-          <p>
+          <span class="section-tag" data-editable data-key="gal_tag">Galeria</span>
+          <h2 data-editable data-key="gal_title">Uma identidade visual que abre o apetite</h2>
+          <p data-editable data-key="gal_subtitle">
             Espaço perfeito para destacar burgers, ambientação e produtos
             campeões da casa.
           </p>
@@ -274,9 +296,9 @@
     <section class="section units-section">
       <div class="container units-grid">
         <div class="units-copy">
-          <span class="section-tag">Unidades e horários</span>
-          <h2>Informações organizadas para facilitar a visita</h2>
-          <p>
+          <span class="section-tag" data-editable data-key="units_tag">Unidades e horários</span>
+          <h2 data-editable data-key="units_title">Informações organizadas para facilitar a visita</h2>
+          <p data-editable data-key="units_desc">
             Um site profissional também precisa transformar interesse em ação.
             Aqui entram localização, horários e contato de forma clara.
           </p>
@@ -284,19 +306,19 @@
 
         <div class="units-cards">
           <article class="unit-card">
-            <h3>Unidade Capoeiras</h3>
-            <p><strong>Endereço:</strong> R. Campolino Alves - Capoeiras, Florianópolis - SC, 88085-110</p>
-            <p><strong>Terça a quinta:</strong> 18h às 23h</p>
-            <p><strong>Sexta e sábados:</strong> 18h às 00h</p>
-            <p><strong>Domingos:</strong> 16h às 22h</p>
+            <h3 data-editable data-key="unit1_name">Unidade Capoeiras</h3>
+            <p data-editable data-key="unit1_addr"><strong>Endereço:</strong> R. Campolino Alves - Capoeiras, Florianópolis - SC, 88085-110</p>
+            <p data-editable data-key="unit1_t1"><strong>Terça a quinta:</strong> 18h às 23h</p>
+            <p data-editable data-key="unit1_t2"><strong>Sexta e sábados:</strong> 18h às 00h</p>
+            <p data-editable data-key="unit1_t3"><strong>Domingos:</strong> 16h às 22h</p>
           </article>
 
           <article class="unit-card">
-            <h3>Unidade Serraria</h3>
-            <p><strong>Funcionamento:</strong> terça a domingo</p>
-            <p><strong>Horário base:</strong> 18h às 23h</p>
-            <p><strong>Sextas e sábados:</strong> até 00h</p>
-            <p><strong>Destaque:</strong> operação com identidade da marca</p>
+            <h3 data-editable data-key="unit2_name">Unidade Serraria</h3>
+            <p data-editable data-key="unit2_t1"><strong>Funcionamento:</strong> terça a domingo</p>
+            <p data-editable data-key="unit2_t2"><strong>Horário base:</strong> 18h às 23h</p>
+            <p data-editable data-key="unit2_t3"><strong>Sextas e sábados:</strong> até 00h</p>
+            <p data-editable data-key="unit2_t4"><strong>Destaque:</strong> operação com identidade da marca</p>
           </article>
         </div>
       </div>
@@ -307,35 +329,26 @@
         <div class="section-heading center">
           <span class="section-tag">Depoimentos</span>
           <h2>O que o público comenta</h2>
-          <p>
-            Comentários reais ajudam a construir confiança e reforçar percepção
-            de qualidade.
-          </p>
+          <p>Comentários reais ajudam a construir confiança e reforçar percepção de qualidade.</p>
         </div>
 
         <div class="testimonials-grid">
           <article class="testimonial-card">
             <div class="quote-mark">"</div>
-            <p>
-              Comida excelente como o atendimento e o ambiente, ainda abre para o almoço.
-            </p>
-            <strong>eduardo lentz</strong>
+            <p data-editable data-key="test_1_p">Comida excelente como o atendimento e o ambiente, ainda abre para o almoço.</p>
+            <strong data-editable data-key="test_1_author">eduardo lentz</strong>
           </article>
 
           <article class="testimonial-card">
             <div class="quote-mark">"</div>
-            <p>
-              Basicamente um pão de carne com queijo porque a pasta de alho nem senti.
-            </p>
-            <strong>Fefa Avalia</strong>
+            <p data-editable data-key="test_2_p">Basicamente um pão de carne com queijo porque a pasta de alho nem senti.</p>
+            <strong data-editable data-key="test_2_author">Fefa Avalia</strong>
           </article>
 
           <article class="testimonial-card">
             <div class="quote-mark">"</div>
-            <p>
-              Estacionamento na rua, tem bastante vagas principalmente se tratando a noite.
-            </p>
-            <strong>luiz lopes</strong>
+            <p data-editable data-key="test_3_p">Estacionamento na rua, tem bastante vagas principalmente se tratando a noite.</p>
+            <strong data-editable data-key="test_3_author">luiz lopes</strong>
           </article>
         </div>
       </div>
@@ -346,19 +359,15 @@
         <div class="contact-copy">
           <span class="section-tag">Contato</span>
           <h2>Fale com a equipe do Virado Num Alho</h2>
-          <p>
-            Ideal para reservas, dúvidas, parcerias, pedidos de informação ou
-            direcionamento para redes sociais.
-          </p>
+          <p>Ideal para reservas, dúvidas, parcerias, pedidos de informação ou direcionamento para redes sociais.</p>
 
           <div class="contact-info-card">
             <ul>
-              <li><strong>Telefone:</strong> (48) 99838-8277</li>
-              <li><strong>Preço por pessoa:</strong> R$ 20-40</li>
-              <li><strong>Instagram:</strong> @viradonumalho</li>
-              <li><strong>Seguidores:</strong> 12 mil</li>
-              <li><strong>Posts:</strong> 169</li>
-              <li><strong>Link:</strong> linklist.bio/viradonumalho</li>
+              <li data-editable data-key="info_phone"><strong>Telefone:</strong> (48) 99838-8277</li>
+              <li data-editable data-key="info_price"><strong>Preço por pessoa:</strong> R$ 20-40</li>
+              <li data-editable data-key="info_ig"><strong>Instagram:</strong> @viradonumalho</li>
+              <li data-editable data-key="info_followers"><strong>Seguidores:</strong> 12 mil</li>
+              <li data-editable data-key="info_posts"><strong>Posts:</strong> 169</li>
             </ul>
           </div>
         </div>
@@ -411,7 +420,7 @@
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Script principal em Inglês conectado ao Supabase -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
-
