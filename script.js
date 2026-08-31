@@ -31,15 +31,15 @@ async function checkAuthSession() {
     const { data: { session } } = await supabase.auth.getSession()
     
     const adminBar = document.getElementById('admin-bar')
-    const openLoginBtn = document.getElementById('btn-open-login')
+    const loginSection = document.getElementById('admin-login-section')
 
     if (session) {
         if (adminBar) adminBar.style.display = 'flex'
-        if (openLoginBtn) openLoginBtn.style.display = 'none'
+        if (loginSection) loginSection.style.display = 'none' // Esconde o formulário se já estiver logado
         enableInlineEditing()
     } else {
         if (adminBar) adminBar.style.display = 'none'
-        if (openLoginBtn) openLoginBtn.style.display = 'block'
+        if (loginSection) loginSection.style.display = 'block'
     }
 }
 
@@ -53,12 +53,10 @@ function enableInlineEditing() {
         el.style.cursor = 'text'
         el.title = 'Click to edit this content'
 
-        // Save automatically when clicking outside the element (blur event)
         el.addEventListener('blur', async () => {
             const key = el.getAttribute('data-key')
             const newContent = el.textContent.trim()
 
-            // Upsert handles both insert or update safely if the key exists
             const { error } = await supabase
                 .from('site_content')
                 .upsert({ key: key, content: newContent }, { onConflict: 'key' })
@@ -73,29 +71,19 @@ function enableInlineEditing() {
     })
 }
 
-// 4. Modal and Authentication Controls
-const loginModal = document.getElementById('login-modal')
-const openLoginBtn = document.getElementById('btn-open-login')
-const closeLoginBtn = document.getElementById('btn-close-login')
-const submitLoginBtn = document.getElementById('btn-submit-login')
-const logoutBtn = document.getElementById('btn-logout')
+// 4. Admin Login Form Submission
+const loginForm = document.getElementById('admin-login-form')
 
-if (openLoginBtn) {
-    openLoginBtn.addEventListener('click', () => {
-        loginModal.style.display = 'flex'
-    })
-}
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        
+        const emailInput = document.getElementById('login-email').value
+        const passwordInput = document.getElementById('login-password').value
+        const feedback = document.getElementById('login-feedback')
 
-if (closeLoginBtn) {
-    closeLoginBtn.addEventListener('click', () => {
-        loginModal.style.display = 'none'
-    })
-}
-
-if (submitLoginBtn) {
-    submitLoginBtn.addEventListener('click', async () => {
-        const emailInput = document.getElementById('admin-email').value
-        const passwordInput = document.getElementById('admin-password').value
+        feedback.textContent = 'Logging in...'
+        feedback.style.color = '#ff9800'
 
         const { error } = await supabase.auth.signInWithPassword({
             email: emailInput,
@@ -103,13 +91,20 @@ if (submitLoginBtn) {
         })
 
         if (error) {
-            alert('Login failed: ' + error.message)
+            feedback.textContent = 'Login failed: ' + error.message
+            feedback.style.color = '#ff6b6b'
         } else {
-            alert('Login successful!')
-            window.location.reload()
+            feedback.textContent = 'Login successful! Updating page...'
+            feedback.style.color = '#4cd137'
+            setTimeout(() => {
+                window.location.reload()
+            }, 1000)
         }
     })
 }
+
+// 5. Logout Control
+const logoutBtn = document.getElementById('btn-logout')
 
 if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
