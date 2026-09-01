@@ -1,5 +1,5 @@
 // ========================================================
-// 1. CONFIGURAÇÃO COM SUAS CHAVES DO SUPABASE
+// 1. CONFIGURAÇÃO COM AS SUAS CHAVES DO SUPABASE
 // ========================================================
 const SUPABASE_URL = 'https://hkfhnoxfggjbuhclpyqt.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZmhub3hmZ2dqYnVoY2xweXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDkzMTUsImV4cCI6MjEwMzU4NTMxNX0.QivPkzOMTuA2bLi5RFA7bzp2YUwDbOg9xnoQDZ-5fmU'
@@ -8,7 +8,7 @@ let activeImageKeyTarget = null
 const adminBar = document.getElementById('admin-bar')
 
 // ========================================================
-// 2. FUNÇÕES REST (Sem dependências externas)
+// 2. FUNÇÕES REST (Sem bibliotecas externas)
 // ========================================================
 
 // Carrega textos, imagens e links salvos no Supabase
@@ -21,7 +21,7 @@ async function loadSiteContent() {
     const data = await res.json()
     if (data && data.length > 0) {
       data.forEach(item => {
-        // Atualiza Textos
+        // Atualiza Textos (que não sejam links especiais)
         const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
         textElements.forEach(el => { el.innerText = item.content })
 
@@ -90,7 +90,7 @@ function enableInlineEditing() {
       const ok = await supabaseUpsert(key, newContent)
       if (ok) {
         el.style.outline = '2px solid #00e676'
-        setTimeout(() => { el.style.outline = '1.5px dashed #ff9800' }, 1200)
+        setTimeout(() => { el.style.outline = '1.5px dashed #e5a93c' }, 1200)
       } else {
         el.style.outline = '2px solid #ff5252'
       }
@@ -117,6 +117,7 @@ function enableInlineEditing() {
       const token = localStorage.getItem('va_admin_token')
       const fileExt = file.name.split('.').pop()
       const fileName = `${activeImageKeyTarget}_${Date.now()}.${fileExt}`
+      const filePath = `uploads/${fileName}`
       const triggerBtn = document.querySelector(`[data-trigger-img="${activeImageKeyTarget}"]`)
       
       if (triggerBtn) triggerBtn.innerText = 'Enviando...'
@@ -188,6 +189,18 @@ const menuToggle = document.getElementById('menu-toggle')
 const navLinks = document.getElementById('nav-links')
 if (menuToggle && navLinks) {
   menuToggle.onclick = function () { navLinks.classList.toggle('active') }
+}
+
+// Formulário de Contato
+const contactForm = document.getElementById('contact-form')
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault()
+    const nome = document.getElementById('nome').value
+    const msg = document.getElementById('mensagem').value
+    const zapText = encodeURIComponent(`Olá! Meu nome é ${nome}. Mensagem do site: ${msg}`)
+    window.open(`https://wa.me/5548998388277?text=${zapText}`, '_blank')
+  })
 }
 
 // Inicialização
