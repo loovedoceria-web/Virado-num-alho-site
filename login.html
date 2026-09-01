@@ -54,6 +54,7 @@
       color: #fff;
       font-size: 15px;
       outline: none;
+      transition: border-color 0.2s;
     }
     input:focus { border-color: #ff9800; }
     button {
@@ -66,7 +67,9 @@
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
+      transition: filter 0.2s;
     }
+    button:hover { filter: brightness(1.1); }
     #feedback {
       font-size: 14px;
       min-height: 20px;
@@ -83,19 +86,16 @@
     <p>Entre com seu e-mail e senha para gerenciar o conteúdo do site.</p>
 
     <form id="admin-login-form">
-      <input type="email" id="login-email" placeholder="E-mail do administrador" required />
-      <input type="password" id="login-password" placeholder="Senha" required />
+      <input type="email" id="login-email" placeholder="E-mail do administrador" required autocomplete="email" />
+      <input type="password" id="login-password" placeholder="Senha" required autocomplete="current-password" />
       <button type="submit" id="btn-submit">Entrar no Painel</button>
       <div id="feedback"></div>
     </form>
   </div>
 
   <script>
-    // ==========================================
-    // Substitua com as suas credenciais
-    // ==========================================
-    const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co'
-    const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI'
+    const SUPABASE_URL = 'https://hkfhnoxfggjbuhclpyqt.supabase.co'
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZmhub3hmZ2dqYnVoY2xweXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDkzMTUsImV4cCI6MjEwMzU4NTMxNX0.QivPkzOMTuA2bLi5RFA7bzp2YUwDbOg9xnoQDZ-5fmU'
 
     const form = document.getElementById('admin-login-form')
     const feedback = document.getElementById('feedback')
@@ -106,11 +106,6 @@
 
       const email = document.getElementById('login-email').value.trim()
       const password = document.getElementById('login-password').value
-
-      if (SUPABASE_URL.includes('SEU_PROJETO') || SUPABASE_ANON_KEY.includes('SUA_CHAVE')) {
-        alert('Cole a URL e a ANON KEY do seu Supabase dentro do arquivo login.html!')
-        return
-      }
 
       btn.disabled = true
       feedback.textContent = 'Verificando credenciais...'
@@ -132,15 +127,15 @@
           throw new Error(data.error_description || data.msg || data.message || 'E-mail ou senha incorretos.')
         }
 
-        // Salva o token de acesso no navegador
+        // Salva o token da sessão no navegador
         localStorage.setItem('va_admin_token', data.access_token)
 
-        feedback.textContent = 'Acesso liberado! Redirecionando...'
+        feedback.textContent = 'Acesso liberado! Entrando no site...'
         feedback.style.color = '#00e676'
 
         setTimeout(() => {
           window.location.href = 'index.html'
-        }, 600)
+        }, 500)
 
       } catch (err) {
         feedback.textContent = 'Erro: ' + err.message
