@@ -4,7 +4,7 @@
 :root {
   --bg-main: #0c0a09;
   --bg-card: #161311;
-  --bg-card-hover: #1e1a17;
+  --bg-card-hover: #1f1b17;
   --bg-light: #24201c;
   
   --color-garlic: #f4ede2;
@@ -22,6 +22,7 @@
   
   --shadow-subtle: 0 8px 24px rgba(0, 0, 0, 0.4);
   --shadow-strong: 0 16px 36px rgba(0, 0, 0, 0.7);
+  --shadow-gold: 0 10px 30px rgba(229, 169, 60, 0.35);
 }
 
 * {
@@ -37,8 +38,8 @@ html {
 body {
   background-color: var(--bg-main);
   background-image: 
-    radial-gradient(circle at 15% 20%, rgba(229, 169, 60, 0.05) 0%, transparent 40%),
-    radial-gradient(circle at 85% 75%, rgba(230, 81, 0, 0.04) 0%, transparent 45%),
+    radial-gradient(circle at 15% 20%, rgba(229, 169, 60, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 85% 75%, rgba(230, 81, 0, 0.05) 0%, transparent 45%),
     radial-gradient(rgba(244, 237, 226, 0.02) 1px, transparent 1px);
   background-size: 100% 100%, 100% 100%, 28px 28px;
   color: var(--color-garlic);
@@ -61,7 +62,68 @@ main {
 }
 
 /* ==========================================================================
-   PAINEL ADMIN (SUPABASE) COM BOTÃO SALVAR
+   ANIMAÇÕES GERAIS (KEYFRAMES)
+   ========================================================================== */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.4deg);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(229, 169, 60, 0.2), var(--shadow-strong);
+  }
+  50% {
+    box-shadow: 0 0 45px rgba(230, 81, 0, 0.4), var(--shadow-strong);
+  }
+}
+
+@keyframes shimmerBtn {
+  0% {
+    transform: translateX(-150%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ==========================================================================
+   SCROLL REVEAL (ELEMENTOS QUE SURGEM NA TELA)
+   ========================================================================== */
+.reveal-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-item.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ==========================================================================
+   PAINEL ADMIN (SUPABASE)
    ========================================================================== */
 #admin-bar {
   display: none;
@@ -77,6 +139,7 @@ main {
   align-items: center;
   border-bottom: 2px solid var(--color-garlic-gold);
   box-shadow: var(--shadow-strong);
+  animation: fadeInScale 0.3s ease;
 }
 
 .admin-tag {
@@ -108,7 +171,7 @@ main {
 
 .btn-admin-save:hover {
   background: #1ffc8b;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(0, 230, 118, 0.6);
 }
 
@@ -129,7 +192,7 @@ main {
   font-size: 12px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .btn-admin-logout:hover {
@@ -180,6 +243,7 @@ main {
   box-shadow: var(--shadow-strong);
   z-index: 25;
   text-transform: uppercase;
+  animation: fadeInScale 0.2s ease;
 }
 
 .admin-logged .editable-img-wrapper:hover .change-img-btn {
@@ -217,16 +281,31 @@ main {
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.hub-trigger::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: translateX(-100%);
+  animation: shimmerBtn 3.5s infinite;
+}
+
+.hub-trigger:hover {
+  transform: scale(1.08) translateY(-2px);
+  background: #f6be57;
+  box-shadow: var(--shadow-gold);
 }
 
 .hub-trigger-icon {
   width: 20px;
   height: 20px;
-}
-
-.hub-trigger:hover {
-  transform: scale(1.05);
-  background: #f6be57;
 }
 
 .hub-options {
@@ -235,8 +314,8 @@ main {
   gap: 10px;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(15px) scale(0.95);
-  transition: all 0.25s ease;
+  transform: translateY(15px) scale(0.92);
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
@@ -261,7 +340,7 @@ main {
   font-weight: 700;
   font-size: 13px;
   box-shadow: var(--shadow-strong);
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
   white-space: nowrap;
 }
 
@@ -269,17 +348,19 @@ main {
   width: 18px;
   height: 18px;
   color: var(--color-garlic-gold);
+  transition: transform 0.2s ease;
 }
 
 .hub-btn:hover {
   background: var(--color-garlic-gold);
   color: #111;
   border-color: var(--color-garlic-gold);
-  transform: translateX(-4px);
+  transform: translateX(-6px) scale(1.02);
 }
 
 .hub-btn:hover .hub-icon {
   color: #111;
+  transform: rotate(-10deg) scale(1.15);
 }
 
 /* ==========================================================================
@@ -289,10 +370,11 @@ main {
   position: sticky;
   top: 0;
   background: rgba(12, 10, 9, 0.94);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
   z-index: 1000;
   border-bottom: 1px solid rgba(244, 237, 226, 0.08);
   padding: 14px 0;
+  transition: background 0.3s, padding 0.3s;
 }
 
 .nav {
@@ -307,6 +389,11 @@ main {
   gap: 12px;
   text-decoration: none;
   color: var(--color-garlic);
+  transition: transform 0.25s ease;
+}
+
+.logo:hover {
+  transform: scale(1.02);
 }
 
 .logo-badge {
@@ -319,6 +406,13 @@ main {
   border: 1px solid rgba(229, 169, 60, 0.4);
   border-radius: var(--radius-sm);
   color: var(--color-garlic-gold);
+  transition: all 0.3s ease;
+}
+
+.logo:hover .logo-badge {
+  border-color: var(--color-garlic-gold);
+  box-shadow: 0 0 15px rgba(229, 169, 60, 0.35);
+  transform: rotate(5deg);
 }
 
 .logo-svg {
@@ -355,7 +449,19 @@ main {
   font-weight: 600;
   padding: 6px 4px;
   position: relative;
-  transition: color 0.2s;
+  transition: color 0.25s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--color-garlic-gold);
+  border-radius: 2px;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nav-links a:hover,
@@ -363,15 +469,10 @@ main {
   color: var(--color-garlic-gold);
 }
 
+.nav-links a:hover::after,
 .nav-links a.active::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
   width: 100%;
-  height: 2px;
-  background: var(--color-garlic-gold);
-  border-radius: 2px;
+  left: 0;
 }
 
 .menu-toggle {
@@ -388,10 +489,11 @@ main {
   height: 2px;
   background: var(--color-garlic);
   border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
 }
 
 /* ==========================================================================
-   BOTÕES GERAIS
+   BOTÕES GERAIS COM EFEITO SHIMMER
    ========================================================================== */
 .btn {
   display: inline-flex;
@@ -406,19 +508,39 @@ main {
   border-radius: var(--radius-sm);
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   border: none;
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary {
   background: var(--color-garlic-gold);
   color: #111;
+  box-shadow: 0 4px 15px rgba(229, 169, 60, 0.2);
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 70%
+  );
+  transform: rotate(25deg) translateX(-100%);
+  animation: shimmerBtn 4s infinite;
 }
 
 .btn-primary:hover {
   background: #f1b953;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(229, 169, 60, 0.35);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: var(--shadow-gold);
 }
 
 .btn-secondary {
@@ -431,6 +553,8 @@ main {
   background: var(--bg-light);
   border-color: var(--color-garlic-gold);
   color: var(--color-garlic-gold);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-subtle);
 }
 
 .btn-header-cta {
@@ -440,6 +564,10 @@ main {
   font-size: 12px;
 }
 
+.btn-header-cta:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
 .btn-block {
   width: 100%;
 }
@@ -447,12 +575,19 @@ main {
 .btn-card-action {
   background: var(--color-garlic-gold);
   color: #111;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: var(--radius-sm);
   font-size: 12px;
   font-weight: 800;
   text-decoration: none;
   text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.btn-card-action:hover {
+  background: #f1b953;
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(229, 169, 60, 0.4);
 }
 
 /* ==========================================================================
@@ -484,6 +619,11 @@ main {
   color: var(--color-garlic-gold);
   letter-spacing: 1px;
   margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.badge-fresh:hover {
+  transform: scale(1.03);
 }
 
 .hero-content h1 {
@@ -497,6 +637,7 @@ main {
 
 .highlight-text {
   color: var(--color-garlic-gold);
+  text-shadow: 0 0 20px rgba(229, 169, 60, 0.3);
 }
 
 .hero-content p {
@@ -524,6 +665,11 @@ main {
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: transform 0.25s ease;
+}
+
+.fact-card:hover {
+  transform: translateY(-3px);
 }
 
 .fact-svg-icon {
@@ -536,6 +682,13 @@ main {
   align-items: center;
   justify-content: center;
   color: var(--color-garlic-gold);
+  transition: all 0.3s ease;
+}
+
+.fact-card:hover .fact-svg-icon {
+  border-color: var(--color-garlic-gold);
+  box-shadow: 0 0 12px rgba(229, 169, 60, 0.3);
+  transform: rotate(-6deg);
 }
 
 .fact-svg-icon svg {
@@ -554,13 +707,20 @@ main {
   color: var(--color-smoke);
 }
 
+/* Spotlight Card com Flutuação Orgânica & Brilho */
 .spotlight-card {
   background: var(--bg-card);
-  border: 1px solid rgba(229, 169, 60, 0.25);
+  border: 1px solid rgba(229, 169, 60, 0.35);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-strong);
   position: relative;
+  animation: floatSlow 6s ease-in-out infinite, pulseGlow 4s ease-in-out infinite;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.spotlight-card:hover {
+  border-color: var(--color-garlic-gold);
 }
 
 .spotlight-tag {
@@ -575,10 +735,12 @@ main {
   border-radius: var(--radius-sm);
   z-index: 10;
   letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(230, 81, 0, 0.4);
 }
 
 .hero-img-wrap {
   height: 280px;
+  overflow: hidden;
 }
 
 .spotlight-img {
@@ -586,6 +748,11 @@ main {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.5s ease;
+}
+
+.spotlight-card:hover .spotlight-img {
+  transform: scale(1.06);
 }
 
 .spotlight-details {
@@ -641,6 +808,13 @@ main {
   display: flex;
   align-items: center;
   gap: 14px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  transition: transform 0.25s ease;
+}
+
+.sensory-item:hover {
+  transform: translateY(-3px);
 }
 
 .s-icon-box {
@@ -653,6 +827,13 @@ main {
   align-items: center;
   justify-content: center;
   color: var(--color-garlic-gold);
+  transition: all 0.3s ease;
+}
+
+.sensory-item:hover .s-icon-box {
+  border-color: var(--color-garlic-gold);
+  box-shadow: 0 0 14px rgba(229, 169, 60, 0.3);
+  transform: rotate(8deg);
 }
 
 .s-icon-box svg {
@@ -747,6 +928,12 @@ main {
   border-radius: var(--radius-md);
   border-left: 3px solid var(--color-garlic-gold);
   position: relative;
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.pillar-box:hover {
+  transform: translateX(8px);
+  background: var(--bg-card-hover);
 }
 
 .pillar-num {
@@ -756,6 +943,11 @@ main {
   font-family: var(--font-display);
   font-size: 22px;
   color: rgba(229, 169, 60, 0.2);
+  transition: color 0.25s ease;
+}
+
+.pillar-box:hover .pillar-num {
+  color: rgba(229, 169, 60, 0.5);
 }
 
 .pillar-box h3 {
@@ -780,6 +972,11 @@ main {
   overflow: hidden;
   box-shadow: var(--shadow-strong);
   border: 1px solid rgba(244, 237, 226, 0.1);
+  transition: transform 0.4s ease;
+}
+
+.photo-card:hover {
+  transform: translateY(-4px);
 }
 
 .main-photo {
@@ -790,6 +987,11 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.main-photo:hover img {
+  transform: scale(1.05);
 }
 
 .photo-caption {
@@ -811,6 +1013,7 @@ main {
   width: 220px;
   height: 220px;
   border: 4px solid var(--bg-main);
+  animation: floatSlow 5s ease-in-out infinite alternate;
 }
 
 .secondary-photo img {
@@ -829,10 +1032,11 @@ main {
   font-weight: 800;
   padding: 4px 10px;
   border-radius: var(--radius-sm);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* ==========================================================================
-   DESTAQUES DO CARDÁPIO
+   DESTAQUES DO CARDÁPIO (HOVER 3D & ZOOM)
    ========================================================================== */
 .menu-cards-grid {
   display: grid;
@@ -849,12 +1053,13 @@ main {
   display: flex;
   flex-direction: column;
   position: relative;
-  transition: transform 0.25s, border-color 0.25s;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.35s ease;
 }
 
 .menu-item-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.01);
   border-color: var(--color-garlic-gold);
+  box-shadow: var(--shadow-gold);
 }
 
 .menu-item-card.featured {
@@ -873,17 +1078,24 @@ main {
   border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
   z-index: 10;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
 }
 
 .menu-item-media {
   height: 180px;
   width: 100%;
+  overflow: hidden;
 }
 
 .menu-item-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.menu-item-card:hover .menu-item-media img {
+  transform: scale(1.08);
 }
 
 .menu-item-body {
@@ -908,6 +1120,11 @@ main {
   color: var(--color-white);
   letter-spacing: 0.5px;
   line-height: 1.1;
+  transition: color 0.2s;
+}
+
+.menu-item-card:hover .menu-item-header h3 {
+  color: var(--color-garlic-gold);
 }
 
 .dish-price {
@@ -934,7 +1151,7 @@ main {
 }
 
 /* ==========================================================================
-   GALERIA MOSAICO
+   GALERIA MOSAICO COM ZOOM SUAVE
    ========================================================================== */
 .custom-gallery-mosaic {
   display: grid;
@@ -963,26 +1180,38 @@ main {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .mosaic-item:hover img {
-  transform: scale(1.04);
+  transform: scale(1.08);
 }
 
 .img-hover-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+  background: linear-gradient(transparent 35%, rgba(0, 0, 0, 0.88) 100%);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: 20px;
   color: var(--color-white);
+  opacity: 0.9;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.mosaic-item:hover .img-hover-overlay {
+  opacity: 1;
 }
 
 .img-hover-overlay strong {
   font-size: 16px;
+  transform: translateY(4px);
+  transition: transform 0.3s ease;
+}
+
+.mosaic-item:hover .img-hover-overlay strong {
+  transform: translateY(0);
 }
 
 .img-hover-overlay small {
@@ -1007,17 +1236,30 @@ main {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  transition: transform 0.35s ease, border-color 0.3s ease, box-shadow 0.35s ease;
+}
+
+.unit-location-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-garlic-gold);
+  box-shadow: var(--shadow-gold);
 }
 
 .unit-card-media {
   height: 220px;
   position: relative;
+  overflow: hidden;
 }
 
 .unit-card-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.unit-location-card:hover .unit-card-media img {
+  transform: scale(1.06);
 }
 
 .unit-badge {
@@ -1138,6 +1380,12 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--color-garlic-gold);
 }
 
 .review-stars {
@@ -1172,6 +1420,11 @@ main {
   align-items: center;
   justify-content: center;
   font-size: 13px;
+  transition: transform 0.25s ease;
+}
+
+.review-card:hover .reviewer-avatar {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .reviewer-info strong {
@@ -1214,6 +1467,11 @@ main {
   align-items: flex-start;
   gap: 16px;
   margin-bottom: 20px;
+  transition: transform 0.2s ease;
+}
+
+.info-block-item:hover {
+  transform: translateX(6px);
 }
 
 .info-icon {
@@ -1226,6 +1484,13 @@ main {
   align-items: center;
   justify-content: center;
   color: var(--color-garlic-gold);
+  transition: all 0.3s ease;
+}
+
+.info-block-item:hover .info-icon {
+  border-color: var(--color-garlic-gold);
+  box-shadow: 0 0 12px rgba(229, 169, 60, 0.3);
+  transform: rotate(-5deg);
 }
 
 .info-block-item strong {
@@ -1251,6 +1516,11 @@ main {
   gap: 10px;
   font-size: 13px;
   border: 1px solid rgba(244, 237, 226, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.social-proof-pill:hover {
+  transform: scale(1.02);
 }
 
 .social-proof-pill a {
@@ -1265,6 +1535,11 @@ main {
   border-radius: var(--radius-lg);
   padding: 35px 30px;
   box-shadow: var(--shadow-strong);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.contact-card-form:hover {
+  border-color: rgba(229, 169, 60, 0.35);
 }
 
 .contact-card-form h3 {
@@ -1297,12 +1572,13 @@ main {
   font-family: var(--font-body);
   font-size: 14px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.25s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   border-color: var(--color-garlic-gold);
+  box-shadow: 0 0 10px rgba(229, 169, 60, 0.2);
 }
 
 /* ==========================================================================
