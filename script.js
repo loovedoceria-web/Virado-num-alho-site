@@ -32,7 +32,7 @@ async function loadSiteContent() {
         const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
         textElements.forEach(el => { el.innerText = item.content })
 
-        // Atualiza Imagens (inclusive logo)
+        // Atualiza Imagens (inclusive a logo)
         const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
         imgElements.forEach(img => { img.src = item.content })
 
@@ -189,6 +189,7 @@ function enableInlineEditing() {
 
   imgButtons.forEach(btn => {
     btn.onclick = function (e) {
+      e.preventDefault()
       e.stopPropagation()
       activeImageKeyTarget = btn.getAttribute('data-trigger-img')
       if (fileInput) fileInput.click()
@@ -224,14 +225,16 @@ function enableInlineEditing() {
         
         await supabaseUpsertSingle(activeImageKeyTarget, publicUrl)
 
-        const targetImg = document.querySelector(`[data-img-key="${activeImageKeyTarget}"]`)
-        if (targetImg) targetImg.src = publicUrl
+        const targetImgs = document.querySelectorAll(`[data-img-key="${activeImageKeyTarget}"]`)
+        targetImgs.forEach(img => { img.src = publicUrl })
 
       } catch (err) {
         alert('Erro ao trocar imagem: ' + err.message)
       }
 
-      if (triggerBtn) triggerBtn.innerText = 'Trocar'
+      if (triggerBtn) {
+        triggerBtn.innerText = activeImageKeyTarget === 'site_logo_img' ? 'Trocar Logo' : 'Trocar Foto'
+      }
       fileInput.value = ''
       activeImageKeyTarget = null
     }
