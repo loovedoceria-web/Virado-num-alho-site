@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contato & Pedidos | Virado Num Alho</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Barra de Controle do Dono -->
+  <aside id="admin-bar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="admin-tag">PAINEL DO DONO</span>
+      <span style="font-size:13px; color:#f4ede2;">Edite os contatos nesta página e clique em <strong>Salvar Alterações</strong>.</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button id="btn-save-all" class="btn-admin-save">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>Salvar Alterações</span>
+      </button>
+      <button id="btn-logout" class="btn-admin-logout">Sair</button>
+    </div>
+  </aside>
+
+  <header class="header">
+    <div class="container nav">
+      <a href="index.html" class="logo">
+        <div class="logo-badge">
+          <svg viewBox="0 0 24 24" class="logo-svg" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 6 5 11c0 4.5 3 8 7 8s7-3.5 7-8c0-5-3-9-7-9z"/><path d="M12 2v17"/></svg>
+        </div>
+        <div class="logo-text">
+          <strong data-editable data-key="brand_name">VIRADO NUM ALHO</strong>
+          <small data-editable data-key="brand_subtitle">BURGER NA BRASA & PÃO DE ALHO ARTESANAL</small>
+        </div>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html">Início</a>
+        <a href="experiencia.html">A Experiência</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="galeria.html">Na Mesa</a>
+        <a href="unidades.html">Onde Comer</a>
+        <a href="depoimentos.html">Quem Provou</a>
+        <a href="contato.html" class="active">Contato</a>
+        <a href="https://www.ifood.com.br" target="_blank" class="btn btn-header-cta" data-editable-link data-key="link_header_cta">Fazer Pedido</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section contact-section">
+      <div class="container contact-split">
+        <div class="contact-info-panel">
+          <span class="section-tag">Atendimento Direto</span>
+          <h2>Bateu a fome? Chama a gente.</h2>
+          <p>Tire dúvidas sobre reservas de mesa para aniversários, consulte o cardápio do dia ou faça seu pedido diretamente.</p>
+
+          <div class="info-block-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <div>
+              <strong>WhatsApp & Pedidos Rápidos</strong>
+              <p data-editable data-key="info_phone">(48) 99838-8277</p>
+            </div>
+          </div>
+
+          <div class="info-block-item">
+            <div class="info-icon">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+            </div>
+            <div>
+              <strong>Faixa de Preço Médio</strong>
+              <p data-editable data-key="info_price">R$ 22 a R$ 42 por pessoa</p>
+            </div>
+          </div>
+
+          <div class="social-proof-pill">
+            <span>Siga nosso dia a dia no Instagram:</span>
+            <a href="https://instagram.com/viradonumalho" target="_blank" data-editable data-key="info_ig">@viradonumalho</a>
+          </div>
+        </div>
+
+        <form class="contact-card-form" id="contact-form">
+          <h3>Envie uma Mensagem</h3>
+          <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Dúvidas, parcerias ou eventos.</p>
+          
+          <div class="form-group">
+            <label for="nome">Seu Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Como podemos te chamar?" required />
+          </div>
+          <div class="form-group">
+            <label for="telefone">WhatsApp</label>
+            <input type="tel" id="telefone" name="telefone" placeholder="(48) 99999-9999" required />
+          </div>
+          <div class="form-group">
+            <label for="mensagem">Mensagem</label>
+            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Em que podemos te ajudar?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Enviar Mensagem</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <strong class="footer-logo">VIRADO NUM ALHO</strong>
+        <p>A primeira hamburgueria focada no sabor inconfundível do pão de alho na brasa em Florianópolis e São José.</p>
+      </div>
+      <div class="footer-nav">
+        <strong>Navegação</strong>
+        <a href="index.html">Início</a>
+        <a href="experiencia.html">A Experiência</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="galeria.html">Na Mesa</a>
+        <a href="unidades.html">Onde Comer</a>
+        <a href="depoimentos.html">Quem Provou</a>
+        <a href="contato.html">Contato</a>
+      </div>
+      <div class="footer-hours">
+        <strong>Atendimento</strong>
+        <p>Terça a Domingo a partir das 18h</p>
+        <p>Entregas via iFood & WhatsApp</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container copyright-text"><p>© 2026 Virado Num Alho. Todos os direitos reservados.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
