@@ -156,7 +156,6 @@
           throw new Error(data.error_description || data.msg || data.message || 'E-mail ou senha incorretos.')
         }
 
-        // Grava token no navegador
         localStorage.setItem('va_admin_token', data.access_token)
 
         feedback.textContent = 'Acesso liberado! Entrando no site...'
