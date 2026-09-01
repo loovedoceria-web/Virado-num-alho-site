@@ -15,7 +15,7 @@ const pendingUpdates = new Map()
 // 2. FUNÇÕES REST DO SUPABASE
 // ========================================================
 
-// Carrega textos, imagens e links salvos no Supabase
+// Carrega textos, imagens, vídeos e links salvos no Supabase
 async function loadSiteContent() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,content`, {
@@ -32,13 +32,25 @@ async function loadSiteContent() {
         const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
         textElements.forEach(el => { el.innerText = item.content })
 
-        // Atualiza Imagens
+        // Atualiza Imagens (inclusive logo)
         const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
         imgElements.forEach(img => { img.src = item.content })
 
         // Atualiza Links
         const linkElements = document.querySelectorAll(`[data-editable-link][data-key="${item.key}"]`)
         linkElements.forEach(link => { link.href = item.content })
+
+        // Atualiza Vídeos
+        const videoElements = document.querySelectorAll(`video[data-video-key="${item.key}"]`)
+        videoElements.forEach(video => {
+          const source = video.querySelector('source')
+          if (source) {
+            source.src = item.content
+            video.load()
+          } else {
+            video.src = item.content
+          }
+        })
       })
     }
   } catch (err) {
@@ -171,7 +183,7 @@ function enableInlineEditing() {
     }
   }
 
-  // 3. Edição de Imagens (Upload no Storage)
+  // 3. Edição de Imagens e Logos (Upload no Storage)
   const imgButtons = document.querySelectorAll('[data-trigger-img]')
   const fileInput = document.getElementById('image-file-input')
 
@@ -219,7 +231,7 @@ function enableInlineEditing() {
         alert('Erro ao trocar imagem: ' + err.message)
       }
 
-      if (triggerBtn) triggerBtn.innerText = 'Trocar Foto'
+      if (triggerBtn) triggerBtn.innerText = 'Trocar'
       fileInput.value = ''
       activeImageKeyTarget = null
     }
