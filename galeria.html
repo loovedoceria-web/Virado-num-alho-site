@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Na Mesa | Galeria Virado Num Alho</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Barra de Controle do Dono -->
+  <aside id="admin-bar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="admin-tag">PAINEL DO DONO</span>
+      <span style="font-size:13px; color:#f4ede2;">Passe o mouse nas fotos para alterar e clique em <strong>Salvar Alterações</strong>.</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button id="btn-save-all" class="btn-admin-save">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>Salvar Alterações</span>
+      </button>
+      <button id="btn-logout" class="btn-admin-logout">Sair</button>
+    </div>
+  </aside>
+
+  <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
+
+  <header class="header">
+    <div class="container nav">
+      <a href="index.html" class="logo">
+        <div class="logo-badge">
+          <svg viewBox="0 0 24 24" class="logo-svg" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 6 5 11c0 4.5 3 8 7 8s7-3.5 7-8c0-5-3-9-7-9z"/><path d="M12 2v17"/></svg>
+        </div>
+        <div class="logo-text">
+          <strong data-editable data-key="brand_name">VIRADO NUM ALHO</strong>
+          <small data-editable data-key="brand_subtitle">BURGER NA BRASA & PÃO DE ALHO ARTESANAL</small>
+        </div>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html">Início</a>
+        <a href="experiencia.html">A Experiência</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="galeria.html" class="active">Na Mesa</a>
+        <a href="unidades.html">Onde Comer</a>
+        <a href="depoimentos.html">Quem Provou</a>
+        <a href="contato.html">Contato</a>
+        <a href="https://www.ifood.com.br" target="_blank" class="btn btn-header-cta" data-editable-link data-key="link_header_cta">Fazer Pedido</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section gallery-section">
+      <div class="container">
+        <div class="section-heading text-center">
+          <span class="section-tag" data-editable data-key="gal_tag">Sem Filtros</span>
+          <h2 data-editable data-key="gal_title">Fotos Reais Direto da Nossa Chapa</h2>
+          <p class="subtitle" data-editable data-key="gal_subtitle">
+            É exatamente assim que o seu prato chega na mesa ou na sua casa.
+          </p>
+        </div>
+
+        <div class="custom-gallery-mosaic">
+          <div class="mosaic-item large editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80" alt="Pão de Alho Recheado Tostado" data-img-key="gal_img_1" />
+            <button class="change-img-btn" data-trigger-img="gal_img_1">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Pão de Alho na Brasa</strong>
+              <small>Crocância audível a cada mordida</small>
+            </div>
+          </div>
+
+          <div class="mosaic-item editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=800&q=80" alt="Burger Artesanal Suculento" data-img-key="gal_img_2" />
+            <button class="change-img-btn" data-trigger-img="gal_img_2">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Carne Alta & Queijo</strong>
+            </div>
+          </div>
+
+          <div class="mosaic-item editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Ambiente da Hamburgueria" data-img-key="gal_img_3" />
+            <button class="change-img-btn" data-trigger-img="gal_img_3">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Clima Descontraído</strong>
+            </div>
+          </div>
+
+          <div class="mosaic-item wide editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=80" alt="Mesa Completa com Porções" data-img-key="gal_img_4" />
+            <button class="change-img-btn" data-trigger-img="gal_img_4">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Combo Perfeito para a Galera</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <strong class="footer-logo">VIRADO NUM ALHO</strong>
+        <p>A primeira hamburgueria focada no sabor inconfundível do pão de alho na brasa em Florianópolis e São José.</p>
+      </div>
+      <div class="footer-nav">
+        <strong>Navegação</strong>
+        <a href="index.html">Início</a>
+        <a href="experiencia.html">A Experiência</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="galeria.html">Na Mesa</a>
+        <a href="unidades.html">Onde Comer</a>
+        <a href="depoimentos.html">Quem Provou</a>
+        <a href="contato.html">Contato</a>
+      </div>
+      <div class="footer-hours">
+        <strong>Atendimento</strong>
+        <p>Terça a Domingo a partir das 18h</p>
+        <p>Entregas via iFood & WhatsApp</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container copyright-text"><p>© 2026 Virado Num Alho. Todos os direitos reservados.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
