@@ -4,18 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Na Mesa | Galeria Virado Num Alho</title>
+  <meta name="description" content="Fotos reais dos nossos burgers e pães de alho recheados." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- Barra de Controle do Dono -->
+  <!-- Barra de Controle do Administrador (Supabase) -->
   <aside id="admin-bar">
     <div style="display:flex; align-items:center; gap:12px;">
       <span class="admin-tag">PAINEL DO DONO</span>
-      <span style="font-size:13px; color:#f4ede2;">Passe o mouse nas fotos para alterar e clique em <strong>Salvar Alterações</strong>.</span>
+      <span style="font-size:13px; color:#FDF8F2;">Passe o mouse nas fotos para alterar e clique em <strong>Salvar Alterações</strong>.</span>
     </div>
     <div style="display:flex; align-items:center; gap:10px;">
       <button id="btn-save-all" class="btn-admin-save">
@@ -28,15 +29,35 @@
 
   <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
 
+  <!-- Speed Dial / Botão Flutuante -->
+  <div class="floating-hub" id="floatingHub">
+    <div class="hub-options">
+      <a href="https://www.ifood.com.br" target="_blank" rel="noopener noreferrer" class="hub-btn hub-ifood" data-editable-link data-key="link_ifood">
+        <svg viewBox="0 0 24 24" class="hub-icon" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+        <span class="hub-text">Pedir no iFood</span>
+      </a>
+      <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Quero%20fazer%20um%20pedido." target="_blank" rel="noopener noreferrer" class="hub-btn hub-wpp" data-editable-link data-key="link_whatsapp">
+        <svg viewBox="0 0 32 32" class="hub-icon" fill="currentColor"><path d="M16 2a13.9 13.9 0 0 0-12 21.1L2 30l7.1-1.9A13.9 13.9 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2s-.9 1.2-1.1 1.4-.4.2-.7.1a9.2 9.2 0 0 1-2.7-1.7 10.2 10.2 0 0 1-1.9-2.3c-.2-.4 0-.6.1-.8.2-.2.4-.4.5-.6l.4-.6c.1-.2 0-.4 0-.6s-.8-2-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.4 3.2 7.5 7.5 0 0 0 1.6 4 17.2 17.2 0 0 0 6.6 5.8c.9.4 1.7.7 2.3.9a5.5 5.5 0 0 0 2.5.2c.8-.1 2.3-.9 2.6-1.8.4-.9.4-1.7.3-1.8-.2-.2-.5-.3-.9-.5z"/></svg>
+        <span class="hub-text">Pedir no WhatsApp</span>
+      </a>
+    </div>
+    <button class="hub-trigger" id="hubTrigger" aria-label="Abrir opções de pedido">
+      <svg viewBox="0 0 24 24" class="hub-trigger-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span>Pedir Agora</span>
+    </button>
+  </div>
+
   <header class="header">
-    <div class="container nav">
-      <a href="index.html" class="logo">
-        <div class="logo-badge">
-          <svg viewBox="0 0 24 24" class="logo-svg" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 6 5 11c0 4.5 3 8 7 8s7-3.5 7-8c0-5-3-9-7-9z"/><path d="M12 2v17"/></svg>
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-badge-logo">
+          <svg viewBox="0 0 24 24" class="brand-logo-svg" fill="currentColor">
+            <path d="M19 6.5C18.2 4.4 15.8 3 12 3S5.8 4.4 5 6.5C3.3 7.8 2 9.8 2 12c0 4.4 4.5 8 10 8s10-3.6 10-8c0-2.2-1.3-4.2-3-5.5zM12 18c-4.4 0-8-2.7-8-6 0-1.5.8-2.9 2.2-4 .5 1.5 2.5 3 5.8 3s5.3-1.5 5.8-3c1.4 1.1 2.2 2.5 2.2 4 0 3.3-3.6 6-8 6zm0-10c-2.8 0-4.6-1.1-5-2.2C7.8 4.7 9.8 4 12 4s4.2.7 5 1.8c-.4 1.1-2.2 2.2-5 2.2z"/>
+          </svg>
         </div>
-        <div class="logo-text">
-          <strong data-editable data-key="brand_name">VIRADO NUM ALHO</strong>
-          <small data-editable data-key="brand_subtitle">BURGER NA BRASA & PÃO DE ALHO ARTESANAL</small>
+        <div class="brand-text">
+          <span class="brand-title" data-editable data-key="brand_name">VIRADO NUM ALHO</span>
+          <span class="brand-tagline" data-editable data-key="brand_slogan">Gostoso pra cachorro!</span>
         </div>
       </a>
 
@@ -44,15 +65,15 @@
         <span></span><span></span><span></span>
       </button>
 
-      <nav class="nav-links" id="nav-links">
-        <a href="index.html">Início</a>
-        <a href="experiencia.html">A Experiência</a>
-        <a href="cardapio.html">Cardápio</a>
-        <a href="galeria.html" class="active">Na Mesa</a>
-        <a href="unidades.html">Onde Comer</a>
-        <a href="depoimentos.html">Quem Provou</a>
-        <a href="contato.html">Contato</a>
-        <a href="https://www.ifood.com.br" target="_blank" class="btn btn-header-cta" data-editable-link data-key="link_header_cta">Fazer Pedido</a>
+      <nav class="nav-menu" id="nav-links">
+        <a href="index.html" class="nav-item">Início</a>
+        <a href="experiencia.html" class="nav-item">A Experiência</a>
+        <a href="cardapio.html" class="nav-item">Cardápio</a>
+        <a href="galeria.html" class="nav-item active">Na Mesa</a>
+        <a href="unidades.html" class="nav-item">Onde Comer</a>
+        <a href="depoimentos.html" class="nav-item">Quem Provou</a>
+        <a href="contato.html" class="nav-item">Contato</a>
+        <a href="https://www.ifood.com.br" target="_blank" class="btn-order" data-editable-link data-key="link_header_cta">Pedir Agora</a>
       </nav>
     </div>
   </header>
@@ -109,9 +130,15 @@
   <footer class="footer">
     <div class="container footer-content">
       <div class="footer-brand">
-        <strong class="footer-logo">VIRADO NUM ALHO</strong>
-        <p>A primeira hamburgueria focada no sabor inconfundível do pão de alho na brasa em Florianópolis e São José.</p>
+        <strong class="footer-logo" data-editable data-key="footer_brand_name">VIRADO NUM ALHO</strong>
+        <p data-editable data-key="footer_about_text">
+          A primeira hamburgueria focada no sabor inconfundível do pão de alho na brasa em Florianópolis e São José. Blend artesanal de costela, queijo derretido e confit de alho exclusivo.
+        </p>
+        <div class="footer-social-link">
+          <a href="https://instagram.com/viradonumalho" target="_blank" data-editable data-key="footer_ig_link">@viradonumalho</a>
+        </div>
       </div>
+
       <div class="footer-nav">
         <strong>Navegação</strong>
         <a href="index.html">Início</a>
@@ -122,14 +149,31 @@
         <a href="depoimentos.html">Quem Provou</a>
         <a href="contato.html">Contato</a>
       </div>
+
       <div class="footer-hours">
         <strong>Atendimento</strong>
-        <p>Terça a Domingo a partir das 18h</p>
-        <p>Entregas via iFood & WhatsApp</p>
+        <p data-editable data-key="footer_hours_1">Terça a Quinta: 18h às 23h</p>
+        <p data-editable data-key="footer_hours_2">Sexta e Sábado: 18h às 00h</p>
+        <p data-editable data-key="footer_hours_3">Domingo: 18h às 23h</p>
+        <p style="margin-top: 8px; color: var(--color-orange-brand); font-weight: 600;" data-editable data-key="footer_delivery_info">Entregas via iFood & WhatsApp</p>
+      </div>
+
+      <div class="footer-support">
+        <strong>Suporte</strong>
+        <p data-editable data-key="footer_sup_phone">WhatsApp: (48) 99838-8277</p>
+        <p data-editable data-key="footer_sup_email">contato@viradonumalho.com.br</p>
+        <div class="support-links">
+          <a href="https://wa.me/5548998388277?text=Preciso%20de%20ajuda%20com%20meu%20pedido" target="_blank" class="btn-support-wpp" data-editable-link data-key="link_support_wpp">
+            Falar com Suporte
+          </a>
+        </div>
       </div>
     </div>
+
     <div class="footer-bottom">
-      <div class="container copyright-text"><p>© 2026 Virado Num Alho. Todos os direitos reservados.</p></div>
+      <div class="container copyright-text">
+        <p>© 2026 Virado Num Alho. Todos os direitos reservados.</p>
+      </div>
     </div>
   </footer>
 
