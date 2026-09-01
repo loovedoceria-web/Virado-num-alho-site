@@ -589,7 +589,7 @@ main {
 }
 
 /* ==========================================================================
-   HERO COM VÍDEO DE FUNDO
+   HERO COM VÍDEO DE FUNDO & PROVA SOCIAL
    ========================================================================== */
 .hero {
   position: relative;
@@ -666,14 +666,33 @@ main {
 .hero-content p {
   font-size: 17px;
   color: #D1C8BD;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   max-width: 540px;
 }
 
 .hero-actions {
   display: flex;
   gap: 16px;
-  margin-bottom: 45px;
+  margin-bottom: 14px;
+}
+
+/* Badge de Prova Social Google Reviews (Hero) */
+.hero-social-proof-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: rgba(253, 248, 242, 0.75);
+  margin-bottom: 36px;
+}
+
+.hero-social-proof-badge .star-icon {
+  color: var(--color-orange-brand);
+}
+
+.hero-social-proof-badge strong {
+  color: #FFFFFF;
+  font-weight: 700;
 }
 
 .hero-facts-row {
@@ -1802,6 +1821,11 @@ main {
 
   .hero-actions {
     flex-direction: column;
+  }
+
+  .hero-social-proof-badge {
+    justify-content: center;
+    width: 100%;
   }
 
   .hero-facts-row {
