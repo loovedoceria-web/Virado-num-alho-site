@@ -25,11 +25,11 @@ async function loadSiteContent() {
         const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
         textElements.forEach(el => { el.innerText = item.content })
 
-        // Atualiza Imagens
+        // Atualiza Imagens (Pratos, Unidades, Galeria, Hero)
         const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
         imgElements.forEach(img => { img.src = item.content })
 
-        // Atualiza Links (WhatsApp, iFood, etc.)
+        // Atualiza Links (WhatsApp, iFood, Cardápio, etc.)
         const linkElements = document.querySelectorAll(`[data-editable-link][data-key="${item.key}"]`)
         linkElements.forEach(link => { link.href = item.content })
       })
@@ -151,7 +151,7 @@ function enableInlineEditing() {
     }
   }
 
-  // 3. Edição de Links (WhatsApp, iFood, etc.)
+  // 3. Edição de Links (WhatsApp, iFood, Cardápio, etc.)
   const editableLinks = document.querySelectorAll('[data-editable-link]')
   editableLinks.forEach(link => {
     link.onclick = async function(e) {
@@ -191,7 +191,22 @@ if (menuToggle && navLinks) {
   menuToggle.onclick = function () { navLinks.classList.toggle('active') }
 }
 
-// Formulário de Contato
+// Speed Dial Mobile Toggle (Clique no Botão de Pedir)
+const hubTrigger = document.getElementById('hubTrigger')
+const floatingHub = document.getElementById('floatingHub')
+if (hubTrigger && floatingHub) {
+  hubTrigger.onclick = function(e) {
+    e.stopPropagation()
+    floatingHub.classList.toggle('active')
+  }
+  document.addEventListener('click', function(e) {
+    if (!floatingHub.contains(e.target)) {
+      floatingHub.classList.remove('active')
+    }
+  })
+}
+
+// Formulário de Contato Direto para o WhatsApp
 const contactForm = document.getElementById('contact-form')
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
