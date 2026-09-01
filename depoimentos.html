@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quem Provou | Avaliações Virado Num Alho</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Barra de Controle do Dono -->
+  <aside id="admin-bar">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <span class="admin-tag">PAINEL DO DONO</span>
+      <span style="font-size:13px; color:#f4ede2;">Edite os depoimentos nesta página e clique em <strong>Salvar Alterações</strong>.</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <button id="btn-save-all" class="btn-admin-save">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        <span>Salvar Alterações</span>
+      </button>
+      <button id="btn-logout" class="btn-admin-logout">Sair</button>
+    </div>
+  </aside>
+
+  <header class="header">
+    <div class="container nav">
+      <a href="index.html" class="logo">
+        <div class="logo-badge">
+          <svg viewBox="0 0 24 24" class="logo-svg" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 6 5 11c0 4.5 3 8 7 8s7-3.5 7-8c0-5-3-9-7-9z"/><path d="M12 2v17"/></svg>
+        </div>
+        <div class="logo-text">
+          <strong data-editable data-key="brand_name">VIRADO NUM ALHO</strong>
+          <small data-editable data-key="brand_subtitle">BURGER NA BRASA & PÃO DE ALHO ARTESANAL</small>
+        </div>
+      </a>
+
+      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav-links" id="nav-links">
+        <a href="index.html">Início</a>
+        <a href="experiencia.html">A Experiência</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="galeria.html">Na Mesa</a>
+        <a href="unidades.html">Onde Comer</a>
+        <a href="depoimentos.html" class="active">Quem Provou</a>
+        <a href="contato.html">Contato</a>
+        <a href="https://www.ifood.com.br" target="_blank" class="btn btn-header-cta" data-editable-link data-key="link_header_cta">Fazer Pedido</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section testimonials-section">
+      <div class="container">
+        <div class="section-heading text-center">
+          <span class="section-tag">Avaliações Reais</span>
+          <h2>O Que Diz Quem Já Se Lambuzou</h2>
+          <p class="subtitle">Comentários extraídos diretamente das avaliações do Google e iFood.</p>
+        </div>
+
+        <div class="testimonials-grid">
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text" data-editable data-key="test_1_p">
+              "O melhor pão de alho que já comi na vida. Não é pesado, o creme de alho tem um gosto incrível e a carne vem no ponto perfeito. O atendimento de Capoeiras é impecável!"
+            </p>
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">EL</div>
+              <div>
+                <strong data-editable data-key="test_1_author">Eduardo Lentz</strong>
+                <small>Local Guide • Google Reviews</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text" data-editable data-key="test_2_p">
+              "Pedi no delivery com medo de chegar murcho e me surpreendi: o pão veio super crocante e com muito queijo derretido. Já virou vício de sexta-feira aqui em casa."
+            </p>
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">FA</div>
+              <div>
+                <strong data-editable data-key="test_2_author">Fernanda Almeida (Fefa)</strong>
+                <small>Cliente Recorrente • iFood</small>
+              </div>
+            </div>
+          </article>
+
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text" data-editable data-key="test_3_p">
+              "Ambiente descontraído, ótimo para ir em galera tomar uma cerveja e comer bem. Preço super justo pela quantidade e qualidade da comida."
+            </p>
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">LL</div>
+              <div>
+                <strong data-editable data-key="test_3_author">Luiz Lopes</strong>
+                <small>Cliente desde 2023 • Google Reviews</small>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <strong class="footer-logo">VIRADO NUM ALHO</strong>
+        <p>A primeira hamburgueria focada no sabor inconfundível do pão de alho na brasa em Florianópolis e São José.</p>
+      </div>
+      <div class="footer-nav">
+        <strong>Navegação</strong>
+        <a href="index.html">Início</a>
+        <a href="experiencia.html">A Experiência</a>
+        <a href="cardapio.html">Cardápio</a>
+        <a href="galeria.html">Na Mesa</a>
+        <a href="unidades.html">Onde Comer</a>
+        <a href="depoimentos.html">Quem Provou</a>
+        <a href="contato.html">Contato</a>
+      </div>
+      <div class="footer-hours">
+        <strong>Atendimento</strong>
+        <p>Terça a Domingo a partir das 18h</p>
+        <p>Entregas via iFood & WhatsApp</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container copyright-text"><p>© 2026 Virado Num Alho. Todos os direitos reservados.</p></div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
