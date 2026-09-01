@@ -1,75 +1,67 @@
+/* ==========================================================================
+   VARIÁVEIS VISUAIS - IDENTIDADE OFICIAL "VIRADO NUM ALHO"
+   ========================================================================== */
 :root {
-  --bg-main: #1f1824; /* Roxo escuro da logo */
-  --bg-card: #281f2f; /* Roxo sutil para cards */
-  --primary: #f28b30; /* Laranja da logo */
-  --primary-hover: #e07a22;
-  --text-main: #ffffff;
-  --text-muted: #b8b1bc;
-  --border-color: #3b2e42;
+  /* Tons de Fundo (Madeira Queimada / Brasa) */
+  --bg-main: #140d09;
+  --bg-card: #1e140e;
+  --bg-card-hover: #291b13;
+  --bg-light: #332218;
+
+  /* Cores da Marca (Logótipo) */
+  --color-orange-brand: #eb6d20;      /* Laranja característico da logo */
+  --color-orange-hover: #d85c10;
+  --color-garlic-gold: #f5b335;       /* Amarelo dourado / manteiga */
+  --color-garlic: #f7efe3;            /* Creme suave */
+  --color-smoke: #9e8e82;             /* Fumo / texto secundário */
+  --color-white: #ffffff;
+
+  /* Tipografia */
+  --font-display: 'Bebas Neue', 'Impact', sans-serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+  --font-fun: 'Caveat', cursive;      /* Para o slogan "Gostoso pra cachorro!" */
+
+  /* Raios e Sombras */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --shadow-subtle: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-strong: 0 16px 36px rgba(0, 0, 0, 0.85);
+  --shadow-brand: 0 10px 30px rgba(235, 109, 32, 0.4);
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--bg-main) !important;
-  color: var(--text-main) !important;
-  margin: 0;
-  box-sizing: border-box;
+/* ==========================================================================
+   BOTÕES COM O LARANJA DA MARCA
+   ========================================================================== */
+.btn-primary,
+.btn-card-action,
+.hub-trigger {
+  background: var(--color-orange-brand) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(235, 109, 32, 0.35) !important;
+  border-color: #ff8539 !important;
 }
 
-body.admin-logged-in {
-  padding-top: 45px;
+.btn-primary:hover,
+.btn-card-action:hover,
+.hub-trigger:hover {
+  background: var(--color-orange-hover) !important;
+  box-shadow: var(--shadow-brand) !important;
 }
 
-/* Barra de Admin */
-#admin-bar {
-  background: #151019 !important;
-  border-bottom: 2px solid var(--primary) !important;
-  z-index: 99999 !important;
+.highlight-text,
+.price-tag,
+.dish-price,
+.logo-text strong {
+  color: var(--color-orange-brand) !important;
 }
 
-/* Cores gerais do site adaptadas para a identidade da logo */
-header, .hero, .proof-bar, .section, .footer, .about, .dark-section, .contact-section {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-}
-
-.dark-section, .proof-bar, .service-card, .highlight-card, .unit-card, .testimonial-card, .contact-info-card, .contact-form, .mini-card {
-  background-color: var(--bg-card) !important;
-  border-color: var(--border-color) !important;
-}
-
-/* Botões e Detalhes com o Laranja da Logo */
-.btn, .btn-nav, .highlight-badge, .logo-mark {
-  background-color: var(--primary) !important;
-  color: var(--bg-main) !important;
-}
-
-.btn:hover, .btn-nav:hover {
-  background-color: var(--primary-hover) !important;
-}
-
-.btn-outline {
-  border-color: var(--primary) !important;
-  color: var(--primary) !important;
-}
-
-.btn-outline:hover {
-  background-color: var(--primary) !important;
-  color: var(--bg-main) !important;
-}
-
-.section-tag, .eyebrow, .logo-text small, .mini-card strong, .proof-item, .unit-card h3, .quote-mark, .footer strong {
-  color: var(--primary) !important;
-}
-
-/* Campos de Formulário */
-input, textarea {
-  background-color: #17111c !important;
-  color: var(--text-main) !important;
-  border: 1px solid var(--border-color) !important;
-}
-
-input:focus, textarea:focus {
-  border-color: var(--primary) !important;
-  outline: none;
+/* Estilo especial para o slogan estilo feito à mão */
+.brand-slogan {
+  font-family: var(--font-fun, cursive);
+  font-size: 15px;
+  color: var(--color-garlic-gold);
+  letter-spacing: 0.5px;
+  font-weight: 700;
 }
