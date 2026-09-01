@@ -112,14 +112,14 @@ function enableInlineEditing() {
       if (!key) return
 
       pendingUpdates.set(key, newContent)
-      el.style.outline = '2px solid #ff9800'
+      el.style.outline = '2px solid #E86328'
 
       if (btnSaveAll) {
         btnSaveAll.innerHTML = `
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
           <span>Salvar Alterações (${pendingUpdates.size})</span>
         `
-        btnSaveAll.style.background = '#00e676'
+        btnSaveAll.style.background = '#00E676'
       }
     }
   })
@@ -148,10 +148,10 @@ function enableInlineEditing() {
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           <span>Salvo com Sucesso!</span>
         `
-        btnSaveAll.style.background = '#00c853'
+        btnSaveAll.style.background = '#00C853'
 
         editables.forEach(el => {
-          el.style.outline = '1.5px dashed #e5a93c'
+          el.style.outline = '1.5px dashed #E86328'
         })
 
         setTimeout(() => {
@@ -166,7 +166,7 @@ function enableInlineEditing() {
         alert('Erro ao salvar no banco: ' + err.message)
         btnSaveAll.disabled = false
         btnSaveAll.innerHTML = `<span>Erro ao Salvar</span>`
-        btnSaveAll.style.background = '#ff5252'
+        btnSaveAll.style.background = '#FF5252'
       }
     }
   }
@@ -249,6 +249,35 @@ function enableInlineEditing() {
   })
 }
 
+// ========================================================
+// 5. MOTOR DE ANIMAÇÃO SCROLL REVEAL
+// ========================================================
+function initAnimations() {
+  const animatedElements = document.querySelectorAll(
+    '.hero-content, .hero-spotlight, .menu-item-card, .mosaic-item, .unit-location-card, .review-card, .pillar-box, .contact-split, .sensory-item'
+  )
+
+  animatedElements.forEach((el, index) => {
+    el.classList.add('reveal-item')
+    const delayClass = `reveal-delay-${(index % 4) + 1}`
+    el.classList.add(delayClass)
+  })
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-revealed')
+        observer.unobserve(entry.target)
+      }
+    })
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -40px 0px'
+  })
+
+  document.querySelectorAll('.reveal-item').forEach(el => observer.observe(el))
+}
+
 // Botão Sair (Logout)
 const logoutBtn = document.getElementById('btn-logout')
 if (logoutBtn) {
@@ -293,5 +322,8 @@ if (contactForm) {
 }
 
 // Inicialização
-loadSiteContent()
-checkAuthFlow()
+document.addEventListener('DOMContentLoaded', () => {
+  initAnimations()
+  loadSiteContent()
+  checkAuthFlow()
+})
