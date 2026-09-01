@@ -72,7 +72,6 @@
       min-height: 20px;
       margin-top: 12px;
       line-height: 1.4;
-      word-break: break-word;
     }
   </style>
 </head>
@@ -91,57 +90,64 @@
     </form>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
-
-    // COLOQUE SUAS CHAVES AQUI
-    const SUPABASE_URL = 'SUA_SUPABASE_URL'
-    const SUPABASE_ANON_KEY = 'SUA_SUPABASE_ANON_KEY'
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  <script>
+    // ==========================================
+    // Substitua com as suas credenciais
+    // ==========================================
+    const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co'
+    const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI'
 
     const form = document.getElementById('admin-login-form')
     const feedback = document.getElementById('feedback')
     const btn = document.getElementById('btn-submit')
 
-    // Alerta se as chaves ainda forem os textos padrões
-    if (SUPABASE_URL.includes('SUA_SUPABASE_URL') || SUPABASE_ANON_KEY.includes('SUA_SUPABASE_ANON_KEY')) {
-      feedback.textContent = 'Atenção: Você precisa colar a URL e ANON KEY do Supabase no código do login.html!'
-      feedback.style.color = '#ff9800'
-    }
-
-    form.addEventListener('submit', async (e) => {
+    form.onsubmit = async function(e) {
       e.preventDefault()
 
       const email = document.getElementById('login-email').value.trim()
       const password = document.getElementById('login-password').value
 
+      if (SUPABASE_URL.includes('SEU_PROJETO') || SUPABASE_ANON_KEY.includes('SUA_CHAVE')) {
+        alert('Cole a URL e a ANON KEY do seu Supabase dentro do arquivo login.html!')
+        return
+      }
+
       btn.disabled = true
-      feedback.textContent = 'Conectando ao Supabase...'
+      feedback.textContent = 'Verificando credenciais...'
       feedback.style.color = '#ff9800'
 
       try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+        const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY
+          },
+          body: JSON.stringify({ email, password })
+        })
 
-        if (error) {
-          console.error('Erro retornado pelo Supabase:', error)
-          feedback.textContent = 'Erro: ' + error.message
-          feedback.style.color = '#ff5252'
-          btn.disabled = false
-        } else {
-          feedback.textContent = 'Acesso liberado! Redirecionando...'
-          feedback.style.color = '#00e676'
-          
-          setTimeout(() => {
-            window.location.href = './index.html'
-          }, 600)
+        const data = await res.json()
+
+        if (!res.ok) {
+          throw new Error(data.error_description || data.msg || data.message || 'E-mail ou senha incorretos.')
         }
+
+        // Salva o token de acesso no navegador
+        localStorage.setItem('va_admin_token', data.access_token)
+
+        feedback.textContent = 'Acesso liberado! Redirecionando...'
+        feedback.style.color = '#00e676'
+
+        setTimeout(() => {
+          window.location.href = 'index.html'
+        }, 600)
+
       } catch (err) {
-        console.error('Erro de conexão:', err)
-        feedback.textContent = 'Falha na conexão. Verifique se está usando Live Server (http://) e não abrindo como arquivo local.'
+        feedback.textContent = 'Erro: ' + err.message
         feedback.style.color = '#ff5252'
         btn.disabled = false
       }
-    })
+    }
   </script>
 </body>
 </html>
