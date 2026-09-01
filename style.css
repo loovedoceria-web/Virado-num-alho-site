@@ -15,7 +15,6 @@
   
   --font-display: 'Bebas Neue', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
-  --font-accent: 'Playfair Display', serif;
   
   --radius-sm: 6px;
   --radius-md: 12px;
@@ -46,6 +45,13 @@ body {
   font-family: var(--font-body);
   line-height: 1.6;
   overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex-grow: 1;
 }
 
 .container {
@@ -181,7 +187,7 @@ body {
 }
 
 /* ==========================================================================
-   SPEED DIAL / BOTÃO FLUTUANTE RECOLHÍVEL & INTELIGENTE
+   SPEED DIAL / BOTÃO FLUTUANTE
    ========================================================================== */
 .floating-hub {
   position: fixed;
@@ -339,19 +345,33 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 22px;
 }
 
 .nav-links a {
-  color: var(--color-garlic);
+  color: #c7beaf;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
+  padding: 6px 4px;
+  position: relative;
   transition: color 0.2s;
 }
 
-.nav-links a:hover {
+.nav-links a:hover,
+.nav-links a.active {
   color: var(--color-garlic-gold);
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-garlic-gold);
+  border-radius: 2px;
 }
 
 .menu-toggle {
@@ -424,13 +444,26 @@ body {
   width: 100%;
 }
 
+.btn-card-action {
+  background: var(--color-garlic-gold);
+  color: #111;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
 /* ==========================================================================
-   HERO SECTION
+   HERO / INÍCIO
    ========================================================================== */
 .hero {
   position: relative;
-  padding: 75px 0 60px;
-  border-bottom: 1px solid rgba(244, 237, 226, 0.06);
+  padding: 60px 0 50px;
+  min-height: calc(100vh - 180px);
+  display: flex;
+  align-items: center;
 }
 
 .hero-grid {
@@ -521,7 +554,6 @@ body {
   color: var(--color-smoke);
 }
 
-/* Hero Spotlight Card */
 .spotlight-card {
   background: var(--bg-card);
   border: 1px solid rgba(229, 169, 60, 0.25);
@@ -589,17 +621,13 @@ body {
   color: var(--color-garlic-gold);
 }
 
-.serve-info {
-  font-size: 12px;
-  color: var(--color-smoke);
-}
-
 /* ==========================================================================
-   BARRA SENSORIAL (PADRÃO LINEAR)
+   BARRA SENSORIAL
    ========================================================================== */
 .sensory-strip {
   background: #120f0d;
-  border-bottom: 1px solid rgba(244, 237, 226, 0.08);
+  border-top: 1px solid rgba(244, 237, 226, 0.06);
+  border-bottom: 1px solid rgba(244, 237, 226, 0.06);
   padding: 24px 0;
 }
 
@@ -647,7 +675,7 @@ body {
    SEÇÕES & TIPOGRAFIA GERAL
    ========================================================================== */
 .section {
-  padding: 90px 0;
+  padding: 80px 0;
 }
 
 .section-tag {
@@ -804,14 +832,8 @@ body {
 }
 
 /* ==========================================================================
-   DESTAQUES DO CARDÁPIO (Com Fotos & Preços)
+   DESTAQUES DO CARDÁPIO
    ========================================================================== */
-.menu-highlights {
-  background: #110e0c;
-  border-top: 1px solid rgba(244, 237, 226, 0.06);
-  border-bottom: 1px solid rgba(244, 237, 226, 0.06);
-}
-
 .menu-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -971,10 +993,6 @@ body {
 /* ==========================================================================
    UNIDADES & MAPAS
    ========================================================================== */
-.units-experience {
-  background: #0e0c0b;
-}
-
 .units-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
@@ -1170,11 +1188,6 @@ body {
 /* ==========================================================================
    CONTATO & FORMULÁRIO
    ========================================================================== */
-.contact-section {
-  background: #12100e;
-  border-top: 1px solid rgba(244, 237, 226, 0.06);
-}
-
 .contact-split {
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -1298,7 +1311,8 @@ body {
 .footer {
   background: #080706;
   border-top: 1px solid rgba(244, 237, 226, 0.06);
-  padding: 60px 0 30px;
+  padding: 50px 0 30px;
+  margin-top: auto;
 }
 
 .footer-content {
