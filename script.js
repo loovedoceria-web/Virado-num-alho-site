@@ -1,666 +1,223 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Virado Num Alho | O Verdadeiro Burger no Pão de Alho de Floripa</title>
-  <meta
-    name="description"
-    content="Burgers artesanais na brasa, creme de alho assado autoral e pão tostado na medida. Peça no iFood ou visite nossas unidades em Capoeiras e Serraria."
-  />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@1,600&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
+// ========================================================
+// 1. CONFIGURAÇÃO COM AS SUAS CHAVES DO SUPABASE
+// ========================================================
+const SUPABASE_URL = 'https://hkfhnoxfggjbuhclpyqt.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZmhub3hmZ2dqYnVoY2xweXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDkzMTUsImV4cCI6MjEwMzU4NTMxNX0.QivPkzOMTuA2bLi5RFA7bzp2YUwDbOg9xnoQDZ-5fmU'
 
-  <aside id="admin-bar">
-    <div style="display:flex; align-items:center; gap:12px;">
-      <span class="admin-tag">PAINEL DO DONO</span>
-      <span style="font-size:13px; color:#f4ede2;">Edite os textos diretamente na tela e clique em <strong>Salvar Alterações</strong> quando terminar.</span>
-    </div>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <button id="btn-save-all" class="btn-admin-save">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-        <span>Salvar Alterações</span>
-      </button>
-      <button id="btn-logout" class="btn-admin-logout">Sair do Painel</button>
-    </div>
-  </aside>
+let activeImageKeyTarget = null
+const adminBar = document.getElementById('admin-bar')
 
-  <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
+// ========================================================
+// 2. FUNÇÕES REST (Sem bibliotecas externas)
+// ========================================================
 
-  <div class="floating-hub" id="floatingHub">
-    <div class="hub-options">
-      <a 
-        href="https://www.ifood.com.br" 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        class="hub-btn hub-ifood" 
-        data-editable-link
-        data-key="link_ifood"
-        title="Pedir pelo iFood"
-      >
-        <svg viewBox="0 0 24 24" class="hub-icon" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
-        <span class="hub-text">Pedir no iFood</span>
-      </a>
+// Carrega textos, imagens e links salvos no Supabase
+async function loadSiteContent() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,content`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY }
+    })
+    if (!res.ok) return
+    const data = await res.json()
+    if (data && data.length > 0) {
+      data.forEach(item => {
+        // Atualiza Textos (que não sejam links especiais)
+        const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
+        textElements.forEach(el => { el.innerText = item.content })
 
-      <a 
-        href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Quero%20fazer%20um%20pedido%20no%20Virado%20Num%20Alho." 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        class="hub-btn hub-wpp" 
-        data-editable-link
-        data-key="link_whatsapp"
-        title="Pedir no WhatsApp"
-      >
-        <svg viewBox="0 0 32 32" class="hub-icon" fill="currentColor">
-          <path d="M16 2a13.9 13.9 0 0 0-12 21.1L2 30l7.1-1.9A13.9 13.9 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2s-.9 1.2-1.1 1.4-.4.2-.7.1a9.2 9.2 0 0 1-2.7-1.7 10.2 10.2 0 0 1-1.9-2.3c-.2-.4 0-.6.1-.8.2-.2.4-.4.5-.6l.4-.6c.1-.2 0-.4 0-.6s-.8-2-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.4 3.2 7.5 7.5 0 0 0 1.6 4 17.2 17.2 0 0 0 6.6 5.8c.9.4 1.7.7 2.3.9a5.5 5.5 0 0 0 2.5.2c.8-.1 2.3-.9 2.6-1.8.4-.9.4-1.7.3-1.8-.2-.2-.5-.3-.9-.5z"/>
-        </svg>
-        <span class="hub-text">Pedir no WhatsApp</span>
-      </a>
-    </div>
+        // Atualiza Imagens (Pratos, Unidades, Galeria, Hero)
+        const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
+        imgElements.forEach(img => { img.src = item.content })
 
-    <button class="hub-trigger" id="hubTrigger" aria-label="Abrir opções de pedido">
-      <svg viewBox="0 0 24 24" class="hub-trigger-icon" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <path d="M16 10a4 4 0 0 1-8 0"></path>
-      </svg>
-      <span class="hub-trigger-label">Pedir Agora</span>
-    </button>
-  </div>
+        // Atualiza Links (WhatsApp, iFood, Cardápio, etc.)
+        const linkElements = document.querySelectorAll(`[data-editable-link][data-key="${item.key}"]`)
+        linkElements.forEach(link => { link.href = item.content })
+      })
+    }
+  } catch (err) {
+    console.warn('Erro ao carregar conteúdo do Supabase:', err)
+  }
+}
 
-  <header class="header">
-    <div class="container nav">
-      <a href="#inicio" class="logo">
-        <div class="logo-badge">
-          <svg viewBox="0 0 24 24" class="logo-svg" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2C8 2 5 6 5 11c0 4.5 3 8 7 8s7-3.5 7-8c0-5-3-9-7-9z"/>
-            <path d="M12 2v17"/>
-            <path d="M8.5 7.5c1.5 2 2 5 2 7.5"/>
-            <path d="M15.5 7.5c-1.5 2-2 5-2 7.5"/>
-          </svg>
-        </div>
-        <div class="logo-text">
-          <strong data-editable data-key="brand_name">VIRADO NUM ALHO</strong>
-          <small data-editable data-key="brand_subtitle">BURGER NA BRASA & PÃO DE ALHO ARTESANAL</small>
-        </div>
-      </a>
+// Salva alterações no Banco de Dados
+async function supabaseUpsert(key, content) {
+  const token = localStorage.getItem('va_admin_token')
+  const headers = {
+    'Content-Type': 'application/json',
+    'apikey': SUPABASE_ANON_KEY,
+    'Prefer': 'resolution=merge-duplicates'
+  }
+  if (token) headers['Authorization'] = `Bearer ${token}`
 
-      <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content`, {
+    method: 'POST',
+    headers: headers,
+    body: JSON.stringify([{ key, content, updated_at: new Date().toISOString() }])
+  })
+  return res.ok
+}
 
-      <nav class="nav-links" id="nav-links">
-        <a href="#inicio">Início</a>
-        <a href="#experiencia">A Experiência</a>
-        <a href="#cardapio-destaque">Cardápio</a>
-        <a href="#galeria">Na Mesa</a>
-        <a href="#unidades">Onde Comer</a>
-        <a href="#depoimentos">Quem Provou</a>
-        <a href="#contato" class="btn btn-header-cta">Fazer Pedido</a>
-      </nav>
-    </div>
-  </header>
+// ========================================================
+// 3. VERIFICAÇÃO DE SESSÃO DO ADMINISTRADOR
+// ========================================================
+function checkAuthFlow() {
+  const token = localStorage.getItem('va_admin_token')
 
-  <main>
-    <section class="hero" id="inicio">
-      <div class="container hero-grid">
-        <div class="hero-content">
-          <div class="badge-fresh" data-editable data-key="hero_eyebrow">
-            🥖 A PRIMEIRA CASA DE PÃO DE ALHO RECHEADO DA ILHA
-          </div>
-          
-          <h1 data-editable data-key="hero_title">
-            CROCANTE POR FORA. <br><span class="highlight-text">CREMOSO & DEFUMADO</span> ATÉ A ÚLTIMA MORDIDA.
-          </h1>
-          
-          <p data-editable data-key="hero_description">
-            Blend de costela bovina selado na alta temperatura, queijo derretendo de verdade e a nossa pasta de alho confitado de receita secreta dentro do pão artesanal crocante.
-          </p>
+  if (token) {
+    if (adminBar) adminBar.style.display = 'flex'
+    document.body.classList.add('admin-logged')
+    enableInlineEditing()
+  } else {
+    if (adminBar) adminBar.style.display = 'none'
+    document.body.classList.remove('admin-logged')
+  }
+}
 
-          <div class="hero-actions">
-            <a href="https://www.ifood.com.br" target="_blank" class="btn btn-primary" data-editable-link data-key="link_hero_ifood">
-              Pedir pelo iFood
-            </a>
-            <a href="#unidades" class="btn btn-secondary">
-              Ver Unidades & Mesas
-            </a>
-          </div>
+// ========================================================
+// 4. EDIÇÃO DIRETA NO SITE (TEXTOS, FOTOS E LINKS)
+// ========================================================
+function enableInlineEditing() {
+  // 1. Edição de Textos
+  const editables = document.querySelectorAll('[data-editable]')
+  editables.forEach(el => {
+    el.setAttribute('contenteditable', 'true')
 
-          <div class="hero-facts-row">
-            <div class="fact-card">
-              <div class="fact-svg-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              </div>
-              <div>
-                <strong data-editable data-key="card_1_val">4.8 no Google</strong>
-                <small data-editable data-key="card_1_lbl">+4.300 clientes apaixonados</small>
-              </div>
-            </div>
-            <div class="fact-card">
-              <div class="fact-svg-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-              </div>
-              <div>
-                <strong data-editable data-key="card_2_val">100% Brasa</strong>
-                <small data-editable data-key="card_2_lbl">Carnes no ponto perfeito</small>
-              </div>
-            </div>
-            <div class="fact-card">
-              <div class="fact-svg-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              </div>
-              <div>
-                <strong data-editable data-key="card_3_val">2 Unidades</strong>
-                <small data-editable data-key="card_3_lbl">Capoeiras e Serraria</small>
-              </div>
-            </div>
-          </div>
-        </div>
+    el.onblur = async function () {
+      const key = el.getAttribute('data-key')
+      const newContent = el.innerText.trim()
+      if (!key) return
 
-        <div class="hero-spotlight">
-          <div class="spotlight-card">
-            <div class="spotlight-tag">O MAIS PEDIDO</div>
-            <div class="editable-img-wrapper hero-img-wrap">
-              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Burger no Pão de Alho" data-img-key="hero_food_img" class="spotlight-img" />
-              <button class="change-img-btn" data-trigger-img="hero_food_img">Trocar Foto</button>
-            </div>
-            <div class="spotlight-details">
-              <h2 data-editable data-key="highlight_title">O Lendário Pão de Alho Vulcão</h2>
-              <p data-editable data-key="highlight_desc">
-                Não é um acompanhamento de churrasco: é uma refeição completa. Pão francês artesanal recheado com queijo prato tostado, pasta de alho confitado na brasa e 180g de carne suculenta.
-              </p>
-              <div class="spotlight-footer">
-                <span class="price-tag" data-editable data-key="hero_price_tag">A partir de R$ 26,90</span>
-                <span class="serve-info">Preparo rápido & quentinho</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+      const ok = await supabaseUpsert(key, newContent)
+      if (ok) {
+        el.style.outline = '2px solid #00e676'
+        setTimeout(() => { el.style.outline = '1.5px dashed #e5a93c' }, 1200)
+      } else {
+        el.style.outline = '2px solid #ff5252'
+      }
+    }
+  })
 
-    <section class="sensory-strip">
-      <div class="container sensory-grid">
-        <div class="sensory-item">
-          <div class="s-icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8 2 5 6 5 11c0 4.5 3 8 7 8s7-3.5 7-8c0-5-3-9-7-9z"/><path d="M12 2v17"/></svg>
-          </div>
-          <div>
-            <strong>Manteiga & Alho Real</strong>
-            <small>Sem conservantes industriais</small>
-          </div>
-        </div>
-        <div class="sensory-item">
-          <div class="s-icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
-          </div>
-          <div>
-            <strong>Blend Alto & Suculento</strong>
-            <small>Ponto rosado e selagem perfeita</small>
-          </div>
-        </div>
-        <div class="sensory-item">
-          <div class="s-icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a8 8 0 0 1 16 0v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7z"/><path d="M8 11h.01"/><path d="M12 11h.01"/><path d="M16 11h.01"/></svg>
-          </div>
-          <div>
-            <strong>Pão Tostado na Hora</strong>
-            <small>Crocância inconfundível</small>
-          </div>
-        </div>
-        <div class="sensory-item">
-          <div class="s-icon-box">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
-          </div>
-          <div>
-            <strong>Puxa-Puxa de Verdade</strong>
-            <small>Queijos nobres maçaricados</small>
-          </div>
-        </div>
-      </div>
-    </section>
+  // 2. Edição de Imagens
+  const imgButtons = document.querySelectorAll('[data-trigger-img]')
+  const fileInput = document.getElementById('image-file-input')
 
-    <section class="section about-story" id="experiencia">
-      <div class="container about-grid">
-        <div class="about-copy">
-          <span class="section-tag" data-editable data-key="about_tag">Nossa Obsessão</span>
-          <h2 data-editable data-key="about_title">Cansamos do pão sem graça e decidimos reinventar o burger.</h2>
-          
-          <p class="lead-text" data-editable data-key="about_p1">
-            Todo mundo ama a casquinha dourada do pão de alho no churrasco de domingo. O que nós fizemos foi transformar essa paixão no prato principal mais saboroso da Grande Florianópolis.
-          </p>
-          
-          <p data-editable data-key="about_p2">
-            Aqui não tem carne fina nem pasta de alho artificial que arde a boca. Criamos um confit suave de alho assado lentamente, combinamos com cortes de carne selecionados e queijos que esticam a cada mordida. O resultado? Um sabor marcante que faz você salivar antes de dar a primeira garfada.
-          </p>
+  imgButtons.forEach(btn => {
+    btn.onclick = function (e) {
+      e.stopPropagation()
+      activeImageKeyTarget = btn.getAttribute('data-trigger-img')
+      if (fileInput) fileInput.click()
+    }
+  })
 
-          <div class="about-pillars">
-            <div class="pillar-box">
-              <div class="pillar-num">01</div>
-              <h3 data-editable data-key="feat_1_title">Alho Confitado Suave</h3>
-              <p data-editable data-key="feat_1_desc">Cozido lentamente no azeite de ervas para perder a acidez e entregar um toque amanteigado e aromático.</p>
-            </div>
-            
-            <div class="pillar-box">
-              <div class="pillar-num">02</div>
-              <h3 data-editable data-key="feat_2_title">Queijo Maçaricado</h3>
-              <p data-editable data-key="feat_2_desc">Camada generosa de queijo fundido que transborda pelas laterais do pão a cada mordida.</p>
-            </div>
+  if (fileInput) {
+    fileInput.onchange = async function (e) {
+      const file = e.target.files[0]
+      if (!file || !activeImageKeyTarget) return
 
-            <div class="pillar-box">
-              <div class="pillar-num">03</div>
-              <h3 data-editable data-key="feat_3_title">Clima de Boteco Raiz</h3>
-              <p data-editable data-key="feat_3_desc">Cerveja gelada, porções para dividir com os amigos e atendimento sem frescura em dois pontos de fácil acesso.</p>
-            </div>
-          </div>
-        </div>
+      const token = localStorage.getItem('va_admin_token')
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${activeImageKeyTarget}_${Date.now()}.${fileExt}`
+      const filePath = `uploads/${fileName}`
+      const triggerBtn = document.querySelector(`[data-trigger-img="${activeImageKeyTarget}"]`)
+      
+      if (triggerBtn) triggerBtn.innerText = 'Enviando...'
 
-        <div class="about-visual-composition">
-          <div class="photo-card main-photo editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Burger Artesanal na Mesa" data-img-key="about_img_1" />
-            <button class="change-img-btn" data-trigger-img="about_img_1">Trocar Foto</button>
-            <div class="photo-caption">Recheio generoso até a ponta</div>
-          </div>
-          <div class="photo-card secondary-photo editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" alt="Pão de Alho Crocante" data-img-key="about_img_2" />
-            <button class="change-img-btn" data-trigger-img="about_img_2">Trocar Foto</button>
-            <div class="floating-badge-award">🥇 Receita Original</div>
-          </div>
-        </div>
-      </div>
-    </section>
+      try {
+        const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/site-images/uploads/${fileName}`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${token}`
+          },
+          body: file
+        })
 
-    <section class="section menu-highlights" id="cardapio-destaque">
-      <div class="container">
-        <div class="section-heading text-center">
-          <span class="section-tag" data-editable data-key="dest_tag">Para Matar a Fome</span>
-          <h2 data-editable data-key="dest_title">Os Campeões de Pedidos na Grelha</h2>
-          <p class="subtitle" data-editable data-key="dest_subtitle">
-            Combinações brutas feitas com ingredientes frescos e servidas com molhos da casa.
-          </p>
-        </div>
+        if (!uploadRes.ok) throw new Error('Erro ao salvar no Storage')
 
-        <div class="menu-cards-grid">
-          <article class="menu-item-card featured">
-            <div class="card-badge">O CARRO-CHEFE</div>
-            <div class="menu-item-media editable-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=600&q=80" alt="Burger no Pão de Alho" data-img-key="dish_img_1" />
-              <button class="change-img-btn" data-trigger-img="dish_img_1">Trocar Foto</button>
-            </div>
-            <div class="menu-item-body">
-              <div class="menu-item-header">
-                <h3 data-editable data-key="srv_1_title">Burger no Pão de Alho Especial</h3>
-                <span class="dish-price" data-editable data-key="srv_1_price">R$ 34,90</span>
-              </div>
-              <p data-editable data-key="srv_1_desc">
-                Hambúrguer de costela 180g, pasta especial de alho assado, muito queijo prato derretido e fatias de bacon crocante dentro da baguete artesanal.
-              </p>
-            </div>
-          </article>
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/site-images/uploads/${fileName}`
+        
+        await supabaseUpsert(activeImageKeyTarget, publicUrl)
 
-          <article class="menu-item-card">
-            <div class="menu-item-media editable-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" alt="Pão de Alho Recheado" data-img-key="dish_img_2" />
-              <button class="change-img-btn" data-trigger-img="dish_img_2">Trocar Foto</button>
-            </div>
-            <div class="menu-item-body">
-              <div class="menu-item-header">
-                <h3 data-editable data-key="srv_2_title">Pão de Alho Recheado Tradicional</h3>
-                <span class="dish-price" data-editable data-key="srv_2_price">R$ 24,90</span>
-              </div>
-              <p data-editable data-key="srv_2_desc">
-                A clássica baguete selada na grelha, transbordando muçarela, parmesão curado e creme artesanal de alho poro tostado.
-              </p>
-            </div>
-          </article>
+        const targetImg = document.querySelector(`[data-img-key="${activeImageKeyTarget}"]`)
+        if (targetImg) targetImg.src = publicUrl
 
-          <article class="menu-item-card">
-            <div class="menu-item-media editable-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&w=600&q=80" alt="Double Bacon Burger" data-img-key="dish_img_3" />
-              <button class="change-img-btn" data-trigger-img="dish_img_3">Trocar Foto</button>
-            </div>
-            <div class="menu-item-body">
-              <div class="menu-item-header">
-                <h3 data-editable data-key="srv_3_title">Double Bacon & Barbecue</h3>
-                <span class="dish-price" data-editable data-key="srv_3_price">R$ 36,90</span>
-              </div>
-              <p data-editable data-key="srv_3_desc">
-                Dois burgers smash de 90g, dobro de cheddar inglês cremoso, tiras crocantes de bacon artesanal e molho barbecue rústico defumado.
-              </p>
-            </div>
-          </article>
+      } catch (err) {
+        alert('Erro ao trocar imagem: ' + err.message)
+      }
 
-          <article class="menu-item-card">
-            <div class="menu-item-media editable-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" alt="Batata Rústica" data-img-key="dish_img_4" />
-              <button class="change-img-btn" data-trigger-img="dish_img_4">Trocar Foto</button>
-            </div>
-            <div class="menu-item-body">
-              <div class="menu-item-header">
-                <h3 data-editable data-key="srv_4_title">Batata Rústica Virada no Alho</h3>
-                <span class="dish-price" data-editable data-key="srv_4_price">R$ 22,00</span>
-              </div>
-              <p data-editable data-key="srv_4_desc">
-                Batatas fritas douradas com casca, temperadas com páprica defumada, alecrim fresco e servidas com pote de maionese de alho confitado.
-              </p>
-            </div>
-          </article>
-        </div>
+      if (triggerBtn) triggerBtn.innerText = 'Trocar Foto'
+      fileInput.value = ''
+      activeImageKeyTarget = null
+    }
+  }
 
-        <div class="menu-full-cta">
-          <a href="https://www.ifood.com.br" target="_blank" class="btn btn-primary btn-large-menu" data-editable-link data-key="link_full_menu">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            Ver Cardápio Completo & Combos no iFood
-          </a>
-        </div>
-      </div>
-    </section>
+  // 3. Edição de Links (WhatsApp, iFood, Cardápio, etc.)
+  const editableLinks = document.querySelectorAll('[data-editable-link]')
+  editableLinks.forEach(link => {
+    link.onclick = async function(e) {
+      if (document.body.classList.contains('admin-logged')) {
+        e.preventDefault()
+        const key = link.getAttribute('data-key')
+        const currentUrl = link.getAttribute('href')
+        const newUrl = prompt(`Editar destino do link (${key}):`, currentUrl)
 
-    <section class="section gallery-section" id="galeria">
-      <div class="container">
-        <div class="section-heading text-center">
-          <span class="section-tag" data-editable data-key="gal_tag">Sem Filtros</span>
-          <h2 data-editable data-key="gal_title">Fotos Reais Direto da Nossa Chapa</h2>
-          <p class="subtitle" data-editable data-key="gal_subtitle">
-            É exatamente assim que o seu prato chega na mesa ou na sua casa.
-          </p>
-        </div>
+        if (newUrl && newUrl.trim() !== '' && newUrl !== currentUrl) {
+          link.setAttribute('href', newUrl.trim())
+          const ok = await supabaseUpsert(key, newUrl.trim())
+          if (ok) {
+            alert('Link atualizado com sucesso!')
+          } else {
+            alert('Erro ao salvar link no banco.')
+          }
+        }
+      }
+    }
+  })
+}
 
-        <div class="custom-gallery-mosaic">
-          <div class="mosaic-item large editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80" alt="Pão de Alho Recheado Tostado" data-img-key="gal_img_1" />
-            <button class="change-img-btn" data-trigger-img="gal_img_1">Trocar Foto</button>
-            <div class="img-hover-overlay">
-              <strong>Pão de Alho na Brasa</strong>
-              <small>Crocância audível a cada mordida</small>
-            </div>
-          </div>
+// Botão Sair (Logout)
+const logoutBtn = document.getElementById('btn-logout')
+if (logoutBtn) {
+  logoutBtn.onclick = function () {
+    localStorage.removeItem('va_admin_token')
+    window.location.href = 'login.html'
+  }
+}
 
-          <div class="mosaic-item editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=800&q=80" alt="Burger Artesanal Suculento" data-img-key="gal_img_2" />
-            <button class="change-img-btn" data-trigger-img="gal_img_2">Trocar Foto</button>
-            <div class="img-hover-overlay">
-              <strong>Carne Alta & Queijo</strong>
-            </div>
-          </div>
+// Menu Mobile
+const menuToggle = document.getElementById('menu-toggle')
+const navLinks = document.getElementById('nav-links')
+if (menuToggle && navLinks) {
+  menuToggle.onclick = function () { navLinks.classList.toggle('active') }
+}
 
-          <div class="mosaic-item editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Ambiente da Hamburgueria" data-img-key="gal_img_3" />
-            <button class="change-img-btn" data-trigger-img="gal_img_3">Trocar Foto</button>
-            <div class="img-hover-overlay">
-              <strong>Clima Descontraído</strong>
-            </div>
-          </div>
+// Speed Dial Mobile Toggle (Clique no Botão de Pedir)
+const hubTrigger = document.getElementById('hubTrigger')
+const floatingHub = document.getElementById('floatingHub')
+if (hubTrigger && floatingHub) {
+  hubTrigger.onclick = function(e) {
+    e.stopPropagation()
+    floatingHub.classList.toggle('active')
+  }
+  document.addEventListener('click', function(e) {
+    if (!floatingHub.contains(e.target)) {
+      floatingHub.classList.remove('active')
+    }
+  })
+}
 
-          <div class="mosaic-item wide editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=80" alt="Mesa Completa com Porções" data-img-key="gal_img_4" />
-            <button class="change-img-btn" data-trigger-img="gal_img_4">Trocar Foto</button>
-            <div class="img-hover-overlay">
-              <strong>Combo Perfeito para a Galera</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+// Formulário de Contato Direto para o WhatsApp
+const contactForm = document.getElementById('contact-form')
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault()
+    const nome = document.getElementById('nome').value
+    const msg = document.getElementById('mensagem').value
+    const zapText = encodeURIComponent(`Olá! Meu nome é ${nome}. Mensagem do site: ${msg}`)
+    window.open(`https://wa.me/5548998388277?text=${zapText}`, '_blank')
+  })
+}
 
-    <section class="section units-experience" id="unidades">
-      <div class="container">
-        <div class="section-heading text-center">
-          <span class="section-tag" data-editable data-key="units_tag">Onde Encontrar</span>
-          <h2 data-editable data-key="units_title">Duas Casas Prontas para te Receber</h2>
-          <p class="subtitle" data-editable data-key="units_desc">
-            Venha comer no salão com chopp gelado ou peça no delivery para receber quentinho.
-          </p>
-        </div>
-
-        <div class="units-cards-grid">
-          <article class="unit-location-card">
-            <div class="unit-card-media editable-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" alt="Fachada e Salão Capoeiras" data-img-key="unit1_img" />
-              <button class="change-img-btn" data-trigger-img="unit1_img">Trocar Foto</button>
-              <div class="unit-badge">CONTINENTE • FLORIPA</div>
-            </div>
-
-            <div class="unit-card-body">
-              <h3 data-editable data-key="unit1_name">Unidade Capoeiras</h3>
-              <p class="unit-address" data-editable data-key="unit1_addr">
-                📍 R. Campolino Alves, Capoeiras — Florianópolis/SC (Próximo à pracinha)
-              </p>
-              
-              <div class="unit-schedule">
-                <div class="sched-row">
-                  <span>Terça a Quinta:</span>
-                  <strong>18h00 às 23h00</strong>
-                </div>
-                <div class="sched-row highlight">
-                  <span>Sexta e Sábado:</span>
-                  <strong>18h00 às 00h00</strong>
-                </div>
-                <div class="sched-row">
-                  <span>Domingo:</span>
-                  <strong>16h00 às 22h00</strong>
-                </div>
-              </div>
-
-              <div class="unit-map-embed">
-                <iframe 
-                  title="Mapa Unidade Capoeiras" 
-                  src="https://maps.google.com/maps?q=Rua%20Campolino%20Alves,%20Capoeiras,%20Florianopolis&t=&z=15&ie=UTF8&iwloc=&output=embed" 
-                  loading="lazy"
-                ></iframe>
-              </div>
-
-              <div class="unit-perks">
-                <span>🚗 Fácil de estacionar na rua</span>
-                <span>🍺 Chopp artesanal na torneira</span>
-              </div>
-
-              <div class="unit-action-links">
-                <a href="https://maps.google.com/?q=Rua+Campolino+Alves+Capoeiras+Florianopolis" target="_blank" class="btn btn-unit-map">Abrir no GPS / Waze</a>
-                <a href="https://wa.me/5548998388277" target="_blank" class="btn btn-unit-wpp">Reservar Mesa</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="unit-location-card">
-            <div class="unit-card-media editable-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Fachada e Salão Serraria" data-img-key="unit2_img" />
-              <button class="change-img-btn" data-trigger-img="unit2_img">Trocar Foto</button>
-              <div class="unit-badge">SÃO JOSÉ</div>
-            </div>
-
-            <div class="unit-card-body">
-              <h3 data-editable data-key="unit2_name">Unidade Serraria</h3>
-              <p class="unit-address" data-editable data-key="unit2_addr">
-                📍 Região Central de Serraria — São José/SC
-              </p>
-              
-              <div class="unit-schedule">
-                <div class="sched-row">
-                  <span>Terça a Quinta:</span>
-                  <strong>18h00 às 23h00</strong>
-                </div>
-                <div class="sched-row highlight">
-                  <span>Sexta e Sábado:</span>
-                  <strong>18h00 às 00h00</strong>
-                </div>
-                <div class="sched-row">
-                  <span>Domingo:</span>
-                  <strong>18h00 às 23h00</strong>
-                </div>
-              </div>
-
-              <div class="unit-map-embed">
-                <iframe 
-                  title="Mapa Unidade Serraria" 
-                  src="https://maps.google.com/maps?q=Serraria,%20Sao%20Jose%20SC&t=&z=14&ie=UTF8&iwloc=&output=embed" 
-                  loading="lazy"
-                ></iframe>
-              </div>
-
-              <div class="unit-perks">
-                <span>🍔 Retirada no balcão ágil</span>
-                <span>🛵 Delivery ultra-rápido na região</span>
-              </div>
-
-              <div class="unit-action-links">
-                <a href="https://maps.google.com/?q=Serraria+Sao+Jose+SC" target="_blank" class="btn btn-unit-map">Abrir no GPS / Waze</a>
-                <a href="https://wa.me/5548998388277" target="_blank" class="btn btn-unit-wpp">Fazer Pedido</a>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section testimonials-section" id="depoimentos">
-      <div class="container">
-        <div class="section-heading text-center">
-          <span class="section-tag">Avaliações Reais</span>
-          <h2>O Que Diz Quem Já Se Lambuzou</h2>
-          <p class="subtitle">Comentários extraídos diretamente das avaliações do Google e iFood.</p>
-        </div>
-
-        <div class="testimonials-grid">
-          <article class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text" data-editable data-key="test_1_p">
-              "O melhor pão de alho que já comi na vida. Não é pesado, o creme de alho tem um gosto incrível e a carne vem no ponto perfeito. O atendimento de Capoeiras é impecável!"
-            </p>
-            <div class="reviewer-info">
-              <div class="reviewer-avatar">EL</div>
-              <div>
-                <strong data-editable data-key="test_1_author">Eduardo Lentz</strong>
-                <small>Local Guide • Google Reviews</small>
-              </div>
-            </div>
-          </article>
-
-          <article class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text" data-editable data-key="test_2_p">
-              "Pedi no delivery com medo de chegar murcho e me surpreendi: o pão veio super crocante e com muito queijo derretido. Já virou vício de sexta-feira aqui em casa."
-            </p>
-            <div class="reviewer-info">
-              <div class="reviewer-avatar">FA</div>
-              <div>
-                <strong data-editable data-key="test_2_author">Fernanda Almeida (Fefa)</strong>
-                <small>Cliente Recorrente • iFood</small>
-              </div>
-            </div>
-          </article>
-
-          <article class="review-card">
-            <div class="review-stars">★★★★★</div>
-            <p class="review-text" data-editable data-key="test_3_p">
-              "Ambiente descontraído, ótimo para ir em galera tomar uma cerveja e comer bem. Preço super justo pela quantidade e qualidade da comida."
-            </p>
-            <div class="reviewer-info">
-              <div class="reviewer-avatar">LL</div>
-              <div>
-                <strong data-editable data-key="test_3_author">Luiz Lopes</strong>
-                <small>Cliente desde 2023 • Google Reviews</small>
-              </div>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section contact-section" id="contato">
-      <div class="container contact-split">
-        <div class="contact-info-panel">
-          <span class="section-tag">Atendimento Direto</span>
-          <h2>Bateu a fome? Chama a gente.</h2>
-          <p>Tire dúvidas sobre reservas de mesa para aniversários, consulte o cardápio do dia ou faça seu pedido diretamente.</p>
-
-          <div class="info-block-item">
-            <div class="info-icon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            </div>
-            <div>
-              <strong>WhatsApp & Pedidos Rápidos</strong>
-              <p data-editable data-key="info_phone">(48) 99838-8277</p>
-            </div>
-          </div>
-
-          <div class="info-block-item">
-            <div class="info-icon">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
-            </div>
-            <div>
-              <strong>Faixa de Preço Médio</strong>
-              <p data-editable data-key="info_price">R$ 22 a R$ 42 por pessoa</p>
-            </div>
-          </div>
-
-          <div class="social-proof-pill">
-            <span>Siga nosso dia a dia no Instagram:</span>
-            <a href="https://instagram.com/viradonumalho" target="_blank" data-editable data-key="info_ig">@viradonumalho</a>
-          </div>
-        </div>
-
-        <form class="contact-card-form" id="contact-form">
-          <h3>Envie uma Mensagem</h3>
-          <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Dúvidas, parcerias ou eventos.</p>
-          
-          <div class="form-group">
-            <label for="nome">Seu Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="Como podemos te chamar?" required />
-          </div>
-          <div class="form-group">
-            <label for="telefone">WhatsApp</label>
-            <input type="tel" id="telefone" name="telefone" placeholder="(48) 99999-9999" required />
-          </div>
-          <div class="form-group">
-            <label for="mensagem">Mensagem</label>
-            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Em que podemos te ajudar?" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Enviar Mensagem</button>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-content">
-      <div class="footer-brand">
-        <strong class="footer-logo">VIRADO NUM ALHO</strong>
-        <p>A primeira hamburgueria focada no sabor inconfundível do pão de alho na brasa em Florianópolis e São José.</p>
-      </div>
-
-      <div class="footer-nav">
-        <strong>Navegação</strong>
-        <a href="#inicio">Início</a>
-        <a href="#experiencia">A Experiência</a>
-        <a href="#cardapio-destaque">Cardápio</a>
-        <a href="#unidades">Unidades</a>
-        <a href="#depoimentos">Avaliações</a>
-      </div>
-
-      <div class="footer-hours">
-        <strong>Atendimento</strong>
-        <p>Terça a Domingo a partir das 18h</p>
-        <p>Entregas via iFood & WhatsApp</p>
-      </div>
-    </div>
-
-    <div class="footer-bottom">
-      <div class="container copyright-text">
-        <p>© 2026 Virado Num Alho. Todos os direitos reservados.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+// Inicialização
+loadSiteContent()
+checkAuthFlow()
