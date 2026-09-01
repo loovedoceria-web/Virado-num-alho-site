@@ -12,7 +12,6 @@
 </head>
 <body>
 
-  <!-- Barra de Controle do Administrador (Supabase) -->
   <aside id="admin-bar">
     <div style="display:flex; align-items:center; gap:12px;">
       <span class="admin-tag">PAINEL DO DONO</span>
@@ -29,10 +28,10 @@
 
   <header class="header">
     <div class="container nav-wrapper">
-      <div class="brand-logo">
+      <div class="brand-logo-container">
         <div class="editable-img-wrapper brand-logo-wrapper">
           <img src="logo.png" alt="Virado Num Alho Logo" data-img-key="site_logo_img" class="brand-logo-img" />
-          <button class="change-img-btn" data-trigger-img="site_logo_img">Trocar Logo</button>
+          <button type="button" class="change-img-btn logo-edit-btn" data-trigger-img="site_logo_img">Trocar Logo</button>
         </div>
         <a href="index.html" class="brand-text">
           <span class="brand-title" data-editable data-key="brand_name">VIRADO NUM ALHO</span>
@@ -157,9 +156,7 @@
     </div>
 
     <div class="footer-bottom">
-      <div class="container copyright-text">
-        <p>© 2026 Virado Num Alho. Todos os direitos reservados.</p>
-      </div>
+      <div class="container copyright-text"><p>© 2026 Virado Num Alho. Todos os direitos reservados.</p></div>
     </div>
   </footer>
 
