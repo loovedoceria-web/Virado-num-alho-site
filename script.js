@@ -1,38 +1,41 @@
 // ========================================================
-// 1. CHAVES DO SUPABASE (Substitua pelos seus dados)
+// 1. CONFIGURAÇÃO COM AS SUAS CHAVES DO SUPABASE
 // ========================================================
-const SUPABASE_URL = 'https://SEU_PROJETO.supabase.co'
-const SUPABASE_ANON_KEY = 'SUA_CHAVE_ANON_AQUI'
+const SUPABASE_URL = 'https://hkfhnoxfggjbuhclpyqt.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZmhub3hmZ2dqYnVoY2xweXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDkzMTUsImV4cCI6MjEwMzU4NTMxNX0.QivPkzOMTuA2bLi5RFA7bzp2YUwDbOg9xnoQDZ-5fmU'
 
 let activeImageKeyTarget = null
-
-// Elementos da Tela
-const gateScreen = document.getElementById('admin-gate-screen')
-const gateForm = document.getElementById('gate-login-form')
-const gateFeedback = document.getElementById('gate-feedback')
-const gateBtn = document.getElementById('gate-btn')
 const adminBar = document.getElementById('admin-bar')
 
 // ========================================================
-// 2. FUNÇÕES REST (Sem depender de bibliotecas externas)
+// 2. FUNÇÕES REST (Sem bibliotecas externas)
 // ========================================================
 
-// Login via API REST oficial do Supabase
-async function supabaseLogin(email, password) {
-  const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_ANON_KEY
-    },
-    body: JSON.stringify({ email, password })
-  })
-  const data = await res.json()
-  if (!res.ok) throw new Error(data.error_description || data.msg || data.message || 'Falha ao autenticar')
-  return data
+// Carrega textos e fotos salvos no Supabase
+async function loadSiteContent() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,content`, {
+      headers: { 'apikey': SUPABASE_ANON_KEY }
+    })
+    if (!res.ok) return
+    const data = await res.json()
+    if (data && data.length > 0) {
+      data.forEach(item => {
+        // Atualiza Textos
+        const textElements = document.querySelectorAll(`[data-key="${item.key}"]`)
+        textElements.forEach(el => { el.innerText = item.content })
+
+        // Atualiza Imagens
+        const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
+        imgElements.forEach(img => { img.src = item.content })
+      })
+    }
+  } catch (err) {
+    console.warn('Erro ao carregar conteúdo do Supabase:', err)
+  }
 }
 
-// Salvar/Editar dados no Banco via REST (Upsert)
+// Salva alterações de texto ou link de foto
 async function supabaseUpsert(key, content) {
   const token = localStorage.getItem('va_admin_token')
   const headers = {
@@ -50,95 +53,19 @@ async function supabaseUpsert(key, content) {
   return res.ok
 }
 
-// Carregar Conteúdo do Banco
-async function loadSiteContent() {
-  try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,content`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY }
-    })
-    if (!res.ok) return
-    const data = await res.json()
-    if (data && data.length > 0) {
-      data.forEach(item => {
-        // Textos
-        const textElements = document.querySelectorAll(`[data-key="${item.key}"]`)
-        textElements.forEach(el => { el.innerText = item.content })
-
-        // Imagens
-        const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
-        imgElements.forEach(img => { img.src = item.content })
-      })
-    }
-  } catch (err) {
-    console.warn('Modo offline ou sem conexão com banco:', err)
-  }
-}
-
 // ========================================================
-// 3. FLUXO DE LOGIN E PROTEÇÃO
+// 3. VERIFICAÇÃO DE SESSÃO DO ADMINISTRADOR
 // ========================================================
 function checkAuthFlow() {
   const token = localStorage.getItem('va_admin_token')
-  const wantsAdmin = window.location.hash === '#admin' || window.location.search.includes('admin=true')
 
   if (token) {
-    // Logado com sucesso
-    if (gateScreen) gateScreen.style.display = 'none'
     if (adminBar) adminBar.style.display = 'flex'
     document.body.classList.add('admin-logged')
     enableInlineEditing()
-  } else if (wantsAdmin) {
-    // Tela de login visível
-    if (gateScreen) gateScreen.style.display = 'flex'
-    if (adminBar) adminBar.style.display = 'none'
-    document.body.classList.remove('admin-logged')
   } else {
-    // Visitante comum
-    if (gateScreen) gateScreen.style.display = 'none'
     if (adminBar) adminBar.style.display = 'none'
     document.body.classList.remove('admin-logged')
-  }
-}
-
-// Clique no botão de Login
-if (gateForm) {
-  gateForm.onsubmit = async function (e) {
-    e.preventDefault()
-
-    const email = document.getElementById('gate-email').value.trim()
-    const password = document.getElementById('gate-password').value
-
-    if (SUPABASE_URL.includes('SEU_PROJETO') || SUPABASE_ANON_KEY.includes('SUA_CHAVE')) {
-      alert('ERRO: Você precisa colar a URL e a ANON KEY do seu Supabase no topo do arquivo script.js!')
-      return
-    }
-
-    gateBtn.disabled = true
-    gateFeedback.textContent = 'Verificando com o servidor...'
-    gateFeedback.style.color = '#ff9800'
-
-    try {
-      const data = await supabaseLogin(email, password)
-      
-      // Salva o token de sessão localmente
-      localStorage.setItem('va_admin_token', data.access_token)
-
-      gateFeedback.textContent = 'Login autorizado! Entrando...'
-      gateFeedback.style.color = '#00e676'
-
-      setTimeout(() => {
-        gateScreen.style.display = 'none'
-        adminBar.style.display = 'flex'
-        document.body.classList.add('admin-logged')
-        enableInlineEditing()
-        gateBtn.disabled = false
-      }, 500)
-
-    } catch (err) {
-      gateFeedback.textContent = 'Erro: ' + err.message
-      gateFeedback.style.color = '#ff5252'
-      gateBtn.disabled = false
-    }
   }
 }
 
@@ -200,7 +127,7 @@ function enableInlineEditing() {
           body: file
         })
 
-        if (!uploadRes.ok) throw new Error('Erro no upload da foto')
+        if (!uploadRes.ok) throw new Error('Erro ao salvar no Storage')
 
         const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/site-images/uploads/${fileName}`
         
@@ -220,13 +147,12 @@ function enableInlineEditing() {
   }
 }
 
-// Botão Sair
+// Botão Sair (Logout)
 const logoutBtn = document.getElementById('btn-logout')
 if (logoutBtn) {
   logoutBtn.onclick = function () {
     localStorage.removeItem('va_admin_token')
-    window.location.hash = ''
-    window.location.reload()
+    window.location.href = 'login.html'
   }
 }
 
@@ -237,8 +163,6 @@ if (menuToggle && navLinks) {
   menuToggle.onclick = function () { navLinks.classList.toggle('active') }
 }
 
-window.addEventListener('hashchange', checkAuthFlow)
-
-// Inicia
+// Inicialização
 loadSiteContent()
 checkAuthFlow()
