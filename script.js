@@ -1,5 +1,5 @@
 // ========================================================
-// 1. CONFIGURAÇÃO COM SUAS CHAVES DO SUPABASE
+// 1. CONFIGURAÇÃO COM AS SUAS CHAVES DO SUPABASE
 // ========================================================
 const SUPABASE_URL = 'https://hkfhnoxfggjbuhclpyqt.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZmhub3hmZ2dqYnVoY2xweXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDkzMTUsImV4cCI6MjEwMzU4NTMxNX0.QivPkzOMTuA2bLi5RFA7bzp2YUwDbOg9xnoQDZ-5fmU'
@@ -42,11 +42,11 @@ async function loadSiteContent() {
       })
     }
   } catch (err) {
-    console.warn('Erro ao carregar conteúdo do Supabase:', err)
+    console.warn('Erro ao carregar dados do Supabase:', err)
   }
 }
 
-// Salva alterações no Banco de Dados
+// Salva alterações no Banco de Dados (Envia apenas key e content)
 async function supabaseBulkUpsert(itemsArray) {
   const token = localStorage.getItem('va_admin_token') || SUPABASE_ANON_KEY
   const headers = {
@@ -58,8 +58,7 @@ async function supabaseBulkUpsert(itemsArray) {
 
   const payload = itemsArray.map(item => ({
     key: item.key,
-    content: item.content,
-    updated_at: new Date().toISOString()
+    content: item.content
   }))
 
   const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content`, {
