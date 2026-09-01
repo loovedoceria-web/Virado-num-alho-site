@@ -12,10 +12,79 @@ const btnSaveAll = document.getElementById('btn-save-all')
 const pendingUpdates = new Map()
 
 // ========================================================
-// 2. FUNÇÕES REST DO SUPABASE
+// 2. INDICADOR DINÂMICO DE ABERTO / FECHADO (FLORIANÓPOLIS)
 // ========================================================
+function updateOpenStatusBadge() {
+  const badge = document.getElementById('openStatusBadge')
+  if (!badge) return
 
-// Carrega textos, imagens, vídeos e links salvos no Supabase
+  // Obtém a data/hora local convertida para o fuso de Florianópolis (America/Sao_Paulo)
+  const now = new Date()
+  const options = { timeZone: 'America/Sao_Paulo', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }
+  const formatter = new Intl.DateTimeFormat('pt-BR', options)
+  const parts = formatter.formatToParts(now)
+
+  let weekday = ''
+  let hour = 0
+  let minute = 0
+
+  parts.forEach(p => {
+    if (p.type === 'weekday') weekday = p.value.toLowerCase()
+    if (p.type === 'hour') hour = parseInt(p.value, 10)
+    if (p.type === 'minute') minute = parseInt(p.value, 10)
+  })
+
+  // Converte o dia da semana para índice 0 (Dom) a 6 (Sáb)
+  const dayIndex = now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo', weekday: 'narrow' })
+  const dayMap = { 'S': 0, 'M': 1, 'T': 2, 'W': 3, 'R': 4, 'F': 5, 'A': 6 } 
+  // Alternativa segura usando Intl
+  const dayName = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Sao_Paulo', weekday: 'long' }).format(now)
+
+  let isOpen = false
+  let statusMsg = ''
+
+  // Regras de Funcionamento:
+  // Segunda: Fechado
+  // Terça a Quinta: 18h às 23h
+  // Sexta e Sábado: 18h às 00h (24h)
+  // Domingo: 18h às 23h
+  const currentMinutes = hour * 60 + minute
+
+  if (dayName === 'Monday') {
+    isOpen = false
+    statusMsg = 'Fechado — abre terça às 18h'
+  } else if (dayName === 'Friday' || dayName === 'Saturday') {
+    if (currentMinutes >= 18 * 60 && currentMinutes < 24 * 60) {
+      isOpen = true
+      statusMsg = 'Aberto agora'
+    } else {
+      isOpen = false
+      statusMsg = currentMinutes < 18 * 60 ? 'Fechado — abre às 18h' : 'Fechado — abre amanhã às 18h'
+    }
+  } else {
+    // Terça, Quarta, Quinta e Domingo
+    if (currentMinutes >= 18 * 60 && currentMinutes < 23 * 60) {
+      isOpen = true
+      statusMsg = 'Aberto agora'
+    } else {
+      isOpen = false
+      statusMsg = currentMinutes < 18 * 60 ? 'Fechado — abre às 18h' : (dayName === 'Sunday' ? 'Fechado — abre terça às 18h' : 'Fechado — abre amanhã às 18h')
+    }
+  }
+
+  const textEl = badge.querySelector('.status-text')
+  if (isOpen) {
+    badge.className = 'open-status-badge is-open'
+    if (textEl) textEl.textContent = statusMsg
+  } else {
+    badge.className = 'open-status-badge is-closed'
+    if (textEl) textEl.textContent = statusMsg
+  }
+}
+
+// ========================================================
+// 3. FUNÇÕES REST DO SUPABASE
+// ========================================================
 async function loadSiteContent() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,content`, {
@@ -32,7 +101,7 @@ async function loadSiteContent() {
         const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
         textElements.forEach(el => { el.innerText = item.content })
 
-        // Atualiza Imagens (inclusive a logo)
+        // Atualiza Imagens
         const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
         imgElements.forEach(img => { img.src = item.content })
 
@@ -58,7 +127,6 @@ async function loadSiteContent() {
   }
 }
 
-// Salva alterações no Banco de Dados (Envia apenas key e content)
 async function supabaseBulkUpsert(itemsArray) {
   const token = localStorage.getItem('va_admin_token') || SUPABASE_ANON_KEY
   const headers = {
@@ -88,13 +156,12 @@ async function supabaseBulkUpsert(itemsArray) {
   return true
 }
 
-// Salva um único item (para fotos e links)
 async function supabaseUpsertSingle(key, content) {
   return await supabaseBulkUpsert([{ key, content }])
 }
 
 // ========================================================
-// 3. VERIFICAÇÃO DE SESSÃO DO ADMINISTRADOR
+// 4. VERIFICAÇÃO DE SESSÃO DO ADMINISTRADOR
 // ========================================================
 function checkAuthFlow() {
   const token = localStorage.getItem('va_admin_token')
@@ -110,10 +177,9 @@ function checkAuthFlow() {
 }
 
 // ========================================================
-// 4. EDIÇÃO DIRETA NO SITE & BOTÃO SALVAR
+// 5. EDIÇÃO DIRETA NO SITE & BOTÃO SALVAR
 // ========================================================
 function enableInlineEditing() {
-  // 1. Edição de Textos com Acúmulo de Alterações Pendentes
   const editables = document.querySelectorAll('[data-editable]')
   editables.forEach(el => {
     el.setAttribute('contenteditable', 'true')
@@ -136,7 +202,6 @@ function enableInlineEditing() {
     }
   })
 
-  // 2. Clique no Botão Salvar Todas as Alterações
   if (btnSaveAll) {
     btnSaveAll.onclick = async function () {
       if (pendingUpdates.size === 0) {
@@ -183,7 +248,6 @@ function enableInlineEditing() {
     }
   }
 
-  // 3. Edição de Imagens e Logos (Upload no Storage)
   const imgButtons = document.querySelectorAll('[data-trigger-img]')
   const fileInput = document.getElementById('image-file-input')
 
@@ -222,7 +286,6 @@ function enableInlineEditing() {
         if (!uploadRes.ok) throw new Error('Erro ao salvar imagem no Storage')
 
         const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/site-images/${filePath}`
-        
         await supabaseUpsertSingle(activeImageKeyTarget, publicUrl)
 
         const targetImgs = document.querySelectorAll(`[data-img-key="${activeImageKeyTarget}"]`)
@@ -240,7 +303,6 @@ function enableInlineEditing() {
     }
   }
 
-  // 4. Edição de Links (WhatsApp, iFood, Cardápio)
   const editableLinks = document.querySelectorAll('[data-editable-link]')
   editableLinks.forEach(link => {
     link.onclick = async function(e) {
@@ -265,7 +327,7 @@ function enableInlineEditing() {
 }
 
 // ========================================================
-// 5. MOTOR DE ANIMAÇÃO SCROLL REVEAL
+// 6. MOTOR DE ANIMAÇÃO SCROLL REVEAL
 // ========================================================
 function initAnimations() {
   const animatedElements = document.querySelectorAll(
@@ -314,8 +376,10 @@ const hubTrigger = document.getElementById('hubTrigger')
 const floatingHub = document.getElementById('floatingHub')
 if (hubTrigger && floatingHub) {
   hubTrigger.onclick = function(e) {
-    e.stopPropagation()
-    floatingHub.classList.toggle('active')
+    if (window.innerWidth <= 768) {
+      // No mobile, se clicar no container expande as opções
+      floatingHub.classList.toggle('active')
+    }
   }
   document.addEventListener('click', function(e) {
     if (!floatingHub.contains(e.target)) {
@@ -338,6 +402,8 @@ if (contactForm) {
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', () => {
+  updateOpenStatusBadge()
+  setInterval(updateOpenStatusBadge, 60000) // Atualiza a cada 1 minuto
   initAnimations()
   loadSiteContent()
   checkAuthFlow()
