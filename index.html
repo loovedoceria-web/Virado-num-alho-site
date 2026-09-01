@@ -30,22 +30,27 @@
   <!-- Input Oculto de Upload de Fotos -->
   <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
 
-  <!-- Speed Dial / Botão Flutuante Compacto -->
+  <!-- Speed Dial / Botão Flutuante Compacto (WhatsApp Priorizado) -->
   <div class="floating-hub" id="floatingHub">
     <div class="hub-options">
+      <!-- Opção Secundária: iFood -->
       <a href="https://www.ifood.com.br" target="_blank" rel="noopener noreferrer" class="hub-btn hub-ifood" data-editable-link data-key="link_ifood">
         <svg viewBox="0 0 24 24" class="hub-icon" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
         <span class="hub-text">Pedir no iFood</span>
       </a>
-      <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Quero%20fazer%20um%20pedido%20no%20Virado%20Num%20Alho." target="_blank" rel="noopener noreferrer" class="hub-btn hub-wpp" data-editable-link data-key="link_whatsapp">
+
+      <!-- Opção Primária: WhatsApp -->
+      <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido%20%F0%9F%8D%94" target="_blank" rel="noopener noreferrer" class="hub-btn hub-wpp" data-editable-link data-key="link_whatsapp">
         <svg viewBox="0 0 32 32" class="hub-icon" fill="currentColor"><path d="M16 2a13.9 13.9 0 0 0-12 21.1L2 30l7.1-1.9A13.9 13.9 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2s-.9 1.2-1.1 1.4-.4.2-.7.1a9.2 9.2 0 0 1-2.7-1.7 10.2 10.2 0 0 1-1.9-2.3c-.2-.4 0-.6.1-.8.2-.2.4-.4.5-.6l.4-.6c.1-.2 0-.4 0-.6s-.8-2-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.4 3.2 7.5 7.5 0 0 0 1.6 4 17.2 17.2 0 0 0 6.6 5.8c.9.4 1.7.7 2.3.9a5.5 5.5 0 0 0 2.5.2c.8-.1 2.3-.9 2.6-1.8.4-.9.4-1.7.3-1.8-.2-.2-.5-.3-.9-.5z"/></svg>
         <span class="hub-text">Pedir no WhatsApp</span>
       </a>
     </div>
-    <button class="hub-trigger" id="hubTrigger" aria-label="Abrir opções de pedido">
+
+    <!-- Botão Flutuante Principal (Abre WhatsApp Direto) -->
+    <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido%20%F0%9F%8D%94" target="_blank" class="hub-trigger" id="hubTrigger" aria-label="Pedir no WhatsApp" data-editable-link data-key="link_hub_trigger">
       <svg viewBox="0 0 24 24" class="hub-trigger-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <span>Pedir Agora</span>
-    </button>
+    </a>
   </div>
 
   <!-- Cabeçalho Principal -->
@@ -74,7 +79,8 @@
         <a href="unidades.html" class="nav-item">Onde Comer</a>
         <a href="depoimentos.html" class="nav-item">Quem Provou</a>
         <a href="contato.html" class="nav-item">Contato</a>
-        <a href="https://www.ifood.com.br" target="_blank" class="btn-order" data-editable-link data-key="link_header_cta">Pedir Agora</a>
+        <!-- CTA Principal Header -> WhatsApp com mensagem pronta -->
+        <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido%20%F0%9F%8D%94" target="_blank" class="btn-order" data-editable-link data-key="link_header_cta">Pedir Agora</a>
       </nav>
     </div>
   </header>
@@ -112,6 +118,7 @@
           </p>
 
           <div class="hero-actions">
+            <!-- Botão Secundário de Pedido via iFood -->
             <a href="https://www.ifood.com.br" target="_blank" class="btn btn-primary" data-editable-link data-key="link_hero_ifood">
               Pedir pelo iFood
             </a>
@@ -120,7 +127,7 @@
             </a>
           </div>
 
-          <!-- Badge de Prova Social Google Reviews (Passo 1) -->
+          <!-- Badge de Prova Social Google Reviews -->
           <div class="hero-social-proof-badge" data-editable data-key="hero_google_proof">
             <svg class="star-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
