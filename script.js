@@ -6,9 +6,13 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 let activeImageKeyTarget = null
 const adminBar = document.getElementById('admin-bar')
+const btnSaveAll = document.getElementById('btn-save-all')
+
+// Armazena alterações pendentes em memória antes de clicar em Salvar
+const pendingUpdates = new Map()
 
 // ========================================================
-// 2. FUNÇÕES REST (Sem bibliotecas externas)
+// 2. FUNÇÕES REST DO SUPABASE
 // ========================================================
 
 // Carrega textos, imagens e links salvos no Supabase
@@ -21,15 +25,15 @@ async function loadSiteContent() {
     const data = await res.json()
     if (data && data.length > 0) {
       data.forEach(item => {
-        // Atualiza Textos (que não sejam links especiais)
+        // Atualiza Textos
         const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
         textElements.forEach(el => { el.innerText = item.content })
 
-        // Atualiza Imagens (Pratos, Unidades, Galeria, Hero)
+        // Atualiza Imagens
         const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
         imgElements.forEach(img => { img.src = item.content })
 
-        // Atualiza Links (WhatsApp, iFood, Cardápio, etc.)
+        // Atualiza Links
         const linkElements = document.querySelectorAll(`[data-editable-link][data-key="${item.key}"]`)
         linkElements.forEach(link => { link.href = item.content })
       })
@@ -39,8 +43,8 @@ async function loadSiteContent() {
   }
 }
 
-// Salva alterações no Banco de Dados
-async function supabaseUpsert(key, content) {
+// Salva múltiplas alterações em lote (Batch Upsert)
+async function supabaseBulkUpsert(itemsArray) {
   const token = localStorage.getItem('va_admin_token')
   const headers = {
     'Content-Type': 'application/json',
@@ -49,12 +53,23 @@ async function supabaseUpsert(key, content) {
   }
   if (token) headers['Authorization'] = `Bearer ${token}`
 
+  const payload = itemsArray.map(item => ({
+    key: item.key,
+    content: item.content,
+    updated_at: new Date().toISOString()
+  }))
+
   const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content`, {
     method: 'POST',
     headers: headers,
-    body: JSON.stringify([{ key, content, updated_at: new Date().toISOString() }])
+    body: JSON.stringify(payload)
   })
   return res.ok
+}
+
+// Salva um único item (usado para fotos e links imediatos)
+async function supabaseUpsertSingle(key, content) {
+  return await supabaseBulkUpsert([{ key, content }])
 }
 
 // ========================================================
@@ -74,30 +89,81 @@ function checkAuthFlow() {
 }
 
 // ========================================================
-// 4. EDIÇÃO DIRETA NO SITE (TEXTOS, FOTOS E LINKS)
+// 4. EDIÇÃO DIRETA NO SITE & BOTÃO SALVAR
 // ========================================================
 function enableInlineEditing() {
-  // 1. Edição de Textos
+  // 1. Edição de Textos com Acúmulo de Alterações Pendentes
   const editables = document.querySelectorAll('[data-editable]')
   editables.forEach(el => {
     el.setAttribute('contenteditable', 'true')
 
-    el.onblur = async function () {
+    el.oninput = function () {
       const key = el.getAttribute('data-key')
       const newContent = el.innerText.trim()
       if (!key) return
 
-      const ok = await supabaseUpsert(key, newContent)
-      if (ok) {
-        el.style.outline = '2px solid #00e676'
-        setTimeout(() => { el.style.outline = '1.5px dashed #e5a93c' }, 1200)
-      } else {
-        el.style.outline = '2px solid #ff5252'
+      pendingUpdates.set(key, newContent)
+      el.style.outline = '2px solid #ff9800'
+
+      // Atualiza o botão salvar para indicar alterações pendentes
+      if (btnSaveAll) {
+        btnSaveAll.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          <span>Salvar Alterações (${pendingUpdates.size})</span>
+        `
+        btnSaveAll.style.background = '#00e676'
       }
     }
   })
 
-  // 2. Edição de Imagens
+  // 2. Clique no Botão Salvar Todas as Alterações
+  if (btnSaveAll) {
+    btnSaveAll.onclick = async function () {
+      if (pendingUpdates.size === 0) {
+        alert('Nenhuma alteração de texto pendente para salvar.')
+        return
+      }
+
+      btnSaveAll.disabled = true
+      btnSaveAll.innerHTML = `<span>Salvando...</span>`
+
+      const batch = []
+      pendingUpdates.forEach((content, key) => {
+        batch.push({ key, content })
+      })
+
+      const ok = await supabaseBulkUpsert(batch)
+
+      if (ok) {
+        pendingUpdates.clear()
+        btnSaveAll.innerHTML = `
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Salvo com Sucesso!</span>
+        `
+        btnSaveAll.style.background = '#00c853'
+
+        // Remove os contornos laranjas dos elementos salvos
+        editables.forEach(el => {
+          el.style.outline = '1.5px dashed #e5a93c'
+        })
+
+        setTimeout(() => {
+          btnSaveAll.disabled = false
+          btnSaveAll.innerHTML = `
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            <span>Salvar Alterações</span>
+          `
+        }, 2000)
+      } else {
+        alert('Erro ao salvar as alterações no banco de dados. Tente novamente.')
+        btnSaveAll.disabled = false
+        btnSaveAll.innerHTML = `<span>Erro ao Salvar</span>`
+        btnSaveAll.style.background = '#ff5252'
+      }
+    }
+  }
+
+  // 3. Edição de Imagens (Upload Direto no Supabase Storage)
   const imgButtons = document.querySelectorAll('[data-trigger-img]')
   const fileInput = document.getElementById('image-file-input')
 
@@ -132,11 +198,11 @@ function enableInlineEditing() {
           body: file
         })
 
-        if (!uploadRes.ok) throw new Error('Erro ao salvar no Storage')
+        if (!uploadRes.ok) throw new Error('Erro ao salvar imagem no Storage')
 
         const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/site-images/uploads/${fileName}`
         
-        await supabaseUpsert(activeImageKeyTarget, publicUrl)
+        await supabaseUpsertSingle(activeImageKeyTarget, publicUrl)
 
         const targetImg = document.querySelector(`[data-img-key="${activeImageKeyTarget}"]`)
         if (targetImg) targetImg.src = publicUrl
@@ -151,7 +217,7 @@ function enableInlineEditing() {
     }
   }
 
-  // 3. Edição de Links (WhatsApp, iFood, Cardápio, etc.)
+  // 4. Edição de Links (WhatsApp, iFood, Cardápio, etc.)
   const editableLinks = document.querySelectorAll('[data-editable-link]')
   editableLinks.forEach(link => {
     link.onclick = async function(e) {
@@ -163,7 +229,7 @@ function enableInlineEditing() {
 
         if (newUrl && newUrl.trim() !== '' && newUrl !== currentUrl) {
           link.setAttribute('href', newUrl.trim())
-          const ok = await supabaseUpsert(key, newUrl.trim())
+          const ok = await supabaseUpsertSingle(key, newUrl.trim())
           if (ok) {
             alert('Link atualizado com sucesso!')
           } else {
@@ -191,7 +257,7 @@ if (menuToggle && navLinks) {
   menuToggle.onclick = function () { navLinks.classList.toggle('active') }
 }
 
-// Speed Dial Mobile Toggle (Clique no Botão de Pedir)
+// Speed Dial Mobile Toggle
 const hubTrigger = document.getElementById('hubTrigger')
 const floatingHub = document.getElementById('floatingHub')
 if (hubTrigger && floatingHub) {
