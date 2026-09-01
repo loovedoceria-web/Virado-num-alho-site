@@ -1,5 +1,5 @@
 // ========================================================
-// 1. CONFIGURAÇÃO COM AS SUAS CHAVES DO SUPABASE
+// 1. CONFIGURAÇÃO COM SUAS CHAVES DO SUPABASE
 // ========================================================
 const SUPABASE_URL = 'https://hkfhnoxfggjbuhclpyqt.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZmhub3hmZ2dqYnVoY2xweXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDkzMTUsImV4cCI6MjEwMzU4NTMxNX0.QivPkzOMTuA2bLi5RFA7bzp2YUwDbOg9xnoQDZ-5fmU'
@@ -8,10 +8,10 @@ let activeImageKeyTarget = null
 const adminBar = document.getElementById('admin-bar')
 
 // ========================================================
-// 2. FUNÇÕES REST (Sem bibliotecas externas)
+// 2. FUNÇÕES REST (Sem dependências externas)
 // ========================================================
 
-// Carrega textos e fotos salvos no Supabase
+// Carrega textos, imagens e links salvos no Supabase
 async function loadSiteContent() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,content`, {
@@ -22,12 +22,16 @@ async function loadSiteContent() {
     if (data && data.length > 0) {
       data.forEach(item => {
         // Atualiza Textos
-        const textElements = document.querySelectorAll(`[data-key="${item.key}"]`)
+        const textElements = document.querySelectorAll(`[data-key="${item.key}"]:not([data-editable-link])`)
         textElements.forEach(el => { el.innerText = item.content })
 
         // Atualiza Imagens
         const imgElements = document.querySelectorAll(`[data-img-key="${item.key}"]`)
         imgElements.forEach(img => { img.src = item.content })
+
+        // Atualiza Links (WhatsApp, iFood, etc.)
+        const linkElements = document.querySelectorAll(`[data-editable-link][data-key="${item.key}"]`)
+        linkElements.forEach(link => { link.href = item.content })
       })
     }
   } catch (err) {
@@ -35,7 +39,7 @@ async function loadSiteContent() {
   }
 }
 
-// Salva alterações de texto ou link de foto
+// Salva alterações no Banco de Dados
 async function supabaseUpsert(key, content) {
   const token = localStorage.getItem('va_admin_token')
   const headers = {
@@ -70,10 +74,10 @@ function checkAuthFlow() {
 }
 
 // ========================================================
-// 4. EDIÇÃO DIRETA NO SITE (TEXTOS E FOTOS)
+// 4. EDIÇÃO DIRETA NO SITE (TEXTOS, FOTOS E LINKS)
 // ========================================================
 function enableInlineEditing() {
-  // 1. Textos
+  // 1. Edição de Textos
   const editables = document.querySelectorAll('[data-editable]')
   editables.forEach(el => {
     el.setAttribute('contenteditable', 'true')
@@ -93,7 +97,7 @@ function enableInlineEditing() {
     }
   })
 
-  // 2. Fotos
+  // 2. Edição de Imagens
   const imgButtons = document.querySelectorAll('[data-trigger-img]')
   const fileInput = document.getElementById('image-file-input')
 
@@ -145,6 +149,29 @@ function enableInlineEditing() {
       activeImageKeyTarget = null
     }
   }
+
+  // 3. Edição de Links (WhatsApp, iFood, etc.)
+  const editableLinks = document.querySelectorAll('[data-editable-link]')
+  editableLinks.forEach(link => {
+    link.onclick = async function(e) {
+      if (document.body.classList.contains('admin-logged')) {
+        e.preventDefault()
+        const key = link.getAttribute('data-key')
+        const currentUrl = link.getAttribute('href')
+        const newUrl = prompt(`Editar destino do link (${key}):`, currentUrl)
+
+        if (newUrl && newUrl.trim() !== '' && newUrl !== currentUrl) {
+          link.setAttribute('href', newUrl.trim())
+          const ok = await supabaseUpsert(key, newUrl.trim())
+          if (ok) {
+            alert('Link atualizado com sucesso!')
+          } else {
+            alert('Erro ao salvar link no banco.')
+          }
+        }
+      }
+    }
+  })
 }
 
 // Botão Sair (Logout)
