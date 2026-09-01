@@ -1,5 +1,5 @@
 // ========================================================
-// 1. CONFIGURAÇÃO COM AS SUAS CHAVES DO SUPABASE
+// 1. CONFIGURAÇÃO COM SUAS CHAVES DO SUPABASE
 // ========================================================
 const SUPABASE_URL = 'https://hkfhnoxfggjbuhclpyqt.supabase.co'
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrZmhub3hmZ2dqYnVoY2xweXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDkzMTUsImV4cCI6MjEwMzU4NTMxNX0.QivPkzOMTuA2bLi5RFA7bzp2YUwDbOg9xnoQDZ-5fmU'
@@ -19,7 +19,10 @@ const pendingUpdates = new Map()
 async function loadSiteContent() {
   try {
     const res = await fetch(`${SUPABASE_URL}/rest/v1/site_content?select=key,content`, {
-      headers: { 'apikey': SUPABASE_ANON_KEY }
+      headers: { 
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+      }
     })
     if (!res.ok) return
     const data = await res.json()
@@ -43,15 +46,15 @@ async function loadSiteContent() {
   }
 }
 
-// Salva múltiplas alterações em lote (Batch Upsert)
+// Salva alterações no Banco de Dados
 async function supabaseBulkUpsert(itemsArray) {
-  const token = localStorage.getItem('va_admin_token')
+  const token = localStorage.getItem('va_admin_token') || SUPABASE_ANON_KEY
   const headers = {
     'Content-Type': 'application/json',
     'apikey': SUPABASE_ANON_KEY,
-    'Prefer': 'resolution=merge-duplicates'
+    'Authorization': `Bearer ${token}`,
+    'Prefer': 'resolution=merge-duplicates,return=minimal'
   }
-  if (token) headers['Authorization'] = `Bearer ${token}`
 
   const payload = itemsArray.map(item => ({
     key: item.key,
@@ -64,10 +67,17 @@ async function supabaseBulkUpsert(itemsArray) {
     headers: headers,
     body: JSON.stringify(payload)
   })
-  return res.ok
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}))
+    console.error('Erro detalhado do Supabase:', errData)
+    throw new Error(errData.message || errData.details || res.statusText)
+  }
+
+  return true
 }
 
-// Salva um único item (usado para fotos e links imediatos)
+// Salva um único item (para fotos e links)
 async function supabaseUpsertSingle(key, content) {
   return await supabaseBulkUpsert([{ key, content }])
 }
@@ -105,7 +115,6 @@ function enableInlineEditing() {
       pendingUpdates.set(key, newContent)
       el.style.outline = '2px solid #ff9800'
 
-      // Atualiza o botão salvar para indicar alterações pendentes
       if (btnSaveAll) {
         btnSaveAll.innerHTML = `
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
@@ -132,9 +141,9 @@ function enableInlineEditing() {
         batch.push({ key, content })
       })
 
-      const ok = await supabaseBulkUpsert(batch)
+      try {
+        await supabaseBulkUpsert(batch)
 
-      if (ok) {
         pendingUpdates.clear()
         btnSaveAll.innerHTML = `
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -142,7 +151,6 @@ function enableInlineEditing() {
         `
         btnSaveAll.style.background = '#00c853'
 
-        // Remove os contornos laranjas dos elementos salvos
         editables.forEach(el => {
           el.style.outline = '1.5px dashed #e5a93c'
         })
@@ -154,8 +162,9 @@ function enableInlineEditing() {
             <span>Salvar Alterações</span>
           `
         }, 2000)
-      } else {
-        alert('Erro ao salvar as alterações no banco de dados. Tente novamente.')
+
+      } catch (err) {
+        alert('Erro ao salvar no banco: ' + err.message)
         btnSaveAll.disabled = false
         btnSaveAll.innerHTML = `<span>Erro ao Salvar</span>`
         btnSaveAll.style.background = '#ff5252'
@@ -163,7 +172,7 @@ function enableInlineEditing() {
     }
   }
 
-  // 3. Edição de Imagens (Upload Direto no Supabase Storage)
+  // 3. Edição de Imagens (Upload no Storage)
   const imgButtons = document.querySelectorAll('[data-trigger-img]')
   const fileInput = document.getElementById('image-file-input')
 
@@ -180,7 +189,7 @@ function enableInlineEditing() {
       const file = e.target.files[0]
       if (!file || !activeImageKeyTarget) return
 
-      const token = localStorage.getItem('va_admin_token')
+      const token = localStorage.getItem('va_admin_token') || SUPABASE_ANON_KEY
       const fileExt = file.name.split('.').pop()
       const fileName = `${activeImageKeyTarget}_${Date.now()}.${fileExt}`
       const filePath = `uploads/${fileName}`
@@ -189,7 +198,7 @@ function enableInlineEditing() {
       if (triggerBtn) triggerBtn.innerText = 'Enviando...'
 
       try {
-        const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/site-images/uploads/${fileName}`, {
+        const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/site-images/${filePath}`, {
           method: 'POST',
           headers: {
             'apikey': SUPABASE_ANON_KEY,
@@ -200,7 +209,7 @@ function enableInlineEditing() {
 
         if (!uploadRes.ok) throw new Error('Erro ao salvar imagem no Storage')
 
-        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/site-images/uploads/${fileName}`
+        const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/site-images/${filePath}`
         
         await supabaseUpsertSingle(activeImageKeyTarget, publicUrl)
 
@@ -217,7 +226,7 @@ function enableInlineEditing() {
     }
   }
 
-  // 4. Edição de Links (WhatsApp, iFood, Cardápio, etc.)
+  // 4. Edição de Links (WhatsApp, iFood, Cardápio)
   const editableLinks = document.querySelectorAll('[data-editable-link]')
   editableLinks.forEach(link => {
     link.onclick = async function(e) {
@@ -229,11 +238,11 @@ function enableInlineEditing() {
 
         if (newUrl && newUrl.trim() !== '' && newUrl !== currentUrl) {
           link.setAttribute('href', newUrl.trim())
-          const ok = await supabaseUpsertSingle(key, newUrl.trim())
-          if (ok) {
+          try {
+            await supabaseUpsertSingle(key, newUrl.trim())
             alert('Link atualizado com sucesso!')
-          } else {
-            alert('Erro ao salvar link no banco.')
+          } catch (err) {
+            alert('Erro ao salvar link no banco: ' + err.message)
           }
         }
       }
@@ -272,7 +281,7 @@ if (hubTrigger && floatingHub) {
   })
 }
 
-// Formulário de Contato Direto para o WhatsApp
+// Formulário de Contato Direto para WhatsApp
 const contactForm = document.getElementById('contact-form')
 if (contactForm) {
   contactForm.addEventListener('submit', function(e) {
