@@ -219,12 +219,22 @@ main {
   border: none;
   cursor: pointer;
   box-shadow: var(--shadow-strong);
-  z-index: 25;
+  z-index: 50;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
-.admin-logged .editable-img-wrapper:hover .change-img-btn {
+.logo-edit-btn {
+  top: 50% !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 9px !important;
+  padding: 4px 6px !important;
+}
+
+.admin-logged .editable-img-wrapper:hover .change-img-btn,
+.admin-logged .brand-logo-wrapper .change-img-btn {
   display: block;
 }
 
@@ -360,7 +370,7 @@ main {
   justify-content: space-between;
 }
 
-.brand-logo {
+.brand-logo-container {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -377,6 +387,7 @@ main {
   justify-content: center;
   overflow: hidden;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
 }
 
 .brand-logo-img {
