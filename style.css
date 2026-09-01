@@ -1582,19 +1582,19 @@ main {
 }
 
 /* ==========================================================================
-   FOOTER
+   FOOTER (4 COLUNAS: SOBRE NÓS, NAVEGAÇÃO, ATENDIMENTO E SUPORTE)
    ========================================================================== */
 .footer {
   background: #080706;
-  border-top: 1px solid rgba(244, 237, 226, 0.06);
-  padding: 50px 0 30px;
+  border-top: 1px solid rgba(244, 237, 226, 0.08);
+  padding: 55px 0 30px;
   margin-top: auto;
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 50px;
+  grid-template-columns: 1.3fr 0.9fr 1.1fr 1.1fr;
+  gap: 36px;
   margin-bottom: 40px;
 }
 
@@ -1604,24 +1604,40 @@ main {
   font-size: 28px;
   color: var(--color-garlic-gold);
   letter-spacing: 1px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .footer-brand p {
   font-size: 13.5px;
   color: var(--color-smoke);
-  max-width: 320px;
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.footer-social-link a {
+  display: inline-block;
+  color: var(--color-garlic-gold);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.footer-social-link a:hover {
+  transform: translateX(4px);
 }
 
 .footer-nav,
-.footer-hours {
+.footer-hours,
+.footer-support {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
 .footer-nav strong,
-.footer-hours strong {
+.footer-hours strong,
+.footer-support strong {
   font-size: 14px;
   color: var(--color-white);
   margin-bottom: 6px;
@@ -1630,20 +1646,50 @@ main {
 }
 
 .footer-nav a {
-  color: var(--color-smoke);
+  color: #a3998f;
   text-decoration: none;
   font-size: 13.5px;
-  transition: color 0.2s;
+  transition: color 0.2s ease, transform 0.2s ease;
+  display: inline-block;
 }
 
 .footer-nav a:hover {
   color: var(--color-garlic-gold);
+  transform: translateX(4px);
 }
 
-.footer-hours p {
+.footer-hours p,
+.footer-support p {
   font-size: 13.5px;
-  color: var(--color-smoke);
+  color: #a3998f;
   margin: 0;
+  line-height: 1.5;
+}
+
+.support-links {
+  margin-top: 10px;
+}
+
+.btn-support-wpp {
+  display: inline-block;
+  background: var(--bg-card);
+  border: 1px solid rgba(229, 169, 60, 0.3);
+  color: var(--color-garlic);
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease;
+}
+
+.btn-support-wpp:hover {
+  background: var(--color-garlic-gold);
+  color: #111;
+  border-color: var(--color-garlic-gold);
+  transform: translateY(-2px);
 }
 
 .footer-bottom {
@@ -1652,6 +1698,21 @@ main {
   font-size: 12px;
   color: #665f57;
   text-align: center;
+}
+
+/* Responsividade do Rodapé */
+@media (max-width: 992px) {
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
 }
 
 /* ==========================================================================
