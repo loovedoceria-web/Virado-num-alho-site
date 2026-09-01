@@ -2,18 +2,18 @@
    RESET & VARIÁVEIS VISUAIS - IDENTIDADE OFICIAL "VIRADO NUM ALHO"
    ========================================================================== */
 :root {
-  /* Fundo Escuro Profundo e Elegante */
+  /* Fundo Escuro Profundo e Acolhedor */
   --bg-main: #140C16;
   --bg-card: #201323;
   --bg-card-hover: #2D1B32;
   --bg-light: #3A233A;
 
   /* Cores da Logo Oficial */
-  --color-logo-purple: #4E3150;      /* Berinjela/Roxo da Logo */
-  --color-orange-brand: #E86328;     /* Laranja da Tipografia da Logo */
+  --color-logo-purple: #4E3150;      /* Roxo da Logo */
+  --color-orange-brand: #E86328;     /* Laranja Brasa */
   --color-orange-hover: #D45217;
-  --color-garlic-gold: #F5B335;      /* Amarelo Manteiga / Dourado */
-  --color-garlic: #FDF8F2;           /* Creme da Logo */
+  --color-garlic-gold: #F5B335;      /* Amarelo Manteiga */
+  --color-garlic: #FDF8F2;           /* Creme */
   --color-smoke: #A895A5;            /* Texto Secundário */
   --color-white: #FFFFFF;
 
@@ -582,17 +582,47 @@ main {
 }
 
 /* ==========================================================================
-   HERO / INÍCIO
+   HERO COM VÍDEO DE FUNDO
    ========================================================================== */
 .hero {
   position: relative;
-  padding: 60px 0 50px;
-  min-height: calc(100vh - 180px);
+  padding: 80px 0 60px;
+  min-height: calc(100vh - 140px);
   display: flex;
   align-items: center;
+  overflow: hidden;
+}
+
+.hero-video-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  filter: contrast(1.15) brightness(0.75);
+}
+
+.hero-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(20, 12, 22, 0.72) 0%, rgba(20, 12, 22, 0.94) 100%);
 }
 
 .hero-grid {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
   gap: 50px;
@@ -602,8 +632,8 @@ main {
 .badge-fresh {
   display: inline-block;
   padding: 6px 14px;
-  background: rgba(232, 99, 40, 0.12);
-  border: 1px solid rgba(232, 99, 40, 0.35);
+  background: rgba(232, 99, 40, 0.15);
+  border: 1px solid rgba(232, 99, 40, 0.4);
   border-radius: 50px;
   font-size: 12px;
   font-weight: 700;
@@ -781,6 +811,8 @@ main {
   border-top: 1px solid rgba(253, 248, 242, 0.06);
   border-bottom: 1px solid rgba(253, 248, 242, 0.06);
   padding: 24px 0;
+  position: relative;
+  z-index: 2;
 }
 
 .sensory-grid {
