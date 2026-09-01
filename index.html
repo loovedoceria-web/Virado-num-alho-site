@@ -30,30 +30,25 @@
   <!-- Input Oculto de Upload de Fotos -->
   <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
 
-  <!-- Speed Dial / Botão Flutuante Compacto (WhatsApp Priorizado) -->
+  <!-- Speed Dial / Botão Flutuante -->
   <div class="floating-hub" id="floatingHub">
     <div class="hub-options">
-      <!-- Opção Secundária: iFood -->
       <a href="https://www.ifood.com.br" target="_blank" rel="noopener noreferrer" class="hub-btn hub-ifood" data-editable-link data-key="link_ifood">
         <svg viewBox="0 0 24 24" class="hub-icon" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
         <span class="hub-text">Pedir no iFood</span>
       </a>
-
-      <!-- Opção Primária: WhatsApp -->
       <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido%20%F0%9F%8D%94" target="_blank" rel="noopener noreferrer" class="hub-btn hub-wpp" data-editable-link data-key="link_whatsapp">
         <svg viewBox="0 0 32 32" class="hub-icon" fill="currentColor"><path d="M16 2a13.9 13.9 0 0 0-12 21.1L2 30l7.1-1.9A13.9 13.9 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2s-.9 1.2-1.1 1.4-.4.2-.7.1a9.2 9.2 0 0 1-2.7-1.7 10.2 10.2 0 0 1-1.9-2.3c-.2-.4 0-.6.1-.8.2-.2.4-.4.5-.6l.4-.6c.1-.2 0-.4 0-.6s-.8-2-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.4 3.2 7.5 7.5 0 0 0 1.6 4 17.2 17.2 0 0 0 6.6 5.8c.9.4 1.7.7 2.3.9a5.5 5.5 0 0 0 2.5.2c.8-.1 2.3-.9 2.6-1.8.4-.9.4-1.7.3-1.8-.2-.2-.5-.3-.9-.5z"/></svg>
         <span class="hub-text">Pedir no WhatsApp</span>
       </a>
     </div>
-
-    <!-- Botão Flutuante Principal (Abre WhatsApp Direto) -->
     <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido%20%F0%9F%8D%94" target="_blank" class="hub-trigger" id="hubTrigger" aria-label="Pedir no WhatsApp" data-editable-link data-key="link_hub_trigger">
       <svg viewBox="0 0 24 24" class="hub-trigger-icon" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
       <span>Pedir Agora</span>
     </a>
   </div>
 
-  <!-- Cabeçalho Principal -->
+  <!-- Cabeçalho Principal (5 Itens de Menu) -->
   <header class="header">
     <div class="container nav-wrapper">
       <div class="brand-logo-container">
@@ -73,13 +68,10 @@
 
       <nav class="nav-menu" id="nav-links">
         <a href="index.html" class="nav-item active">Início</a>
-        <a href="experiencia.html" class="nav-item">A Experiência</a>
         <a href="cardapio.html" class="nav-item">Cardápio</a>
-        <a href="galeria.html" class="nav-item">Na Mesa</a>
         <a href="unidades.html" class="nav-item">Onde Comer</a>
         <a href="depoimentos.html" class="nav-item">Quem Provou</a>
         <a href="contato.html" class="nav-item">Contato</a>
-        <!-- CTA Principal Header -> WhatsApp com mensagem pronta -->
         <a href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20quero%20fazer%20um%20pedido%20%F0%9F%8D%94" target="_blank" class="btn-order" data-editable-link data-key="link_header_cta">Pedir Agora</a>
       </nav>
     </div>
@@ -118,7 +110,6 @@
           </p>
 
           <div class="hero-actions">
-            <!-- Botão Secundário de Pedido via iFood -->
             <a href="https://www.ifood.com.br" target="_blank" class="btn btn-primary" data-editable-link data-key="link_hero_ifood">
               Pedir pelo iFood
             </a>
@@ -209,6 +200,100 @@
         </div>
       </div>
     </div>
+
+    <!-- SEÇÃO UNIFICADA: A EXPERIÊNCIA & NA MESA -->
+    <section class="section about-story" id="experiencia-na-mesa">
+      <div class="container about-grid">
+        <div class="about-copy">
+          <span class="section-tag" data-editable data-key="about_tag">Nossa Obsessão</span>
+          <h2 data-editable data-key="about_title">Cansamos do pão sem graça e decidimos reinventar o burger.</h2>
+          
+          <p class="lead-text" data-editable data-key="about_p1">
+            Todo mundo ama a casquinha dourada do pão de alho no churrasco de domingo. O que nós fizemos foi transformar essa paixão no prato principal mais saboroso da Grande Florianópolis.
+          </p>
+          
+          <p data-editable data-key="about_p2">
+            Aqui não tem carne fina nem pasta de alho artificial que arde a boca. Criamos um confit suave de alho assado lentamente, combinamos com cortes de carne selecionados e queijos que esticam a cada mordida.
+          </p>
+
+          <div class="about-pillars">
+            <div class="pillar-box">
+              <div class="pillar-num">01</div>
+              <h3 data-editable data-key="feat_1_title">Alho Confitado Suave</h3>
+              <p data-editable data-key="feat_1_desc">Cozido lentamente no azeite de ervas para perder a acidez e entregar um toque amanteigado e aromático.</p>
+            </div>
+            
+            <div class="pillar-box">
+              <div class="pillar-num">02</div>
+              <h3 data-editable data-key="feat_2_title">Queijo Maçaricado</h3>
+              <p data-editable data-key="feat_2_desc">Camada generosa de queijo fundido que transborda pelas laterais do pão a cada mordida.</p>
+            </div>
+
+            <div class="pillar-box">
+              <div class="pillar-num">03</div>
+              <h3 data-editable data-key="feat_3_title">Clima de Boteco Raiz</h3>
+              <p data-editable data-key="feat_3_desc">Cerveja gelada, porções para dividir com os amigos e atendimento sem frescura.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="about-visual-composition">
+          <div class="photo-card main-photo editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Burger Artesanal na Mesa" data-img-key="about_img_1" />
+            <button class="change-img-btn" data-trigger-img="about_img_1">Trocar Foto</button>
+            <div class="photo-caption">Recheio generoso até a ponta</div>
+          </div>
+          <div class="photo-card secondary-photo editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" alt="Pão de Alho Crocante" data-img-key="about_img_2" />
+            <button class="change-img-btn" data-trigger-img="about_img_2">Trocar Foto</button>
+            <div class="floating-badge-award">🥇 Receita Original</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mosaico de Fotos Integrado na Home -->
+      <div class="container" style="margin-top: 60px;">
+        <div class="section-heading text-center">
+          <span class="section-tag" data-editable data-key="gal_tag">Sem Filtros</span>
+          <h2 data-editable data-key="gal_title">Fotos Reais Direto da Nossa Chapa</h2>
+        </div>
+
+        <div class="custom-gallery-mosaic">
+          <div class="mosaic-item large editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=900&q=80" alt="Pão de Alho Recheado Tostado" data-img-key="gal_img_1" />
+            <button class="change-img-btn" data-trigger-img="gal_img_1">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Pão de Alho na Brasa</strong>
+              <small>Crocância audível a cada mordida</small>
+            </div>
+          </div>
+
+          <div class="mosaic-item editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=800&q=80" alt="Burger Artesanal Suculento" data-img-key="gal_img_2" />
+            <button class="change-img-btn" data-trigger-img="gal_img_2">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Carne Alta & Queijo</strong>
+            </div>
+          </div>
+
+          <div class="mosaic-item editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Ambiente da Hamburgueria" data-img-key="gal_img_3" />
+            <button class="change-img-btn" data-trigger-img="gal_img_3">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Clima Descontraído</strong>
+            </div>
+          </div>
+
+          <div class="mosaic-item wide editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=1200&q=80" alt="Mesa Completa com Porções" data-img-key="gal_img_4" />
+            <button class="change-img-btn" data-trigger-img="gal_img_4">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Combo Perfeito para a Galera</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -228,9 +313,7 @@
       <div class="footer-nav">
         <strong>Navegação</strong>
         <a href="index.html">Início</a>
-        <a href="experiencia.html">A Experiência</a>
         <a href="cardapio.html">Cardápio</a>
-        <a href="galeria.html">Na Mesa</a>
         <a href="unidades.html">Onde Comer</a>
         <a href="depoimentos.html">Quem Provou</a>
         <a href="contato.html">Contato</a>
