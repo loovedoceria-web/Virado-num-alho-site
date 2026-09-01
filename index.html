@@ -81,7 +81,24 @@
   </header>
 
   <main>
+    <!-- HERO COM VÍDEO DE FUNDO EM LOOP -->
     <section class="hero">
+      <!-- Container do Vídeo em Background -->
+      <div class="hero-video-container">
+        <video 
+          autoplay 
+          muted 
+          loop 
+          playsinline 
+          class="hero-bg-video" 
+          poster="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=1200&q=80"
+          data-video-key="hero_video_bg"
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-frying-burgers-in-a-pan-41584-large.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-video-overlay"></div>
+      </div>
+
       <div class="container hero-grid">
         <div class="hero-content">
           <div class="badge-fresh" data-editable data-key="hero_eyebrow">
@@ -158,7 +175,7 @@
       </div>
     </section>
 
-    <!-- Barra Sensorial Rápida -->
+    <!-- Barra Sensorial -->
     <div class="sensory-strip">
       <div class="container sensory-grid">
         <div class="sensory-item">
