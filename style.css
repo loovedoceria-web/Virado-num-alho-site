@@ -202,27 +202,26 @@ main {
 
 .editable-img-wrapper {
   position: relative;
-  display: block;
-  width: 100%;
-  height: 100%;
+  display: inline-block;
 }
 
 .change-img-btn {
   display: none;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 6px;
+  right: 6px;
   background: var(--color-orange-brand);
   color: #FFFFFF;
   font-weight: 800;
-  font-size: 11px;
-  padding: 7px 12px;
+  font-size: 10px;
+  padding: 6px 10px;
   border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
   box-shadow: var(--shadow-strong);
   z-index: 25;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .admin-logged .editable-img-wrapper:hover .change-img-btn {
@@ -343,7 +342,7 @@ main {
 }
 
 /* ==========================================================================
-   HEADER & NAVEGAÇÃO
+   HEADER & LOGO EDITÁVEL
    ========================================================================== */
 .header {
   position: sticky;
@@ -364,37 +363,34 @@ main {
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  transition: transform 0.2s ease;
+  gap: 14px;
 }
 
-.brand-logo:hover {
-  transform: scale(1.02);
-}
-
-.brand-badge-logo {
+.brand-logo-wrapper {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--color-logo-purple);
+  border: 2px solid var(--color-orange-brand);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: var(--color-logo-purple);
-  border: 2px solid var(--color-orange-brand);
-  border-radius: 50%;
-  color: var(--color-orange-brand);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
-.brand-logo-svg {
-  width: 28px;
-  height: 28px;
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .brand-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-decoration: none;
 }
 
 .brand-title {
@@ -1381,7 +1377,7 @@ main {
 
 /* ==========================================================================
    DEPOIMENTOS COM AVATARES & ESTRELAS
-   ========================================================================== */
+   ========================================================================= */
 .testimonials-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
