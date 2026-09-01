@@ -30,7 +30,7 @@
   <!-- Input Oculto de Upload de Fotos -->
   <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
 
-  <!-- Speed Dial / Botão Flutuante -->
+  <!-- Speed Dial / Botão Flutuante Compacto -->
   <div class="floating-hub" id="floatingHub">
     <div class="hub-options">
       <a href="https://www.ifood.com.br" target="_blank" rel="noopener noreferrer" class="hub-btn hub-ifood" data-editable-link data-key="link_ifood">
@@ -48,7 +48,7 @@
     </a>
   </div>
 
-  <!-- Cabeçalho Principal (5 Itens de Menu) -->
+  <!-- Cabeçalho Principal com Indicador de Aberto/Fechado -->
   <header class="header">
     <div class="container nav-wrapper">
       <div class="brand-logo-container">
@@ -60,6 +60,11 @@
           <span class="brand-title" data-editable data-key="brand_name">VIRADO NUM ALHO</span>
           <span class="brand-tagline" data-editable data-key="brand_slogan">Gostoso pra cachorro!</span>
         </a>
+        <!-- Indicador Dinâmico de Aberto / Fechado (Florianópolis) -->
+        <div class="open-status-badge" id="openStatusBadge" title="Horário de funcionamento">
+          <span class="status-dot"></span>
+          <span class="status-text">Calculando...</span>
+        </div>
       </div>
 
       <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menu">
