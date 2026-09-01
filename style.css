@@ -239,7 +239,7 @@ main {
 }
 
 /* ==========================================================================
-   SPEED DIAL / BOTÃO FLUTUANTE
+   SPEED DIAL / BOTÃO FLUTUANTE (WHATSAPP PRIORIZADO)
    ========================================================================== */
 .floating-hub {
   position: fixed;
@@ -259,13 +259,14 @@ main {
   padding: 14px 22px;
   border-radius: 50px;
   background: var(--color-orange-brand);
-  color: #FFFFFF;
+  color: #FFFFFF !important;
   border: 2px solid #FF7C45;
   font-family: var(--font-body);
   font-weight: 800;
   font-size: 13px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
+  text-decoration: none;
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
