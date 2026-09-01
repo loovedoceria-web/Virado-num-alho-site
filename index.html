@@ -15,75 +15,8 @@
     rel="stylesheet"
   />
   <link rel="stylesheet" href="style.css" />
-
   <style>
-    /* TELA DE LOGIN ANTES DO SITE (Cobre 100% da tela) */
-    #admin-gate-screen {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #0b0b0b;
-      z-index: 9999999;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      box-sizing: border-box;
-      font-family: 'Inter', sans-serif;
-    }
-    .gate-card {
-      background: #161616;
-      border: 1px solid #282828;
-      border-radius: 12px;
-      padding: 40px 30px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.9);
-      text-align: center;
-      color: #fff;
-    }
-    .gate-logo {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 52px;
-      height: 52px;
-      background: #ff9800;
-      color: #111;
-      font-weight: 900;
-      border-radius: 10px;
-      font-size: 22px;
-      margin-bottom: 18px;
-      font-family: 'Bebas Neue', sans-serif;
-    }
-    .gate-card h2 { color: #ff9800; font-size: 22px; margin-bottom: 8px; }
-    .gate-card p { color: #888; font-size: 13px; margin-bottom: 24px; line-height: 1.4; }
-    .gate-card form { display: flex; flex-direction: column; gap: 14px; }
-    .gate-card input {
-      width: 100%;
-      padding: 13px 15px;
-      background: #202020;
-      border: 1px solid #333;
-      border-radius: 6px;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-      box-sizing: border-box;
-    }
-    .gate-card input:focus { border-color: #ff9800; }
-    .gate-card button {
-      width: 100%;
-      padding: 13px;
-      background: #ff9800;
-      color: #111;
-      border: none;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .gate-feedback { font-size: 13px; margin-top: 10px; min-height: 18px; }
-
-    /* BARRA SUPERIOR DO ADMIN */
+    /* Barra Superior do Administrador */
     #admin-bar {
       display: none;
       background: #111;
@@ -98,68 +31,154 @@
       align-items: center;
       border-bottom: 2px solid #ff9800;
       box-sizing: border-box;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
       font-family: 'Inter', sans-serif;
     }
-    .admin-logged { padding-top: 50px !important; }
+    .admin-logged {
+      padding-top: 50px !important;
+    }
     .admin-logged [data-editable] {
       outline: 1.5px dashed #ff9800;
       cursor: text;
+      transition: all 0.2s;
     }
     .admin-logged [data-editable]:focus {
       outline: 2px solid #00e676;
       background: rgba(255, 152, 0, 0.08);
     }
-    .editable-img-wrapper { position: relative; display: block; width: 100%; height: 100%; }
+    .admin-logged [data-editable-link] {
+      outline: 2px dashed #ff9800 !important;
+      cursor: pointer;
+    }
+    .editable-img-wrapper {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
     .change-img-btn {
       display: none;
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 12px;
+      right: 12px;
       background: #ff9800;
       color: #111;
       font-weight: 800;
       font-size: 11px;
-      padding: 7px 12px;
-      border-radius: 4px;
+      padding: 8px 14px;
+      border-radius: 6px;
       border: none;
       cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.6);
       z-index: 20;
       text-transform: uppercase;
     }
-    .admin-logged .editable-img-wrapper:hover .change-img-btn { display: block; }
+    .admin-logged .editable-img-wrapper:hover .change-img-btn {
+      display: block;
+    }
+
+    /* Botões Flutuantes (WhatsApp & iFood) */
+    .floating-cta-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 99990;
+    }
+    .floating-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 50px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .floating-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+    .ifood-btn {
+      background-color: #ea1d2c;
+    }
+    .ifood-btn .btn-icon-img {
+      height: 18px;
+      width: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+    .wpp-btn {
+      background-color: #25d366;
+    }
+    .wpp-btn .btn-icon-svg {
+      width: 20px;
+      height: 20px;
+    }
+    @media (max-width: 600px) {
+      .floating-cta-container {
+        bottom: 16px;
+        right: 16px;
+        gap: 8px;
+      }
+      .floating-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- TELA DE LOGIN BLOQUEANTE -->
-  <div id="admin-gate-screen">
-    <div class="gate-card">
-      <div class="gate-logo">VA</div>
-      <h2>Área Restrita</h2>
-      <p>Faça login com seu e-mail e senha para acessar o modo de edição do site.</p>
-      
-      <form id="gate-login-form">
-        <input type="email" id="gate-email" placeholder="E-mail do administrador" required />
-        <input type="password" id="gate-password" placeholder="Senha" required />
-        <button type="submit" id="gate-btn">Entrar no Painel</button>
-        <div id="gate-feedback" class="gate-feedback"></div>
-      </form>
-    </div>
-  </div>
-
-  <!-- BARRA DE CONTROLE DO ADMIN -->
+  <!-- Barra de Controle do Administrador -->
   <aside id="admin-bar">
     <div style="display:flex; align-items:center; gap:12px;">
-      <span style="background:#ff9800; color:#111; font-weight:800; font-size:11px; padding:3px 8px; border-radius:4px;">MODO ADMIN ATIVO</span>
-      <span style="font-size:13px; color:#ccc;">Clique nos textos pontilhados para editar. Ao clicar fora, salva sozinho.</span>
+      <span style="background:#ff9800; color:#111; font-weight:800; font-size:11px; padding:4px 8px; border-radius:4px;">MODO ADMIN ATIVO</span>
+      <span style="font-size:13px; color:#e0e0e0;">Clique nos textos para editar, no botão das imagens ou nos botões de link.</span>
     </div>
     <div style="display:flex; gap:10px;">
       <button id="btn-logout" style="background:#ff9800; color:#111; border:none; padding:6px 16px; font-weight:700; border-radius:4px; cursor:pointer;">Sair do Painel</button>
     </div>
   </aside>
 
-  <!-- Input oculto de upload de fotos -->
+  <!-- Input Oculto de Upload de Fotos -->
   <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
+
+  <!-- Botões de Ação Rápida Flutuantes (WhatsApp & iFood) -->
+  <div class="floating-cta-container">
+    <a 
+      href="https://www.ifood.com.br" 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      class="floating-btn ifood-btn" 
+      aria-label="Pedir pelo iFood"
+      data-editable-link
+      data-key="link_ifood"
+    >
+      <img src="https://logodownload.org/wp-content/uploads/2017/05/ifood-logo-0.png" alt="iFood" class="btn-icon-img" />
+      <span class="btn-label">Pedir no iFood</span>
+    </a>
+
+    <a 
+      href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      class="floating-btn wpp-btn" 
+      aria-label="Pedir pelo WhatsApp"
+      data-editable-link
+      data-key="link_whatsapp"
+    >
+      <svg viewBox="0 0 32 32" class="btn-icon-svg">
+        <path fill="currentColor" d="M16 2a13.9 13.9 0 0 0-12 21.1L2 30l7.1-1.9A13.9 13.9 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2s-.9 1.2-1.1 1.4-.4.2-.7.1a9.2 9.2 0 0 1-2.7-1.7 10.2 10.2 0 0 1-1.9-2.3c-.2-.4 0-.6.1-.8.2-.2.4-.4.5-.6l.4-.6c.1-.2 0-.4 0-.6s-.8-2-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.4 3.2 7.5 7.5 0 0 0 1.6 4 17.2 17.2 0 0 0 6.6 5.8c.9.4 1.7.7 2.3.9a5.5 5.5 0 0 0 2.5.2c.8-.1 2.3-.9 2.6-1.8.4-.9.4-1.7.3-1.8-.2-.2-.5-.3-.9-.5z"/>
+      </svg>
+      <span class="btn-label">Pedir no Whats</span>
+    </a>
+  </div>
 
   <header class="header">
     <div class="container nav">
@@ -520,6 +539,6 @@
     </div>
   </footer>
 
- <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
