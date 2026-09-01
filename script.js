@@ -12,7 +12,69 @@ const btnSaveAll = document.getElementById('btn-save-all')
 const pendingUpdates = new Map()
 
 // ========================================================
-// 2. FUNÇÕES REST DO SUPABASE
+// 2. SISTEMA DE NAVEGAÇÃO ENTRE ABAS/PÁGINAS
+// ========================================================
+function switchTab(targetTabId) {
+  const cleanId = targetTabId.replace('#', '').replace('page-', '')
+  const targetPage = document.getElementById(`page-${cleanId}`)
+
+  if (!targetPage) return
+
+  // 1. Oculta todas as páginas e exibe a selecionada
+  const allPages = document.querySelectorAll('.page-view')
+  allPages.forEach(page => page.classList.remove('active'))
+  targetPage.classList.add('active')
+
+  // 2. Atualiza estado ativo nos links do menu
+  const allNavLinks = document.querySelectorAll('.nav-tab-link')
+  allNavLinks.forEach(link => {
+    const tabAttr = link.getAttribute('data-tab')
+    if (tabAttr === cleanId) {
+      link.classList.add('active')
+    } else {
+      link.classList.remove('active')
+    }
+  })
+
+  // 3. Fecha menu mobile se estiver aberto
+  const navLinks = document.getElementById('nav-links')
+  if (navLinks) navLinks.classList.remove('active')
+
+  // 4. Rola para o topo da nova página
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+
+  // 5. Atualiza hash na URL
+  if (history.pushState) {
+    history.pushState(null, null, `#${cleanId}`)
+  } else {
+    location.hash = `#${cleanId}`
+  }
+}
+
+// Configura eventos de clique em todos os links de aba
+function initTabNavigation() {
+  const tabLinks = document.querySelectorAll('.nav-tab-link')
+  tabLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      const tabTarget = this.getAttribute('data-tab') || this.getAttribute('href')
+      if (tabTarget && (tabTarget.startsWith('#') || !tabTarget.includes('://'))) {
+        e.preventDefault()
+        switchTab(tabTarget)
+      }
+    })
+  })
+
+  // Checa a URL inicial (ex: #cardapio) ou abre o início por padrão
+  const initialHash = window.location.hash
+  if (initialHash && document.getElementById(`page-${initialHash.replace('#', '')}`)) {
+    switchTab(initialHash)
+  } else {
+    switchTab('inicio')
+  }
+}
+
+// ========================================================
+// 3. FUNÇÕES REST DO SUPABASE
 // ========================================================
 
 // Carrega textos, imagens e links salvos no Supabase
@@ -82,7 +144,7 @@ async function supabaseUpsertSingle(key, content) {
 }
 
 // ========================================================
-// 3. VERIFICAÇÃO DE SESSÃO DO ADMINISTRADOR
+// 4. VERIFICAÇÃO DE SESSÃO DO ADMINISTRADOR
 // ========================================================
 function checkAuthFlow() {
   const token = localStorage.getItem('va_admin_token')
@@ -98,7 +160,7 @@ function checkAuthFlow() {
 }
 
 // ========================================================
-// 4. EDIÇÃO DIRETA NO SITE & BOTÃO SALVAR
+// 5. EDIÇÃO DIRETA NO SITE & BOTÃO SALVAR
 // ========================================================
 function enableInlineEditing() {
   // 1. Edição de Textos com Acúmulo de Alterações Pendentes
@@ -292,6 +354,13 @@ if (contactForm) {
   })
 }
 
+// Monitora navegação pelo botão voltar/avançar do navegador
+window.addEventListener('hashchange', () => {
+  const hash = window.location.hash
+  if (hash) switchTab(hash)
+})
+
 // Inicialização
+initTabNavigation()
 loadSiteContent()
 checkAuthFlow()
