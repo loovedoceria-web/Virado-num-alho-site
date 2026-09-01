@@ -1080,7 +1080,7 @@ main {
 }
 
 /* ==========================================================================
-   DESTAQUES DO CARDÁPIO
+   DESTAQUES DO CARDÁPIO & BOTÕES DE PEDIDO DIRETO
    ========================================================================== */
 .menu-cards-grid {
   display: grid;
@@ -1182,6 +1182,38 @@ main {
   font-size: 13.5px;
   color: #B3A99E;
   line-height: 1.5;
+}
+
+/* Linha de Ação do Card de Produto */
+.menu-item-action-row {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(253, 248, 242, 0.08);
+}
+
+.btn-dish-order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(232, 99, 40, 0.14);
+  border: 1px solid var(--color-orange-brand);
+  color: var(--color-garlic);
+  font-weight: 700;
+  font-size: 13px;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.25s ease;
+}
+
+.btn-dish-order:hover {
+  background: var(--color-orange-brand);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(232, 99, 40, 0.4);
 }
 
 .menu-full-cta {
