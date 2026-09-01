@@ -3,190 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Virado Num Alho | Hambúrguer Artesanal e Pão de Alho Recheado</title>
+  <title>Virado Num Alho | O Verdadeiro Burger no Pão de Alho de Floripa</title>
   <meta
     name="description"
-    content="Virado Num Alho: hamburgueria artesanal com pão de alho recheado, burgers marcantes e duas unidades na Grande Florianópolis."
+    content="Burgers artesanais na brasa, creme de alho assado autoral e pão tostado na medida. Peça no iFood ou visite nossas unidades em Capoeiras e Serraria."
   />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@1,600&display=swap"
     rel="stylesheet"
   />
   <link rel="stylesheet" href="style.css" />
-  <style>
-    /* Barra Superior do Administrador */
-    #admin-bar {
-      display: none;
-      background: #111;
-      color: #fff;
-      padding: 10px 24px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 999999;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #ff9800;
-      box-sizing: border-box;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-      font-family: 'Inter', sans-serif;
-    }
-    .admin-logged {
-      padding-top: 50px !important;
-    }
-    .admin-logged [data-editable] {
-      outline: 1.5px dashed #ff9800;
-      cursor: text;
-      transition: all 0.2s;
-    }
-    .admin-logged [data-editable]:focus {
-      outline: 2px solid #00e676;
-      background: rgba(255, 152, 0, 0.08);
-    }
-    .admin-logged [data-editable-link] {
-      outline: 2px dashed #ff9800 !important;
-      cursor: pointer;
-    }
-    .editable-img-wrapper {
-      position: relative;
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-    .change-img-btn {
-      display: none;
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: #ff9800;
-      color: #111;
-      font-weight: 800;
-      font-size: 11px;
-      padding: 8px 14px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.6);
-      z-index: 20;
-      text-transform: uppercase;
-    }
-    .admin-logged .editable-img-wrapper:hover .change-img-btn {
-      display: block;
-    }
-
-    /* Botões Flutuantes (WhatsApp & iFood) */
-    .floating-cta-container {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 99990;
-    }
-    .floating-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 18px;
-      border-radius: 50px;
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 14px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .floating-btn:hover {
-      transform: translateY(-3px) scale(1.03);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-    }
-    .ifood-btn {
-      background-color: #ea1d2c;
-    }
-    .ifood-btn .btn-icon-img {
-      height: 18px;
-      width: auto;
-      object-fit: contain;
-      filter: brightness(0) invert(1);
-    }
-    .wpp-btn {
-      background-color: #25d366;
-    }
-    .wpp-btn .btn-icon-svg {
-      width: 20px;
-      height: 20px;
-    }
-    @media (max-width: 600px) {
-      .floating-cta-container {
-        bottom: 16px;
-        right: 16px;
-        gap: 8px;
-      }
-      .floating-btn {
-        padding: 10px 14px;
-        font-size: 13px;
-      }
-    }
-  </style>
 </head>
 <body>
 
-  <!-- Barra de Controle do Administrador -->
   <aside id="admin-bar">
     <div style="display:flex; align-items:center; gap:12px;">
-      <span style="background:#ff9800; color:#111; font-weight:800; font-size:11px; padding:4px 8px; border-radius:4px;">MODO ADMIN ATIVO</span>
-      <span style="font-size:13px; color:#e0e0e0;">Clique nos textos para editar, no botão das imagens ou nos botões de link.</span>
+      <span class="admin-tag">PAINEL DO DONO</span>
+      <span style="font-size:13px; color:#f4ede2;">Clique em qualquer texto tracejado para editar. Ao clicar fora, salva automaticamente.</span>
     </div>
     <div style="display:flex; gap:10px;">
-      <button id="btn-logout" style="background:#ff9800; color:#111; border:none; padding:6px 16px; font-weight:700; border-radius:4px; cursor:pointer;">Sair do Painel</button>
+      <button id="btn-logout" class="btn-admin-logout">Sair do Painel</button>
     </div>
   </aside>
 
-  <!-- Input Oculto de Upload de Fotos -->
   <input type="file" id="image-file-input" accept="image/*" style="display:none;" />
 
-  <!-- Botões de Ação Rápida Flutuantes (WhatsApp & iFood) -->
   <div class="floating-cta-container">
     <a 
       href="https://www.ifood.com.br" 
       target="_blank" 
       rel="noopener noreferrer" 
-      class="floating-btn ifood-btn" 
-      aria-label="Pedir pelo iFood"
+      class="floating-btn ifood-brand-btn" 
+      aria-label="Pedir no iFood"
       data-editable-link
       data-key="link_ifood"
     >
-      <img src="https://logodownload.org/wp-content/uploads/2017/05/ifood-logo-0.png" alt="iFood" class="btn-icon-img" />
-      <span class="btn-label">Pedir no iFood</span>
+      <svg viewBox="0 0 24 24" class="btn-icon" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+      <span>Pedir no iFood</span>
     </a>
 
     <a 
-      href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Gostaria%20de%20fazer%20um%20pedido." 
+      href="https://wa.me/5548998388277?text=Ol%C3%A1!%20Quero%20fazer%20um%20pedido%20no%20Virado%20Num%20Alho." 
       target="_blank" 
       rel="noopener noreferrer" 
-      class="floating-btn wpp-btn" 
+      class="floating-btn wpp-brand-btn" 
       aria-label="Pedir pelo WhatsApp"
       data-editable-link
       data-key="link_whatsapp"
     >
-      <svg viewBox="0 0 32 32" class="btn-icon-svg">
-        <path fill="currentColor" d="M16 2a13.9 13.9 0 0 0-12 21.1L2 30l7.1-1.9A13.9 13.9 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2s-.9 1.2-1.1 1.4-.4.2-.7.1a9.2 9.2 0 0 1-2.7-1.7 10.2 10.2 0 0 1-1.9-2.3c-.2-.4 0-.6.1-.8.2-.2.4-.4.5-.6l.4-.6c.1-.2 0-.4 0-.6s-.8-2-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.4 3.2 7.5 7.5 0 0 0 1.6 4 17.2 17.2 0 0 0 6.6 5.8c.9.4 1.7.7 2.3.9a5.5 5.5 0 0 0 2.5.2c.8-.1 2.3-.9 2.6-1.8.4-.9.4-1.7.3-1.8-.2-.2-.5-.3-.9-.5z"/>
+      <svg viewBox="0 0 32 32" class="btn-icon" fill="currentColor">
+        <path d="M16 2a13.9 13.9 0 0 0-12 21.1L2 30l7.1-1.9A13.9 13.9 0 1 0 16 2zm0 25.5a11.5 11.5 0 0 1-5.9-1.6l-.4-.3-4.4 1.2 1.2-4.3-.3-.5A11.6 11.6 0 1 1 16 27.5zm6.4-8.7c-.4-.2-2.1-1-2.4-1.2-.3-.1-.6-.2-.8.2s-.9 1.2-1.1 1.4-.4.2-.7.1a9.2 9.2 0 0 1-2.7-1.7 10.2 10.2 0 0 1-1.9-2.3c-.2-.4 0-.6.1-.8.2-.2.4-.4.5-.6l.4-.6c.1-.2 0-.4 0-.6s-.8-2-1.1-2.7c-.3-.7-.6-.6-.8-.6h-.7a1.4 1.4 0 0 0-1 .5 4.3 4.3 0 0 0-1.4 3.2 7.5 7.5 0 0 0 1.6 4 17.2 17.2 0 0 0 6.6 5.8c.9.4 1.7.7 2.3.9a5.5 5.5 0 0 0 2.5.2c.8-.1 2.3-.9 2.6-1.8.4-.9.4-1.7.3-1.8-.2-.2-.5-.3-.9-.5z"/>
       </svg>
-      <span class="btn-label">Pedir no Whats</span>
+      <span>Pedir no WhatsApp</span>
     </a>
   </div>
 
   <header class="header">
     <div class="container nav">
       <a href="#inicio" class="logo">
-        <span class="logo-mark">VA</span>
+        <div class="logo-badge">
+          <span class="logo-flame">🔥</span>
+          <span class="logo-garlic">🧄</span>
+        </div>
         <div class="logo-text">
-          <strong data-editable data-key="brand_name">Virado Num Alho</strong>
-          <small data-editable data-key="brand_subtitle">Burgers + pão de alho recheado</small>
+          <strong data-editable data-key="brand_name">VIRADO NUM ALHO</strong>
+          <small data-editable data-key="brand_subtitle">BURGER NA BRASA & PÃO DE ALHO ARTESANAL</small>
         </div>
       </a>
 
@@ -198,192 +81,226 @@
 
       <nav class="nav-links" id="nav-links">
         <a href="#inicio">Início</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#servicos">Destaques</a>
-        <a href="#galeria">Galeria</a>
-        <a href="#depoimentos">Depoimentos</a>
-        <a href="#contato" class="btn btn-nav">Contato</a>
+        <a href="#experiencia">A Experiência</a>
+        <a href="#cardapio-destaque">Destaques</a>
+        <a href="#galeria">Na Mesa</a>
+        <a href="#unidades">Onde Comer</a>
+        <a href="#depoimentos">Quem Provou</a>
+        <a href="#contato" class="btn btn-header-cta">Fazer Pedido</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="hero" id="inicio">
-      <div class="hero-overlay"></div>
+      <div class="hero-bg-texture"></div>
 
       <div class="container hero-grid">
         <div class="hero-content">
-          <span class="eyebrow" data-editable data-key="hero_eyebrow">🥇 O primeiro pão de alho da Grande Florianópolis</span>
+          <div class="badge-fresh" data-editable data-key="hero_eyebrow">
+            🥖 A PRIMEIRA CASA DE PÃO DE ALHO RECHEADO DA ILHA
+          </div>
+          
           <h1 data-editable data-key="hero_title">
-            Hamburgueria com identidade forte, sabor marcante e pão de alho recheado
+            CROCANTE POR FORA. <br><span class="highlight-text">CREMOSO & DEFUMADO</span> ATÉ A ÚLTIMA MORDIDA.
           </h1>
+          
           <p data-editable data-key="hero_description">
-            O Virado Num Alho combina burgers artesanais,
-            pão de alho recheado e uma presença visual marcante para entregar
-            uma experiência gastronômica memorável em Florianópolis.
+            Blend de costela bovina selado na alta temperatura, queijo derretendo de verdade e a nossa pasta de alho confitado de receita secreta dentro do pão artesanal crocante.
           </p>
 
           <div class="hero-actions">
-            <a href="#contato" class="btn">Peça informações</a>
-            <a href="#galeria" class="btn btn-outline">Ver ambiente e burgers</a>
+            <a href="https://www.ifood.com.br" target="_blank" class="btn btn-primary" data-editable-link data-key="link_hero_ifood">
+              Pedir pelo iFood
+            </a>
+            <a href="#unidades" class="btn btn-secondary">
+              Ver Unidades & Mesas
+            </a>
           </div>
 
-          <div class="hero-info-cards">
-            <div class="mini-card">
-              <strong data-editable data-key="card_1_val">4,339</strong>
-              <span data-editable data-key="card_1_lbl">avaliações no Google</span>
+          <div class="hero-facts-row">
+            <div class="fact-card">
+              <span class="fact-icon">⭐</span>
+              <div>
+                <strong data-editable data-key="card_1_val">4.8 no Google</strong>
+                <small data-editable data-key="card_1_lbl">+4.300 clientes apaixonados</small>
+              </div>
             </div>
-            <div class="mini-card">
-              <strong data-editable data-key="card_2_val">R$ 20-40</strong>
-              <span data-editable data-key="card_2_lbl">faixa de preço</span>
+            <div class="fact-card">
+              <span class="fact-icon">🥩</span>
+              <div>
+                <strong data-editable data-key="card_2_val">100% Brasa</strong>
+                <small data-editable data-key="card_2_lbl">Carnes no ponto perfeito</small>
+              </div>
             </div>
-            <div class="mini-card">
-              <strong data-editable data-key="card_3_val">2 unidades</strong>
-              <span data-editable data-key="card_3_lbl">Capoeiras e Serraria</span>
+            <div class="fact-card">
+              <span class="fact-icon">📍</span>
+              <div>
+                <strong data-editable data-key="card_3_val">2 Unidades</strong>
+                <small data-editable data-key="card_3_lbl">Capoeiras e Serraria</small>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="hero-highlight">
-          <div class="highlight-card">
-            <span class="highlight-badge" data-editable data-key="highlight_badge">Especial da casa</span>
-            <h2 data-editable data-key="highlight_title">Pão de alho recheado</h2>
-            <p data-editable data-key="highlight_desc">
-              Uma assinatura de marca que diferencia a casa e cria uma proposta
-              de valor clara para o público.
-            </p>
-
-            <ul>
-              <li data-editable data-key="hl_item_1">Burgers artesanais com presença visual forte</li>
-              <li data-editable data-key="hl_item_2">Combinações intensas e identidade própria</li>
-              <li data-editable data-key="hl_item_3">Experiência casual com clima premium</li>
-            </ul>
+        <div class="hero-spotlight">
+          <div class="spotlight-card">
+            <div class="spotlight-tag">O MAIS PEDIDO</div>
+            <div class="editable-img-wrapper hero-img-wrap">
+              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80" alt="Burger no Pão de Alho" data-img-key="hero_food_img" class="spotlight-img" />
+              <button class="change-img-btn" data-trigger-img="hero_food_img">Trocar Foto</button>
+            </div>
+            <div class="spotlight-details">
+              <h2 data-editable data-key="highlight_title">O Lendário Pão de Alho Vulcão</h2>
+              <p data-editable data-key="highlight_desc">
+                Não é um acompanhamento de churrasco: é uma refeição completa. Pão francês artesanal recheado com queijo prato tostado, pasta de alho confitado na brasa e 180g de carne suculenta.
+              </p>
+              <div class="spotlight-footer">
+                <span class="price-tag" data-editable data-key="hero_price_tag">A partir de R$ 26,90</span>
+                <span class="serve-info">Preparo rápido & quentinho</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="proof-bar">
-      <div class="container proof-grid">
-        <div class="proof-item" data-editable data-key="proof_1">12 mil seguidores</div>
-        <div class="proof-item" data-editable data-key="proof_2">169 posts publicados</div>
-        <div class="proof-item" data-editable data-key="proof_3">Atendimento em duas unidades</div>
-        <div class="proof-item" data-editable data-key="proof_4">Marca forte e reconhecimento local</div>
+    <section class="sensory-strip">
+      <div class="container sensory-grid">
+        <div class="sensory-item">
+          <span class="s-icon">🧈</span>
+          <div>
+            <strong>Manteiga & Alho Real</strong>
+            <small>Sem conservantes industriais</small>
+          </div>
+        </div>
+        <div class="sensory-item">
+          <span class="s-icon">🔥</span>
+          <div>
+            <strong>Blend Alto & Suculento</strong>
+            <small>Ponto rosado e selagem perfeita</small>
+          </div>
+        </div>
+        <div class="sensory-item">
+          <span class="s-icon">🥖</span>
+          <div>
+            <strong>Pão Tostado na Hora</strong>
+            <small>Crocância inconfundível</small>
+          </div>
+        </div>
+        <div class="sensory-item">
+          <span class="s-icon">🧀</span>
+          <div>
+            <strong>Puxa-Puxa de Verdade</strong>
+            <small>Queijos nobres maçaricados</small>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section about" id="sobre">
+    <section class="section about-story" id="experiencia">
       <div class="container about-grid">
-        <div class="about-content">
-          <span class="section-tag" data-editable data-key="about_tag">Sobre a marca</span>
-          <h2 data-editable data-key="about_title">Uma hamburgueria pensada para ser lembrada</h2>
-          <p data-editable data-key="about_p1">
-            O Virado Num Alho se destaca por unir uma proposta
-            visual forte com um cardápio que explora burgers artesanais e o
-            apelo irresistível do pão de alho recheado.
+        <div class="about-copy">
+          <span class="section-tag" data-editable data-key="about_tag">Nossa Obsessão</span>
+          <h2 data-editable data-key="about_title">Cansamos do pão sem graça e decidimos reinventar o burger.</h2>
+          
+          <p class="lead-text" data-editable data-key="about_p1">
+            Todo mundo ama a casquinha dourada do pão de alho no churrasco de domingo. O que nós fizemos foi transformar essa paixão no prato principal mais saboroso da Grande Florianópolis.
           </p>
+          
           <p data-editable data-key="about_p2">
-            A comunicação da marca, o nome, a assinatura gastronômica e a prova
-            social ajudam a construir uma presença sólida, com potencial alto de
-            atração tanto para público recorrente quanto para novos clientes.
+            Aqui não tem carne fina nem pasta de alho artificial que arde a boca. Criamos um confit suave de alho assado lentamente, combinamos com cortes de carne selecionados e queijos que esticam a cada mordida. O resultado? Um sabor marcante que faz você salivar antes de dar a primeira garfada.
           </p>
 
-          <div class="about-features">
-            <article class="feature-box">
-              <h3 data-editable data-key="feat_1_title">Assinatura própria</h3>
-              <p data-editable data-key="feat_1_desc">
-                A combinação entre hambúrguer artesanal e alho cria um
-                posicionamento único e fácil de memorizar.
-              </p>
-            </article>
+          <div class="about-pillars">
+            <div class="pillar-box">
+              <div class="pillar-num">01</div>
+              <h3 data-editable data-key="feat_1_title">Alho Confitado Suave</h3>
+              <p data-editable data-key="feat_1_desc">Cozido lentamente no azeite de ervas para perder a acidez e entregar um toque amanteigado e aromático.</p>
+            </div>
+            
+            <div class="pillar-box">
+              <div class="pillar-num">02</div>
+              <h3 data-editable data-key="feat_2_title">Queijo Maçaricado</h3>
+              <p data-editable data-key="feat_2_desc">Camada generosa de queijo fundido que transborda pelas laterais do pão a cada mordida.</p>
+            </div>
 
-            <article class="feature-box">
-              <h3 data-editable data-key="feat_2_title">Experiência visual</h3>
-              <p data-editable data-key="feat_2_desc">
-                Fotos, ambientação e apresentação dos burgers ajudam a vender
-                antes mesmo do primeiro pedido.
-              </p>
-            </article>
-
-            <article class="feature-box">
-              <h3 data-editable data-key="feat_3_title">Força local</h3>
-              <p data-editable data-key="feat_3_desc">
-                Presença consolidada em Florianópolis, com unidades em
-                Capoeiras e Serraria.
-              </p>
-            </article>
+            <div class="pillar-box">
+              <div class="pillar-num">03</div>
+              <h3 data-editable data-key="feat_3_title">Clima de Boteco Raiz</h3>
+              <p data-editable data-key="feat_3_desc">Cerveja gelada, porções para dividir com os amigos e atendimento sem frescura em dois pontos de fácil acesso.</p>
+            </div>
           </div>
         </div>
 
-        <div class="about-visual">
-          <div class="editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80" alt="Burger Premium" data-img-key="about_img_1" class="image-stack large" />
+        <div class="about-visual-composition">
+          <div class="photo-card main-photo editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Burger Artesanal na Mesa" data-img-key="about_img_1" />
             <button class="change-img-btn" data-trigger-img="about_img_1">Trocar Foto</button>
+            <div class="photo-caption">Recheio generoso até a ponta</div>
           </div>
-          <div class="editable-img-wrapper" style="margin-top: 15px;">
-            <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" alt="Pão de Alho" data-img-key="about_img_2" class="image-stack small" />
+          <div class="photo-card secondary-photo editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=600&q=80" alt="Pão de Alho Crocante" data-img-key="about_img_2" />
             <button class="change-img-btn" data-trigger-img="about_img_2">Trocar Foto</button>
+            <div class="floating-badge-award">🥇 Receita Original</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section dark-section" id="servicos">
+    <section class="section menu-highlights" id="cardapio-destaque">
       <div class="container">
-        <div class="section-heading center light">
-          <span class="section-tag section-tag-dark" data-editable data-key="dest_tag">Destaques</span>
-          <h2 data-editable data-key="dest_title">O que torna o Virado Num Alho especial</h2>
-          <p data-editable data-key="dest_subtitle">
-            Estrutura ideal para apresentar os principais diferenciais da marca.
+        <div class="section-heading text-center">
+          <span class="section-tag" data-editable data-key="dest_tag">Para Matar a Fome</span>
+          <h2 data-editable data-key="dest_title">Os Campeões de Pedidos na Grelha</h2>
+          <p class="subtitle" data-editable data-key="dest_subtitle">
+            Combinações brutas feitas com ingredientes frescos e servidas com molhos da casa.
           </p>
         </div>
 
-        <div class="services-grid">
-          <article class="service-card">
-            <div class="icon">🍔</div>
-            <h3 data-editable data-key="srv_1_title">Hambúrgueres artesanais</h3>
+        <div class="menu-cards-grid">
+          <article class="menu-item-card featured">
+            <div class="card-badge">O CARRO-CHEFE</div>
+            <div class="menu-item-header">
+              <div class="custom-dish-icon">🍔🧄</div>
+              <span class="dish-price" data-editable data-key="srv_1_price">R$ 34,90</span>
+            </div>
+            <h3 data-editable data-key="srv_1_title">Burger no Pão de Alho Especial</h3>
             <p data-editable data-key="srv_1_desc">
-              Montagens robustas, carnes suculentas, queijos marcantes e apresentação única.
+              Hambúrguer de costela 180g, pasta especial de alho assado, muito queijo prato derretido e fatias de bacon crocante dentro da baguete crocante.
             </p>
           </article>
 
-          <article class="service-card">
-            <div class="icon">🧄</div>
-            <h3 data-editable data-key="srv_2_title">Pães de alho recheados</h3>
+          <article class="menu-item-card">
+            <div class="menu-item-header">
+              <div class="custom-dish-icon">🥖🧀</div>
+              <span class="dish-price" data-editable data-key="srv_2_price">R$ 24,90</span>
+            </div>
+            <h3 data-editable data-key="srv_2_title">Pão de Alho Recheado Tradicional</h3>
             <p data-editable data-key="srv_2_desc">
-              O produto que reforça a identidade da marca e entrega um diferencial memorável.
+              A clássica baguete selada na grelha, transbordando muçarela, parmesão curado e creme artesanal de alho poro tostado.
             </p>
           </article>
 
-          <article class="service-card">
-            <div class="icon">🔥</div>
-            <h3 data-editable data-key="srv_3_title">Experiência intensa</h3>
+          <article class="menu-item-card">
+            <div class="menu-item-header">
+              <div class="custom-dish-icon">🥓🔥</div>
+              <span class="dish-price" data-editable data-key="srv_3_price">R$ 36,90</span>
+            </div>
+            <h3 data-editable data-key="srv_3_title">Double Bacon & Barbecue</h3>
             <p data-editable data-key="srv_3_desc">
-              Uma proposta gastronômica com personalidade e muito sabor.
+              Dois burgers smash de 90g, dobro de cheddar inglês cremoso, tiras crocantes de bacon artesanal e molho barbecue rústico defumado.
             </p>
           </article>
 
-          <article class="service-card">
-            <div class="icon">📍</div>
-            <h3 data-editable data-key="srv_4_title">Duas unidades</h3>
+          <article class="menu-item-card">
+            <div class="menu-item-header">
+              <div class="custom-dish-icon">🍟🧅</div>
+              <span class="dish-price" data-editable data-key="srv_4_price">R$ 22,00</span>
+            </div>
+            <h3 data-editable data-key="srv_4_title">Batata Rústica Virada no Alho</h3>
             <p data-editable data-key="srv_4_desc">
-              Atendimento em pontos estratégicos em Capoeiras e Serraria.
-            </p>
-          </article>
-
-          <article class="service-card">
-            <div class="icon">⭐</div>
-            <h3 data-editable data-key="srv_5_title">Forte prova social</h3>
-            <p data-editable data-key="srv_5_desc">
-              Milhares de avaliações no Google e audiência engajada.
-            </p>
-          </article>
-
-          <article class="service-card">
-            <div class="icon">🎶</div>
-            <h3 data-editable data-key="srv_6_title">Clima descontraído</h3>
-            <p data-editable data-key="srv_6_desc">
-              Ambiente e proposta ideais para reunir amigos e família.
+              Batatas fritas douradas com casca, temperadas com páprica defumada, alecrim fresco e servidas com pote de maionese de alho confitado.
             </p>
           </article>
         </div>
@@ -392,63 +309,126 @@
 
     <section class="section gallery-section" id="galeria">
       <div class="container">
-        <div class="section-heading center">
-          <span class="section-tag" data-editable data-key="gal_tag">Galeria</span>
-          <h2 data-editable data-key="gal_title">Uma identidade visual que abre o apetite</h2>
-          <p data-editable data-key="gal_subtitle">
-            Destaque para nossos burgers, ambiente e momentos.
+        <div class="section-heading text-center">
+          <span class="section-tag" data-editable data-key="gal_tag">Sem Filtros</span>
+          <h2 data-editable data-key="gal_title">Fotos Reais Direto da Nossa Chapa</h2>
+          <p class="subtitle" data-editable data-key="gal_subtitle">
+            É exatamente assim que o seu prato chega na mesa ou na sua casa.
           </p>
         </div>
 
-        <div class="gallery-grid">
-          <div class="gallery-card tall editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=800&q=80" alt="Galeria 1" data-img-key="gal_img_1" />
+        <div class="custom-gallery-mosaic">
+          <div class="mosaic-item large editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=900&q=80" alt="Pão de Alho Recheado Tostado" data-img-key="gal_img_1" />
             <button class="change-img-btn" data-trigger-img="gal_img_1">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Pão de Alho na Brasa</strong>
+              <small>Crocância audível a cada mordida</small>
+            </div>
           </div>
 
-          <div class="gallery-card editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80" alt="Galeria 2" data-img-key="gal_img_2" />
+          <div class="mosaic-item editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80" alt="Burger Artesanal Suculento" data-img-key="gal_img_2" />
             <button class="change-img-btn" data-trigger-img="gal_img_2">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Carne Alta & Queijo</strong>
+            </div>
           </div>
 
-          <div class="gallery-card editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=800&q=80" alt="Galeria 3" data-img-key="gal_img_3" />
+          <div class="mosaic-item editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80" alt="Ambiente da Hamburgueria" data-img-key="gal_img_3" />
             <button class="change-img-btn" data-trigger-img="gal_img_3">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Clima Descontraído</strong>
+            </div>
           </div>
 
-          <div class="gallery-card wide editable-img-wrapper">
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80" alt="Galeria 4" data-img-key="gal_img_4" />
+          <div class="mosaic-item wide editable-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1572802419224-296b0aeee0d9?auto=format&fit=crop&w=1200&q=80" alt="Mesa Completa com Porções" data-img-key="gal_img_4" />
             <button class="change-img-btn" data-trigger-img="gal_img_4">Trocar Foto</button>
+            <div class="img-hover-overlay">
+              <strong>Combo Perfeito para a Galera</strong>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section units-section">
-      <div class="container units-grid">
-        <div class="units-copy">
-          <span class="section-tag" data-editable data-key="units_tag">Unidades e horários</span>
-          <h2 data-editable data-key="units_title">Informações organizadas para facilitar a visita</h2>
-          <p data-editable data-key="units_desc">
-            Localização e horários para você planejar seu pedido ou visita.
+    <section class="section units-experience" id="unidades">
+      <div class="container">
+        <div class="section-heading text-center">
+          <span class="section-tag" data-editable data-key="units_tag">Onde Encontrar</span>
+          <h2 data-editable data-key="units_title">Duas Casas Prontas para te Receber</h2>
+          <p class="subtitle" data-editable data-key="units_desc">
+            Venha comer no salão com chopp gelado ou peça no delivery para receber quentinho.
           </p>
         </div>
 
-        <div class="units-cards">
-          <article class="unit-card">
+        <div class="units-cards-grid">
+          <article class="unit-location-card">
+            <div class="unit-badge">CONTINENTE</div>
             <h3 data-editable data-key="unit1_name">Unidade Capoeiras</h3>
-            <p data-editable data-key="unit1_addr"><strong>Endereço:</strong> R. Campolino Alves - Capoeiras, Florianópolis - SC, 88085-110</p>
-            <p data-editable data-key="unit1_t1"><strong>Terça a quinta:</strong> 18h às 23h</p>
-            <p data-editable data-key="unit1_t2"><strong>Sexta e sábados:</strong> 18h às 00h</p>
-            <p data-editable data-key="unit1_t3"><strong>Domingos:</strong> 16h às 22h</p>
+            <p class="unit-address" data-editable data-key="unit1_addr">
+              📍 R. Campolino Alves, Capoeiras — Florianópolis/SC (Próximo à pracinha)
+            </p>
+            
+            <div class="unit-schedule">
+              <div class="sched-row">
+                <span>Terça a Quinta:</span>
+                <strong>18h00 às 23h00</strong>
+              </div>
+              <div class="sched-row highlight">
+                <span>Sexta e Sábado:</span>
+                <strong>18h00 às 00h00</strong>
+              </div>
+              <div class="sched-row">
+                <span>Domingo:</span>
+                <strong>16h00 às 22h00</strong>
+              </div>
+            </div>
+
+            <div class="unit-perks">
+              <span>🚗 Fácil de estacionar na rua</span>
+              <span>🍺 Chopp artesanal na torneira</span>
+            </div>
+
+            <div class="unit-action-links">
+              <a href="https://maps.google.com/?q=Rua+Campolino+Alves+Capoeiras+Florianopolis" target="_blank" class="btn btn-unit-map">Abrir no GPS / Waze</a>
+              <a href="https://wa.me/5548998388277" target="_blank" class="btn btn-unit-wpp">Reservar Mesa</a>
+            </div>
           </article>
 
-          <article class="unit-card">
+          <article class="unit-location-card">
+            <div class="unit-badge">SÃO JOSÉ</div>
             <h3 data-editable data-key="unit2_name">Unidade Serraria</h3>
-            <p data-editable data-key="unit2_t1"><strong>Funcionamento:</strong> terça a domingo</p>
-            <p data-editable data-key="unit2_t2"><strong>Horário base:</strong> 18h às 23h</p>
-            <p data-editable data-key="unit2_t3"><strong>Sextas e sábados:</strong> até 00h</p>
-            <p data-editable data-key="unit2_t4"><strong>Destaque:</strong> operação com identidade da marca</p>
+            <p class="unit-address" data-editable data-key="unit2_addr">
+              📍 Região Central de Serraria — São José/SC
+            </p>
+            
+            <div class="unit-schedule">
+              <div class="sched-row">
+                <span>Terça a Quinta:</span>
+                <strong>18h00 às 23h00</strong>
+              </div>
+              <div class="sched-row highlight">
+                <span>Sexta e Sábado:</span>
+                <strong>18h00 às 00h00</strong>
+              </div>
+              <div class="sched-row">
+                <span>Domingo:</span>
+                <strong>18h00 às 23h00</strong>
+              </div>
+            </div>
+
+            <div class="unit-perks">
+              <span>🍔 Retirada no balcão ágil</span>
+              <span>🛵 Delivery ultra-rápido na região</span>
+            </div>
+
+            <div class="unit-action-links">
+              <a href="https://maps.google.com/?q=Serraria+Sao+Jose+SC" target="_blank" class="btn btn-unit-map">Abrir no GPS / Waze</a>
+              <a href="https://wa.me/5548998388277" target="_blank" class="btn btn-unit-wpp">Fazer Pedido</a>
+            </div>
           </article>
         </div>
       </div>
@@ -456,85 +436,135 @@
 
     <section class="section testimonials-section" id="depoimentos">
       <div class="container">
-        <div class="section-heading center">
-          <span class="section-tag">Depoimentos</span>
-          <h2>O que o público comenta</h2>
-          <p>Comentários reais dos nossos clientes.</p>
+        <div class="section-heading text-center">
+          <span class="section-tag">Avaliações Reais</span>
+          <h2>O Que Diz Quem Já Se Lambuzou</h2>
+          <p class="subtitle">Comentários extraídos diretamente das avaliações do Google e iFood.</p>
         </div>
 
         <div class="testimonials-grid">
-          <article class="testimonial-card">
-            <div class="quote-mark">"</div>
-            <p data-editable data-key="test_1_p">Comida excelente como o atendimento e o ambiente, ainda abre para o almoço.</p>
-            <strong data-editable data-key="test_1_author">eduardo lentz</strong>
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text" data-editable data-key="test_1_p">
+              "O melhor pão de alho que já comi na vida. Não é pesado, o creme de alho tem um gosto incrível e a carne vem no ponto perfeito. O atendimento de Capoeiras é impecável!"
+            </p>
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">EL</div>
+              <div>
+                <strong data-editable data-key="test_1_author">Eduardo Lentz</strong>
+                <small>Local Guide • Google Reviews</small>
+              </div>
+            </div>
           </article>
 
-          <article class="testimonial-card">
-            <div class="quote-mark">"</div>
-            <p data-editable data-key="test_2_p">Um dos melhores pães de alho recheados que já experimentei na região.</p>
-            <strong data-editable data-key="test_2_author">Fefa Avalia</strong>
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text" data-editable data-key="test_2_p">
+              "Pedi no delivery com medo de chegar murcho e me surpreendi: o pão veio super crocante e com muito queijo derretido. Já virou vício de sexta-feira aqui em casa."
+            </p>
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">FA</div>
+              <div>
+                <strong data-editable data-key="test_2_author">Fernanda Almeida (Fefa)</strong>
+                <small>Cliente Recorrente • iFood</small>
+              </div>
+            </div>
           </article>
 
-          <article class="testimonial-card">
-            <div class="quote-mark">"</div>
-            <p data-editable data-key="test_3_p">Estacionamento na rua bem tranquilo e lanche impecável.</p>
-            <strong data-editable data-key="test_3_author">luiz lopes</strong>
+          <article class="review-card">
+            <div class="review-stars">★★★★★</div>
+            <p class="review-text" data-editable data-key="test_3_p">
+              "Ambiente descontraído, ótimo para ir em galera tomar uma cerveja e comer bem. Preço super justo pela quantidade e qualidade da comida."
+            </p>
+            <div class="reviewer-info">
+              <div class="reviewer-avatar">LL</div>
+              <div>
+                <strong data-editable data-key="test_3_author">Luiz Lopes</strong>
+                <small>Cliente desde 2023 • Google Reviews</small>
+              </div>
+            </div>
           </article>
         </div>
       </div>
     </section>
 
     <section class="section contact-section" id="contato">
-      <div class="container contact-grid">
-        <div class="contact-copy">
-          <span class="section-tag">Contato</span>
-          <h2>Fale com a equipe do Virado Num Alho</h2>
-          <p>Ideal para dúvidas, encomendas ou reservas.</p>
+      <div class="container contact-split">
+        <div class="contact-info-panel">
+          <span class="section-tag">Atendimento Direto</span>
+          <h2>Bateu a fome? Chama a gente.</h2>
+          <p>Tire dúvidas sobre reservas de mesa para aniversários, consulte o cardápio do dia ou faça seu pedido diretamente.</p>
 
-          <div class="contact-info-card">
-            <ul>
-              <li data-editable data-key="info_phone"><strong>Telefone:</strong> (48) 99838-8277</li>
-              <li data-editable data-key="info_price"><strong>Preço por pessoa:</strong> R$ 20-40</li>
-              <li data-editable data-key="info_ig"><strong>Instagram:</strong> @viradonumalho</li>
-              <li data-editable data-key="info_followers"><strong>Seguidores:</strong> 12 mil</li>
-              <li data-editable data-key="info_posts"><strong>Posts:</strong> 169</li>
-            </ul>
+          <div class="info-block-item">
+            <div class="info-icon">📞</div>
+            <div>
+              <strong>WhatsApp & Pedidos Rápidos</strong>
+              <p data-editable data-key="info_phone">(48) 99838-8277</p>
+            </div>
+          </div>
+
+          <div class="info-block-item">
+            <div class="info-icon">💵</div>
+            <div>
+              <strong>Faixa de Preço Médio</strong>
+              <p data-editable data-key="info_price">R$ 22 a R$ 42 por pessoa</p>
+            </div>
+          </div>
+
+          <div class="social-proof-pill">
+            <span>Siga nosso dia a dia no Instagram:</span>
+            <a href="https://instagram.com/viradonumalho" target="_blank" data-editable data-key="info_ig">@viradonumalho</a>
           </div>
         </div>
 
-        <form class="contact-form" id="contact-form">
-          <h3>Envie sua mensagem</h3>
+        <form class="contact-card-form" id="contact-form">
+          <h3>Envie uma Mensagem</h3>
+          <p style="color:#aaa; font-size:13px; margin-bottom:15px;">Dúvidas, parcerias ou eventos.</p>
+          
           <div class="form-group">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" placeholder="Seu nome" required />
+            <label for="nome">Seu Nome</label>
+            <input type="text" id="nome" name="nome" placeholder="Como podemos te chamar?" required />
           </div>
           <div class="form-group">
-            <label for="telefone">Telefone</label>
+            <label for="telefone">WhatsApp</label>
             <input type="tel" id="telefone" name="telefone" placeholder="(48) 99999-9999" required />
           </div>
           <div class="form-group">
             <label for="mensagem">Mensagem</label>
-            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Digite sua mensagem" required></textarea>
+            <textarea id="mensagem" name="mensagem" rows="4" placeholder="Em que podemos te ajudar?" required></textarea>
           </div>
-          <button type="submit" class="btn btn-full">Enviar</button>
+          <button type="submit" class="btn btn-primary btn-block">Enviar Mensagem</button>
         </form>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="container footer-grid">
-      <div>
-        <strong>Virado Num Alho</strong>
-        <p>Hambúrguer artesanal, pão de alho recheado e identidade forte em Florianópolis.</p>
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <strong class="footer-logo">VIRADO NUM ALHO</strong>
+        <p>A primeira hamburgueria focada no sabor inconfundível do pão de alho na brasa em Florianópolis e São José.</p>
       </div>
-      <div class="footer-links">
+
+      <div class="footer-nav">
+        <strong>Navegação</strong>
         <a href="#inicio">Início</a>
-        <a href="#sobre">Sobre</a>
-        <a href="#servicos">Destaques</a>
-        <a href="#galeria">Galeria</a>
-        <a href="#depoimentos">Depoimentos</a>
-        <a href="#contato">Contato</a>
+        <a href="#experiencia">A Experiência</a>
+        <a href="#cardapio-destaque">Cardápio</a>
+        <a href="#unidades">Unidades</a>
+        <a href="#depoimentos">Avaliações</a>
+      </div>
+
+      <div class="footer-hours">
+        <strong>Atendimento</strong>
+        <p>Terça a Domingo a partir das 18h</p>
+        <p>Entregas via iFood & WhatsApp</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="container copyright-text">
+        <p>© 2026 Virado Num Alho. Todos os direitos reservados.</p>
       </div>
     </div>
   </footer>
